@@ -11,3 +11,9 @@ TESTS = $(check_PROGRAMS)
 sequencer_test_SOURCES = test_main.cpp variable_length_value_test.cpp volume_test.cpp
 sequencer_test_CPPFLAGS = $(CPPUNIT_CFLAGS)
 sequencer_test_LDADD = $(CPPUNIT_LIBS) libsequencer.a
+
+gcov: check
+	gcov -l -p *.gcda
+
+gcov-clean:
+	rm -f *.gcda *.gcno *.gcov
