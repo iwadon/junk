@@ -29,6 +29,9 @@ public:
     VariableLengthValue d(D, L);					\
     VariableLengthValue::value_type v = d.value();			\
     CPPUNIT_ASSERT_EQUAL(static_cast<VariableLengthValue::value_type>(V), v); \
+    VariableLengthValue d2(D, 0);					\
+    VariableLengthValue::value_type v2 = d2.value();			\
+    CPPUNIT_ASSERT_EQUAL(static_cast<VariableLengthValue::value_type>(V), v2); \
   }
 
 void VariableLengthValueTest::test_data()
