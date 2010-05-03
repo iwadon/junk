@@ -12,7 +12,7 @@ TESTS = $(check_PROGRAMS)
 
 sequencer_test_SOURCES = test_main.cpp function_test.cpp peg_test.cpp variable_length_value_test.cpp volume_test.cpp
 sequencer_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
-sequencer_test_LDFLAGS = libsequencer.a $(CPPUNIT_LIBS)
+sequencer_test_LDADD = libsequencer.a $(CPPUNIT_LIBS)
 
 AM_CXXFLAGS = -Wall -O2 -g
 
