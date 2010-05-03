@@ -1,8 +1,6 @@
 #ifndef PEG_HPP_INCLUDED
 #define PEG_HPP_INCLUDED 1
 
-#include <boost/utility/addressof.hpp>
-
 namespace peg
 {
   struct Result
