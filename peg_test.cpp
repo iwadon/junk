@@ -29,8 +29,8 @@ void PegTest::test_parse()
 
   result = (peg::any[action1]).parse("foo");
   CPPUNIT_ASSERT_EQUAL(true, result.status);
-  CPPUNIT_ASSERT_EQUAL(std::string(""), std::string(result.rest));
-  CPPUNIT_ASSERT_EQUAL(std::string("foo"), str_);
+  CPPUNIT_ASSERT_EQUAL(std::string("oo"), std::string(result.rest));
+  CPPUNIT_ASSERT_EQUAL(std::string("f"), str_);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PegTest);

@@ -10,7 +10,7 @@ namespace peg
 
   Result Any::parse(const char *str)
   {
-    Result result = {true, str + strlen(str)};
+    Result result = {true, str + 1};
     return result;
   }
 }
