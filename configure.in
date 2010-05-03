@@ -28,6 +28,7 @@ fi
 
 # Checks for libraries.
 AM_PATH_CPPUNIT
+AX_BOOST_BASE
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdint.h])

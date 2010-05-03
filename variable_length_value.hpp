@@ -12,6 +12,7 @@ public:
   typedef uint32_t value_type;
   typedef char data_type;
   typedef size_t len_type;
+  VariableLengthValue() { set_value(0); }
   VariableLengthValue(const data_type *data, const len_type len) { set_data(data, len); }
   VariableLengthValue(const value_type value) { set_value(value); }
   void data(const data_type **data, len_type *len) const;
