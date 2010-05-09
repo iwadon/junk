@@ -1,6 +1,8 @@
 #ifndef PEG_HPP_INCLUDED
 #define PEG_HPP_INCLUDED 1
 
+#include <string>
+
 namespace peg
 {
   struct Result
@@ -13,6 +15,7 @@ namespace peg
   {
   public:
     virtual Result parse(const char *src) = 0;
+    virtual std::string inspect() const = 0;
     template <typename F>
     ParsingExpression &operator[](F f);
     ParsingExpression &operator/(ParsingExpression &rhs);
@@ -24,6 +27,7 @@ namespace peg
   public:
     Action(ParsingExpression *pe, F action);
     Result parse(const char *src);
+    std::string inspect() const;
   private:
     ParsingExpression *pe_;
     F action_;
@@ -33,6 +37,7 @@ namespace peg
   {
   public:
     Result parse(const char *src);
+    std::string inspect() const;
   };
 
   class Byte : public ParsingExpression
@@ -40,6 +45,7 @@ namespace peg
   public:
     Byte(const size_t bytes);
     Result parse(const char *src);
+    std::string inspect() const;
   private:
     size_t bytes_;
   };
@@ -49,6 +55,7 @@ namespace peg
   public:
     Char(const char chr);
     Result parse(const char *src);
+    std::string inspect() const;
   private:
     char chr_;
   };
@@ -58,6 +65,7 @@ namespace peg
   public:
     OrderedChoice(ParsingExpression &lhs, ParsingExpression &rhs);
     Result parse(const char *src);
+    std::string inspect() const;
   private:
     ParsingExpression &lhs_;
     ParsingExpression &rhs_;
@@ -69,6 +77,7 @@ namespace peg
     Rule();
     Rule(ParsingExpression &pe);
     Result parse(const char *src);
+    std::string inspect() const;
   private:
     ParsingExpression *pe_;
   };
@@ -99,6 +108,12 @@ namespace peg
     Result result = pe_->parse(str);
     action_(str, result.rest);
     return result;
+  }
+
+  template <typename F>
+  inline std::string Action<F>::inspect() const
+  {
+    return pe_->inspect();
   }
 
   extern Any any;

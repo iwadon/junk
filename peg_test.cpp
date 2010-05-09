@@ -8,9 +8,11 @@
 class PegTest : public CppUnit::TestCase
 {
   CPPUNIT_TEST_SUITE(PegTest);
+  CPPUNIT_TEST(test_inspect);
   CPPUNIT_TEST(test_parse);
   CPPUNIT_TEST_SUITE_END();
 public:
+  void test_inspect();
   void test_parse();
 private:
 };
@@ -29,6 +31,25 @@ static void action1(const char *first, const char *last)
     CPPUNIT_ASSERT_EQUAL(std::string(MATCHED), str_);			\
     CPPUNIT_ASSERT_EQUAL(STATUS, result.status);			\
   }
+
+void PegTest::test_inspect()
+{
+  // any
+  CPPUNIT_ASSERT_EQUAL(std::string("."), peg::any.inspect());
+
+  // byte
+  CPPUNIT_ASSERT_EQUAL(std::string("[4B]"), peg::byte(4).inspect());
+
+  // char_
+  CPPUNIT_ASSERT_EQUAL(std::string("'a'"), peg::char_('a').inspect());
+
+  // ordered choice
+  CPPUNIT_ASSERT_EQUAL(std::string("'a' / 'b'"), (peg::char_('a') / peg::char_('b')).inspect());
+
+  // rule
+  peg::Rule a_or_b = peg::char_('a') / peg::char_('b');
+  CPPUNIT_ASSERT_EQUAL(std::string("'a' / 'b'"), a_or_b.inspect());
+}
 
 void PegTest::test_parse()
 {

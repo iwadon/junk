@@ -1,7 +1,9 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include <cstring>
+#ifdef HAVE_BOOST
+#include <boost/format.hpp>
+#endif
 #include "peg.hpp"
 
 namespace peg
@@ -14,6 +16,12 @@ namespace peg
     return result;
   }
 
+  std::string Any::inspect() const
+  {
+    std::string str(".");
+    return str;
+  }
+
   Byte::Byte(const size_t bytes)
     : bytes_(bytes)
   {
@@ -23,6 +31,20 @@ namespace peg
   {
     Result result = {true, str + bytes_};
     return result;
+  }
+
+  std::string Byte::inspect() const
+  {
+    std::string str;
+    switch (bytes_) {
+    case 1:
+      str = "[1 byte]";
+      break;
+    default:
+      str = (boost::format("[%uB]") % bytes_).str();
+      break;
+    }
+    return str;
   }
 
   Char::Char(const char chr)
@@ -43,6 +65,14 @@ namespace peg
     return result;
   }
 
+  std::string Char::inspect() const
+  {
+    std::string str = "'";
+    str += chr_;
+    str += "'";
+    return str;
+  }
+
   OrderedChoice::OrderedChoice(ParsingExpression &lhs, ParsingExpression &rhs)
     : lhs_(lhs)
     , rhs_(rhs)
@@ -56,6 +86,14 @@ namespace peg
       result = rhs_.parse(src);
     }
     return result;
+  }
+
+  std::string OrderedChoice::inspect() const
+  {
+    std::string str = lhs_.inspect();
+    str += " / ";
+    str += rhs_.inspect();
+    return str;
   }
 
   Rule::Rule()
@@ -76,6 +114,11 @@ namespace peg
       Result result = {false, str};
       return result;
     }
+  }
+
+  std::string Rule::inspect() const
+  {
+    return pe_->inspect();
   }
 
   ParsingExpression &byte(const size_t bytes)
