@@ -15,6 +15,7 @@ namespace peg
     virtual Result parse(const char *src) = 0;
     template <typename F>
     ParsingExpression &operator[](F f);
+    ParsingExpression &operator/(ParsingExpression &rhs);
   };
 
   template <typename F>
@@ -34,10 +35,44 @@ namespace peg
     Result parse(const char *src);
   };
 
+  class Byte : public ParsingExpression
+  {
+  public:
+    Byte(const size_t bytes);
+    Result parse(const char *src);
+  private:
+    size_t bytes_;
+  };
+
+  class Char : public ParsingExpression
+  {
+  public:
+    Char(const char chr);
+    Result parse(const char *src);
+  private:
+    char chr_;
+  };
+
+  class OrderedChoice : public ParsingExpression
+  {
+  public:
+    OrderedChoice(ParsingExpression &lhs, ParsingExpression &rhs);
+    Result parse(const char *src);
+  private:
+    ParsingExpression &lhs_;
+    ParsingExpression &rhs_;
+  };
+
   template <typename F>
   inline ParsingExpression &ParsingExpression::operator[](F f)
   {
     ParsingExpression *pe = new Action<F>(this, f);
+    return *pe;
+  }
+
+  inline ParsingExpression &ParsingExpression::operator/(ParsingExpression &rhs)
+  {
+    ParsingExpression *pe = new OrderedChoice(*this, rhs);
     return *pe;
   }
 
@@ -49,7 +84,7 @@ namespace peg
   }
 
   template <typename F>
-  Result Action<F>::parse(const char *str)
+  inline Result Action<F>::parse(const char *str)
   {
     Result result = pe_->parse(str);
     action_(str, result.rest);
@@ -57,6 +92,9 @@ namespace peg
   }
 
   extern Any any;
+
+  ParsingExpression &byte(const size_t bytes);
+  ParsingExpression &char_(const char chr);
 }
 
 #endif // defined(PEG_HPP_INCLUDED)

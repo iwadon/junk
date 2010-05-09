@@ -23,14 +23,29 @@ static void action1(const char *first, const char *last)
   str_ = s;
 }
 
+#define PEG_ASSERT(PEG, STATUS, MATCHED, REST) {			\
+    peg::Result result = PEG;						\
+    CPPUNIT_ASSERT_EQUAL(std::string(REST), std::string(result.rest));	\
+    CPPUNIT_ASSERT_EQUAL(std::string(MATCHED), str_);			\
+    CPPUNIT_ASSERT_EQUAL(STATUS, result.status);			\
+  }
+
 void PegTest::test_parse()
 {
-  peg::Result result;
+  // any
+  PEG_ASSERT((peg::any[action1]).parse("foo"), true, "f", "oo");
 
-  result = (peg::any[action1]).parse("foo");
-  CPPUNIT_ASSERT_EQUAL(true, result.status);
-  CPPUNIT_ASSERT_EQUAL(std::string("oo"), std::string(result.rest));
-  CPPUNIT_ASSERT_EQUAL(std::string("f"), str_);
+  // byte
+  PEG_ASSERT((peg::byte(1)[action1]).parse("\x01\x23\x45\x67"), true, "\x01", "\x23\x45\x67");
+  PEG_ASSERT((peg::byte(2)[action1]).parse("\x01\x23\x45\x67"), true, "\x01\x23", "\x45\x67");
+
+  // char_
+  PEG_ASSERT((peg::char_('f')[action1]).parse("foo"), true, "f", "oo");
+  PEG_ASSERT((peg::char_('o')[action1]).parse("foo"), false, "", "foo");
+
+  // ordered choice
+  PEG_ASSERT((peg::char_('f') / peg::char_('b'))[action1].parse("foo"), true, "f", "oo");
+  PEG_ASSERT((peg::char_('f') / peg::char_('b'))[action1].parse("bar"), true, "b", "ar");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PegTest);
