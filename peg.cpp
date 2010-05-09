@@ -58,6 +58,26 @@ namespace peg
     return result;
   }
 
+  Rule::Rule()
+    : pe_(NULL)
+  {
+  }
+
+  Rule::Rule(ParsingExpression &pe)
+    : pe_(&pe)
+  {
+  }
+
+  Result Rule::parse(const char *str)
+  {
+    if (pe_ != NULL) {
+      return pe_->parse(str);
+    } else {
+      Result result = {false, str};
+      return result;
+    }
+  }
+
   ParsingExpression &byte(const size_t bytes)
   {
     ParsingExpression *pe = new Byte(bytes);

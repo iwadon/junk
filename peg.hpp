@@ -63,6 +63,16 @@ namespace peg
     ParsingExpression &rhs_;
   };
 
+  class Rule : public ParsingExpression
+  {
+  public:
+    Rule();
+    Rule(ParsingExpression &pe);
+    Result parse(const char *src);
+  private:
+    ParsingExpression *pe_;
+  };
+
   template <typename F>
   inline ParsingExpression &ParsingExpression::operator[](F f)
   {

@@ -46,6 +46,15 @@ void PegTest::test_parse()
   // ordered choice
   PEG_ASSERT((peg::char_('f') / peg::char_('b'))[action1].parse("foo"), true, "f", "oo");
   PEG_ASSERT((peg::char_('f') / peg::char_('b'))[action1].parse("bar"), true, "b", "ar");
+
+  // rule
+  peg::Rule a_or_b = (peg::char_('a') / peg::char_('b'))[action1];
+  PEG_ASSERT(a_or_b.parse("abc"), true, "a", "bc");
+  PEG_ASSERT(a_or_b.parse("cba"), false, "", "cba");
+  peg::Rule c_or_d;
+  c_or_d = (peg::char_('c') / peg::char_('d'))[action1];
+  PEG_ASSERT(c_or_d.parse("dcb"), true, "d", "cb");
+  PEG_ASSERT(c_or_d.parse("bcd"), false, "", "bcd");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PegTest);
