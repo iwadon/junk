@@ -79,6 +79,35 @@ namespace peg
     return str;
   }
 
+  Range::Range(const char first, const char last)
+    : first_(first)
+    , last_(last)
+  {
+  }
+
+  Result Range::parse(const char *str)
+  {
+    Result result;
+    if (*str >= first_ && *str <= last_) {
+      result.status = true;
+      result.rest = str + 1;
+    } else {
+      result.status = false;
+      result.rest = str;
+    }
+    return result;
+  }
+
+  std::string Range::inspect() const
+  {
+    std::string str = "[";
+    str += first_;
+    str += "-";
+    str += last_;
+    str += "]";
+    return str;
+  }
+
   Sequence::Sequence(ParsingExpression &lhs, ParsingExpression &rhs)
     : lhs_(lhs)
     , rhs_(rhs)
@@ -249,6 +278,12 @@ namespace peg
   ParsingExpression &char_(const char chr)
   {
     ParsingExpression *pe = new Char(chr);
+    return *pe;
+  }
+
+  ParsingExpression &range(const char first, const char last)
+  {
+    ParsingExpression *pe = new Range(first, last);
     return *pe;
   }
 }

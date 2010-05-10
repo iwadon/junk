@@ -65,6 +65,17 @@ namespace peg
     char chr_;
   };
 
+  class Range : public ParsingExpression
+  {
+  public:
+    Range(const char first, const char last);
+    Result parse(const char *src);
+    std::string inspect() const;
+  private:
+    char first_;
+    char last_;
+  };
+
   class Sequence : public ParsingExpression
   {
   public:
@@ -206,6 +217,7 @@ namespace peg
 
   ParsingExpression &byte(const size_t bytes);
   ParsingExpression &char_(const char chr);
+  ParsingExpression &range(const char first, const char last);
 }
 
 #endif // defined(PEG_HPP_INCLUDED)

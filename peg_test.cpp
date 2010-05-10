@@ -43,6 +43,9 @@ void PegTest::test_inspect()
   // char_
   CPPUNIT_ASSERT_EQUAL(std::string("'a'"), peg::char_('a').inspect());
 
+  // range
+  CPPUNIT_ASSERT_EQUAL(std::string("[0-9]"), peg::range('0', '9').inspect());
+
   // sequence
   CPPUNIT_ASSERT_EQUAL(std::string("'a' 'b'"), (peg::char_('a') >> peg::char_('b')).inspect());
 
@@ -57,6 +60,9 @@ void PegTest::test_inspect()
 
   // optional
   CPPUNIT_ASSERT_EQUAL(std::string("'a'?"), (-peg::char_('a')).inspect());
+
+  // and-predicate
+  CPPUNIT_ASSERT_EQUAL(std::string("&'a'"), (&peg::char_('a')).inspect());
 
   // rule
   peg::Rule a_or_b = peg::char_('a') / peg::char_('b');
@@ -75,6 +81,10 @@ void PegTest::test_parse()
   // char_
   PEG_ASSERT((peg::char_('f')[action1]).parse("foo"), true, "f", "oo");
   PEG_ASSERT((peg::char_('o')[action1]).parse("foo"), false, "", "foo");
+
+  // range
+  PEG_ASSERT((peg::range('0', '3')[action1]).parse("123"), true, "1", "23");
+  PEG_ASSERT(((+peg::range('0', '3'))[action1]).parse("135"), true, "13", "5");
 
   // sequence
   PEG_ASSERT((peg::char_('f') >> peg::char_('o'))[action1].parse("foo"), true, "fo", "o");
