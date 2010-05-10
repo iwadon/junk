@@ -97,6 +97,10 @@ void PegTest::test_parse()
   PEG_ASSERT((-peg::char_('a'))[action1].parse("aaa"), true, "a", "aa");
   PEG_ASSERT((+peg::char_('a'))[action1].parse("bbb"), false, "", "bbb");
 
+  // and-predicate
+  PEG_ASSERT((&peg::char_('a') >> +peg::any)[action1].parse("abc"), true, "abc", "");
+  PEG_ASSERT((&peg::char_('a') >> +peg::any)[action1].parse("cba"), false, "", "cba");
+
   // rule
   peg::Rule a_or_b = (peg::char_('a') / peg::char_('b'))[action1];
   PEG_ASSERT(a_or_b.parse("abc"), true, "a", "bc");

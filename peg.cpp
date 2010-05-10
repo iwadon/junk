@@ -3,6 +3,7 @@
 #endif
 #ifdef HAVE_BOOST
 #include <boost/format.hpp>
+#include <boost/utility.hpp>
 #endif
 #include "peg.hpp"
 
@@ -12,8 +13,13 @@ namespace peg
 
   Result Any::parse(const char *str)
   {
-    Result result = {true, str + 1};
-    return result;
+    if (*str != '\0') {
+      Result result = {true, str + 1};
+      return result;
+    } else {
+      Result result = {false, str};
+      return result;
+    }
   }
 
   std::string Any::inspect() const
@@ -157,9 +163,9 @@ namespace peg
     if (!result.status) {
       return result;
     }
-    while (result.status) {
+    do {
       result = pe_.parse(result.rest);
-    }
+    } while (result.status);
     result.status = true;
     return result;
   }
@@ -190,13 +196,32 @@ namespace peg
     return str;
   }
 
+  AndPredicate::AndPredicate(ParsingExpression &pe)
+    : pe_(pe)
+  {
+  }
+
+  Result AndPredicate::parse(const char *src)
+  {
+    Result result = pe_.parse(src);
+    result.rest = src;
+    return result;
+  }
+
+  std::string AndPredicate::inspect() const
+  {
+    std::string str = "&";
+    str += pe_.inspect();
+    return str;
+  }
+
   Rule::Rule()
     : pe_(NULL)
   {
   }
 
   Rule::Rule(ParsingExpression &pe)
-    : pe_(&pe)
+    : pe_(boost::addressof(pe))
   {
   }
 
