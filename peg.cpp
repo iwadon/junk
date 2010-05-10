@@ -146,6 +146,31 @@ namespace peg
     return str;
   }
 
+  OneOrMore::OneOrMore(ParsingExpression &pe)
+    : pe_(pe)
+  {
+  }
+
+  Result OneOrMore::parse(const char *src)
+  {
+    Result result = pe_.parse(src);
+    if (!result.status) {
+      return result;
+    }
+    while (result.status) {
+      result = pe_.parse(result.rest);
+    }
+    result.status = true;
+    return result;
+  }
+
+  std::string OneOrMore::inspect() const
+  {
+    std::string str = pe_.inspect();
+    str += "+";
+    return str;
+  }
+
   Rule::Rule()
     : pe_(NULL)
   {

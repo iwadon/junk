@@ -21,6 +21,7 @@ namespace peg
     ParsingExpression &operator>>(ParsingExpression &rhs);
     ParsingExpression &operator/(ParsingExpression &rhs);
     ParsingExpression &operator*();
+    ParsingExpression &operator+();
   };
 
   template <typename F>
@@ -94,6 +95,16 @@ namespace peg
     ParsingExpression &pe_;
   };
 
+  class OneOrMore : public ParsingExpression
+  {
+  public:
+    OneOrMore(ParsingExpression &pe);
+    Result parse(const char *src);
+    std::string inspect() const;
+  private:
+    ParsingExpression &pe_;
+  };
+
   class Rule : public ParsingExpression
   {
   public:
@@ -127,6 +138,12 @@ namespace peg
   inline ParsingExpression &ParsingExpression::operator*()
   {
     ParsingExpression *pe = new ZeroOrMore(*this);
+    return *pe;
+  }
+
+  inline ParsingExpression &ParsingExpression::operator+()
+  {
+    ParsingExpression *pe = new OneOrMore(*this);
     return *pe;
   }
 
