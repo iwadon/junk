@@ -18,6 +18,7 @@ namespace peg
     virtual std::string inspect() const = 0;
     template <typename F>
     ParsingExpression &operator[](F f);
+    ParsingExpression &operator>>(ParsingExpression &rhs);
     ParsingExpression &operator/(ParsingExpression &rhs);
   };
 
@@ -60,6 +61,17 @@ namespace peg
     char chr_;
   };
 
+  class Sequence : public ParsingExpression
+  {
+  public:
+    Sequence(ParsingExpression &lhs, ParsingExpression &rhs);
+    Result parse(const char *src);
+    std::string inspect() const;
+  private:
+    ParsingExpression &lhs_;
+    ParsingExpression &rhs_;
+  };
+
   class OrderedChoice : public ParsingExpression
   {
   public:
@@ -86,6 +98,12 @@ namespace peg
   inline ParsingExpression &ParsingExpression::operator[](F f)
   {
     ParsingExpression *pe = new Action<F>(this, f);
+    return *pe;
+  }
+
+  inline ParsingExpression &ParsingExpression::operator>>(ParsingExpression &rhs)
+  {
+    ParsingExpression *pe = new Sequence(*this, rhs);
     return *pe;
   }
 

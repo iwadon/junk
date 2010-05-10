@@ -73,6 +73,35 @@ namespace peg
     return str;
   }
 
+  Sequence::Sequence(ParsingExpression &lhs, ParsingExpression &rhs)
+    : lhs_(lhs)
+    , rhs_(rhs)
+  {
+  }
+
+  Result Sequence::parse(const char *src)
+  {
+    Result result = lhs_.parse(src);
+    if (result.status) {
+      result = rhs_.parse(result.rest);
+      if (result.status) {
+	return result;
+      }
+    }
+    result.status = false;
+    result.rest = src;
+    return result;
+  }
+
+  std::string Sequence::inspect() const
+  {
+    std::string str = lhs_.inspect();
+    str += " ";
+    str += rhs_.inspect();
+    return str;
+  }
+
+
   OrderedChoice::OrderedChoice(ParsingExpression &lhs, ParsingExpression &rhs)
     : lhs_(lhs)
     , rhs_(rhs)
