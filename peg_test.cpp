@@ -64,6 +64,9 @@ void PegTest::test_inspect()
   // and-predicate
   CPPUNIT_ASSERT_EQUAL(std::string("&'a'"), (&peg::char_('a')).inspect());
 
+  // not-predicate
+  CPPUNIT_ASSERT_EQUAL(std::string("!'a'"), (!peg::char_('a')).inspect());
+
   // rule
   peg::Rule a_or_b = peg::char_('a') / peg::char_('b');
   CPPUNIT_ASSERT_EQUAL(std::string("'a' / 'b'"), a_or_b.inspect());
@@ -110,6 +113,10 @@ void PegTest::test_parse()
   // and-predicate
   PEG_ASSERT((&peg::char_('a') >> +peg::any)[action1].parse("abc"), true, "abc", "");
   PEG_ASSERT((&peg::char_('a') >> +peg::any)[action1].parse("cba"), false, "", "cba");
+
+  // not-predicate
+  PEG_ASSERT((!peg::char_('a') >> +peg::any)[action1].parse("abc"), false, "", "abc");
+  PEG_ASSERT((!peg::char_('a') >> +peg::any)[action1].parse("cba"), true, "cba", "");
 
   // rule
   peg::Rule a_or_b = (peg::char_('a') / peg::char_('b'))[action1];

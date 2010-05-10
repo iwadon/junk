@@ -244,6 +244,26 @@ namespace peg
     return str;
   }
 
+  NotPredicate::NotPredicate(ParsingExpression &pe)
+    : pe_(pe)
+  {
+  }
+
+  Result NotPredicate::parse(const char *src)
+  {
+    Result result = pe_.parse(src);
+    result.status = !result.status;
+    result.rest = src;
+    return result;
+  }
+
+  std::string NotPredicate::inspect() const
+  {
+    std::string str = "!";
+    str += pe_.inspect();
+    return str;
+  }
+
   Rule::Rule()
     : pe_(NULL)
   {

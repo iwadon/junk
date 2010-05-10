@@ -24,6 +24,7 @@ namespace peg
     ParsingExpression &operator+();
     ParsingExpression &operator-();
     ParsingExpression &operator&();
+    ParsingExpression &operator!();
   };
 
   template <typename F>
@@ -138,6 +139,16 @@ namespace peg
     ParsingExpression &pe_;
   };
 
+  class NotPredicate : public ParsingExpression
+  {
+  public:
+    NotPredicate(ParsingExpression &pe);
+    Result parse(const char *src);
+    std::string inspect() const;
+  private:
+    ParsingExpression &pe_;
+  };
+
   class Rule : public ParsingExpression
   {
   public:
@@ -189,6 +200,12 @@ namespace peg
   inline ParsingExpression &ParsingExpression::operator&()
   {
     ParsingExpression *pe = new AndPredicate(*this);
+    return *pe;
+  }
+
+  inline ParsingExpression &ParsingExpression::operator!()
+  {
+    ParsingExpression *pe = new NotPredicate(*this);
     return *pe;
   }
 
