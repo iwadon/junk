@@ -20,6 +20,7 @@ namespace peg
     ParsingExpression &operator[](F f);
     ParsingExpression &operator>>(ParsingExpression &rhs);
     ParsingExpression &operator/(ParsingExpression &rhs);
+    ParsingExpression &operator*();
   };
 
   template <typename F>
@@ -83,6 +84,16 @@ namespace peg
     ParsingExpression &rhs_;
   };
 
+  class ZeroOrMore : public ParsingExpression
+  {
+  public:
+    ZeroOrMore(ParsingExpression &pe);
+    Result parse(const char *src);
+    std::string inspect() const;
+  private:
+    ParsingExpression &pe_;
+  };
+
   class Rule : public ParsingExpression
   {
   public:
@@ -110,6 +121,12 @@ namespace peg
   inline ParsingExpression &ParsingExpression::operator/(ParsingExpression &rhs)
   {
     ParsingExpression *pe = new OrderedChoice(*this, rhs);
+    return *pe;
+  }
+
+  inline ParsingExpression &ParsingExpression::operator*()
+  {
+    ParsingExpression *pe = new ZeroOrMore(*this);
     return *pe;
   }
 

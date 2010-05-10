@@ -49,6 +49,9 @@ void PegTest::test_inspect()
   // ordered choice
   CPPUNIT_ASSERT_EQUAL(std::string("'a' / 'b'"), (peg::char_('a') / peg::char_('b')).inspect());
 
+  // zero-or-more
+  CPPUNIT_ASSERT_EQUAL(std::string("'a'*"), (*peg::char_('a')).inspect());
+
   // rule
   peg::Rule a_or_b = peg::char_('a') / peg::char_('b');
   CPPUNIT_ASSERT_EQUAL(std::string("'a' / 'b'"), a_or_b.inspect());
@@ -75,6 +78,10 @@ void PegTest::test_parse()
   PEG_ASSERT((peg::char_('f') / peg::char_('b'))[action1].parse("foo"), true, "f", "oo");
   PEG_ASSERT((peg::char_('f') / peg::char_('b'))[action1].parse("bar"), true, "b", "ar");
   PEG_ASSERT((peg::char_('a') / peg::char_('z'))[action1].parse("baz"), false, "", "baz");
+
+  // zero-or-more
+  PEG_ASSERT((*peg::char_('a'))[action1].parse("aabbcc"), true, "aa", "bbcc");
+  PEG_ASSERT((*peg::char_('a'))[action1].parse("bbccdd"), true, "", "bbccdd");
 
   // rule
   peg::Rule a_or_b = (peg::char_('a') / peg::char_('b'))[action1];

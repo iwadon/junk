@@ -101,7 +101,6 @@ namespace peg
     return str;
   }
 
-
   OrderedChoice::OrderedChoice(ParsingExpression &lhs, ParsingExpression &rhs)
     : lhs_(lhs)
     , rhs_(rhs)
@@ -122,6 +121,28 @@ namespace peg
     std::string str = lhs_.inspect();
     str += " / ";
     str += rhs_.inspect();
+    return str;
+  }
+
+  ZeroOrMore::ZeroOrMore(ParsingExpression &pe)
+    : pe_(pe)
+  {
+  }
+
+  Result ZeroOrMore::parse(const char *src)
+  {
+    Result result = pe_.parse(src);
+    while (result.status) {
+      result = pe_.parse(result.rest);
+    }
+    result.status = true;
+    return result;
+  }
+
+  std::string ZeroOrMore::inspect() const
+  {
+    std::string str = pe_.inspect();
+    str += "*";
     return str;
   }
 
