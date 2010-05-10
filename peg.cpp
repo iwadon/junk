@@ -171,6 +171,25 @@ namespace peg
     return str;
   }
 
+  Optional::Optional(ParsingExpression &pe)
+    : pe_(pe)
+  {
+  }
+
+  Result Optional::parse(const char *src)
+  {
+    Result result = pe_.parse(src);
+    result.status = true;
+    return result;
+  }
+
+  std::string Optional::inspect() const
+  {
+    std::string str = pe_.inspect();
+    str += "?";
+    return str;
+  }
+
   Rule::Rule()
     : pe_(NULL)
   {
