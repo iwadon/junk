@@ -1,6 +1,7 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include <iostream>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 #include "peg.hpp"
@@ -10,10 +11,12 @@ class PegTest : public CppUnit::TestCase
   CPPUNIT_TEST_SUITE(PegTest);
   CPPUNIT_TEST(test_inspect);
   CPPUNIT_TEST(test_parse);
+  CPPUNIT_TEST(test_example_1);
   CPPUNIT_TEST_SUITE_END();
 public:
   void test_inspect();
   void test_parse();
+  void test_example_1();
 private:
 };
 
@@ -126,6 +129,24 @@ void PegTest::test_parse()
   c_or_d = (peg::char_('c') / peg::char_('d'))[action1];
   PEG_ASSERT(c_or_d.parse("dcb"), true, "d", "cb");
   PEG_ASSERT(c_or_d.parse("bcd"), false, "", "bcd");
+}
+
+/**
+ * http://en.wikipedia.org/wiki/Parsing_expression_grammar#Examples
+ *
+ *   Value ← [0-9]+ / '(' Expr ')'
+ *   Product ← Value (('*' / '/') Value)*
+ *   Sum ← Product (('+' / '-') Product)*
+ *   Expr ← Sum
+ */
+void PegTest::test_example_1()
+{
+  peg::Rule value, product, sum, expr;
+  value = (+peg::range('0', '9')) / (peg::char_('(') >> expr >> peg::char_(')'));
+  product = value >> *((peg::char_('*') / peg::char_('/')) >> value);
+  sum = product >> *((peg::char_('+') / peg::char_('-')) >> product);
+  expr = sum;
+  PEG_ASSERT((expr[action1]).parse("(123+456)*789"), true, "(123+456)*789", "");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PegTest);
