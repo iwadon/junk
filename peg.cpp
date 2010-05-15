@@ -79,6 +79,32 @@ namespace peg
     return str;
   }
 
+  String::String(const char *str)
+    : str_(str)
+  {
+  }
+
+  Result String::parse(const char *src)
+  {
+    Result result;
+    if (!strncmp(src, str_.c_str(), str_.size())) {
+      result.status = true;
+      result.rest = src + str_.size();
+    } else {
+      result.status = false;
+      result.rest = src;
+    }
+    return result;
+  }
+
+  std::string String::inspect() const
+  {
+    std::string str = "\"";
+    str += str_;
+    str += "\"";
+    return str;
+  }
+
   Range::Range(const char first, const char last)
     : first_(first)
     , last_(last)
@@ -298,6 +324,12 @@ namespace peg
   ParsingExpression &char_(const char chr)
   {
     ParsingExpression *pe = new Char(chr);
+    return *pe;
+  }
+
+  ParsingExpression &str(const char *str)
+  {
+    ParsingExpression *pe = new String(str);
     return *pe;
   }
 

@@ -66,6 +66,16 @@ namespace peg
     char chr_;
   };
 
+  class String : public ParsingExpression
+  {
+  public:
+    String(const char *str);
+    Result parse(const char *src);
+    std::string inspect() const;
+  private:
+    std::string str_;
+  };
+
   class Range : public ParsingExpression
   {
   public:
@@ -234,6 +244,7 @@ namespace peg
 
   ParsingExpression &byte(const size_t bytes);
   ParsingExpression &char_(const char chr);
+  ParsingExpression &str(const char *str);
   ParsingExpression &range(const char first, const char last);
 }
 
