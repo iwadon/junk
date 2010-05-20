@@ -1,6 +1,8 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include <cctype>
+#include <iostream>
 #ifdef HAVE_BOOST
 #include <boost/format.hpp>
 #include <boost/utility.hpp>
@@ -9,17 +11,126 @@
 
 namespace peg
 {
-  Any any;
-
-  Result Any::parse(const char *str)
+  const char *encode_char(const char ch)
   {
-    if (*str != '\0') {
-      Result result = {true, str + 1};
-      return result;
+    //std::cout << __PRETTY_FUNCTION__ << ": " << ch << std::endl;
+    printf("%02x\n", ch);
+    static char buf[4 + 1];
+    char *p = buf;
+    if (isgraph(ch)) {
+      *p++ = ch;
     } else {
-      Result result = {false, str};
-      return result;
+      *p++ = '\\';
+      switch (ch) {
+      case '\n':
+	*p++ = 'n';
+	break;
+      case '\r':
+	*p++ = 'r';
+	break;
+      case '\t':
+	*p++ = 't';
+	break;
+      default:
+	snprintf(p, sizeof buf - 1, "x%02X", ch);
+	p += 3;
+	break;
+      }
     }
+    *p = '\0';
+    return buf;
+  }
+
+  std::string encode_str(const char *str, const size_t len, const size_t limit)
+  {
+    std::string s;
+    //size_t len = strlen(str);
+    size_t len_ = len;
+    if (len_ == 0) {
+      len_ = strlen(str);
+    }
+    size_t l;
+    if (limit > 0) {
+      l = std::min(len_, static_cast<size_t>(limit));
+    } else {
+      l = len_;
+    }
+    for (size_t i = 0; i < l; ++i) {
+      s += encode_char(str[i]);
+    }
+    if (len > l) {
+      s += "...";
+    }
+    return s;
+  }
+
+  void ErrorInfo::clear()
+  {
+    info_list_.clear();
+  }
+
+  bool ErrorInfo::empty() const
+  {
+    return info_list_.empty();
+  }
+
+  std::string ErrorInfo::message() const
+  {
+    const info_type &info = info_list_[0];
+    std::string s = "parse error: expect ";
+    s += info.first;
+    s += ", but \"";
+    s += encode_str(info.second.rest, 8);
+    s += "\"";
+    return s;
+  }
+
+  void ErrorInfo::push(std::string &msg, const Result &result)
+  {
+    info_type info(msg, result);
+    info_list_.push_back(info);
+  }
+
+  size_t ErrorInfo::size() const
+  {
+    return info_list_.size();
+  }
+
+  ErrorInfo::info_type ErrorInfo::operator[](const size_t index) const
+  {
+    return info_list_[index];
+  }
+
+  void ErrorInfo::update(const ParsingExpression &pe, const Result &result)
+  {
+    if (result.status) {
+      clear();
+    } else {
+      std::string msg = pe.inspect();
+      push(msg, result);
+    }
+  }
+
+  Result ParsingExpression::parse(const char *src)
+  {
+    ErrorInfo err;
+    Result result = parse(err, src);
+    if (!result.status) {
+      std::cout << err.message() << std::endl;
+    }
+    return result;
+  }
+
+  Result Any::parse(ErrorInfo &err, const char *src)
+  {
+    Result result = { true };
+    if (*src != '\0') {
+      result.rest = src + 1;
+    } else {
+      result.rest = src + 0;
+    }
+    err.update(*this, result);
+    return result;
   }
 
   std::string Any::inspect() const
@@ -33,9 +144,10 @@ namespace peg
   {
   }
 
-  Result Byte::parse(const char *str)
+  Result Byte::parse(ErrorInfo &err, const char *src)
   {
-    Result result = {true, str + bytes_};
+    Result result = {true, src + bytes_};
+    err.update(*this, result);
     return result;
   }
 
@@ -58,23 +170,24 @@ namespace peg
   {
   }
 
-  Result Char::parse(const char *str)
+  Result Char::parse(ErrorInfo &err, const char *src)
   {
     Result result;
-    if (*str == chr_) {
+    if (*src == chr_) {
       result.status = true;
-      result.rest = str + 1;
+      result.rest = src + 1;
     } else {
       result.status = false;
-      result.rest = str;
+      result.rest = src;
     }
+    err.update(*this, result);
     return result;
   }
 
   std::string Char::inspect() const
   {
     std::string str = "'";
-    str += chr_;
+    str += encode_char(chr_);
     str += "'";
     return str;
   }
@@ -84,7 +197,7 @@ namespace peg
   {
   }
 
-  Result String::parse(const char *src)
+  Result String::parse(ErrorInfo &err, const char *src)
   {
     Result result;
     if (!strncmp(src, str_.c_str(), str_.size())) {
@@ -94,13 +207,14 @@ namespace peg
       result.status = false;
       result.rest = src;
     }
+    err.update(*this, result);
     return result;
   }
 
   std::string String::inspect() const
   {
     std::string str = "\"";
-    str += str_;
+    str += encode_str(str_.c_str(), 0);
     str += "\"";
     return str;
   }
@@ -111,16 +225,17 @@ namespace peg
   {
   }
 
-  Result Range::parse(const char *str)
+  Result Range::parse(ErrorInfo &err, const char *src)
   {
     Result result;
-    if (*str >= first_ && *str <= last_) {
+    if (*src >= first_ && *src <= last_) {
       result.status = true;
-      result.rest = str + 1;
+      result.rest = src + 1;
     } else {
       result.status = false;
-      result.rest = str;
+      result.rest = src;
     }
+    err.update(*this, result);
     return result;
   }
 
@@ -140,17 +255,16 @@ namespace peg
   {
   }
 
-  Result Sequence::parse(const char *src)
+  Result Sequence::parse(ErrorInfo &err, const char *src)
   {
-    Result result = lhs_.parse(src);
+    Result result = lhs_.parse(err, src);
     if (result.status) {
-      result = rhs_.parse(result.rest);
-      if (result.status) {
-	return result;
-      }
+      result = rhs_.parse(err, result.rest);
     }
-    result.status = false;
-    result.rest = src;
+    if (!result.status) {
+      result.rest = src;
+    }
+    err.update(*this, result);
     return result;
   }
 
@@ -168,12 +282,13 @@ namespace peg
   {
   }
 
-  Result OrderedChoice::parse(const char *src)
+  Result OrderedChoice::parse(ErrorInfo &err, const char *src)
   {
-    Result result = lhs_.parse(src);
+    Result result = lhs_.parse(err, src);
     if (!result.status) {
-      result = rhs_.parse(src);
+      result = rhs_.parse(err, src);
     }
+    err.update(*this, result);
     return result;
   }
 
@@ -190,13 +305,14 @@ namespace peg
   {
   }
 
-  Result ZeroOrMore::parse(const char *src)
+  Result ZeroOrMore::parse(ErrorInfo &err, const char *src)
   {
-    Result result = pe_.parse(src);
-    while (result.status) {
-      result = pe_.parse(result.rest);
+    Result result = pe_.parse(err, src);
+    while (*result.rest != '\0' && result.status) {
+      result = pe_.parse(err, result.rest);
     }
     result.status = true;
+    err.update(*this, result);
     return result;
   }
 
@@ -212,16 +328,18 @@ namespace peg
   {
   }
 
-  Result OneOrMore::parse(const char *src)
+  Result OneOrMore::parse(ErrorInfo &err, const char *src)
   {
-    Result result = pe_.parse(src);
+    Result result = pe_.parse(err, src);
     if (!result.status) {
+      err.update(*this, result);
       return result;
     }
     do {
-      result = pe_.parse(result.rest);
-    } while (result.status);
+      result = pe_.parse(err, result.rest);
+    } while (*result.rest != '\0' && result.status);
     result.status = true;
+    err.update(*this, result);
     return result;
   }
 
@@ -237,10 +355,11 @@ namespace peg
   {
   }
 
-  Result Optional::parse(const char *src)
+  Result Optional::parse(ErrorInfo &err, const char *src)
   {
-    Result result = pe_.parse(src);
+    Result result = pe_.parse(err, src);
     result.status = true;
+    err.update(*this, result);
     return result;
   }
 
@@ -256,10 +375,11 @@ namespace peg
   {
   }
 
-  Result AndPredicate::parse(const char *src)
+  Result AndPredicate::parse(ErrorInfo &err, const char *src)
   {
-    Result result = pe_.parse(src);
+    Result result = pe_.parse(err, src);
     result.rest = src;
+    err.update(*this, result);
     return result;
   }
 
@@ -275,11 +395,12 @@ namespace peg
   {
   }
 
-  Result NotPredicate::parse(const char *src)
+  Result NotPredicate::parse(ErrorInfo &err, const char *src)
   {
-    Result result = pe_.parse(src);
+    Result result = pe_.parse(err, src);
     result.status = !result.status;
     result.rest = src;
+    err.update(*this, result);
     return result;
   }
 
@@ -292,28 +413,37 @@ namespace peg
 
   Rule::Rule()
     : pe_(NULL)
+    , in_inspect(false)
   {
   }
 
   Rule::Rule(ParsingExpression &pe)
     : pe_(boost::addressof(pe))
+    , in_inspect(false)
   {
   }
 
-  Result Rule::parse(const char *str)
+  Result Rule::parse(ErrorInfo &err, const char *src)
   {
-    if (pe_ != NULL) {
-      return pe_->parse(str);
-    } else {
-      Result result = {false, str};
-      return result;
-    }
+    Result result = pe_->parse(err, src);
+    err.update(*this, result);
+    return result;
   }
 
   std::string Rule::inspect() const
   {
-    return pe_->inspect();
+    std::string s;
+    if (in_inspect) {
+      s = "[...]";
+    } else {
+      in_inspect = true;
+      s += pe_->inspect();
+      in_inspect = false;
+    }
+    return s;
   }
+
+  Any any;
 
   ParsingExpression &byte(const size_t bytes)
   {

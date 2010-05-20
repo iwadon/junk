@@ -2,9 +2,13 @@
 #define PEG_HPP_INCLUDED 1
 
 #include <string>
+#include <utility>
+#include <vector>
 
 namespace peg
 {
+  class ErrorInfo;
+
   struct Result
   {
     bool status;
@@ -14,7 +18,8 @@ namespace peg
   class ParsingExpression
   {
   public:
-    virtual Result parse(const char *src) = 0;
+    virtual Result parse(const char *src);
+    virtual Result parse(ErrorInfo &err, const char *src) = 0;
     virtual std::string inspect() const = 0;
     template <typename F>
     ParsingExpression &operator[](F f);
@@ -27,12 +32,29 @@ namespace peg
     ParsingExpression &operator!();
   };
 
+  class ErrorInfo
+  {
+  public:
+    typedef std::pair<std::string, peg::Result> info_type;
+    void clear();
+    bool empty() const;
+    std::string message() const;
+    void push(std::string &src, const peg::Result &result);
+    size_t size() const;
+    info_type operator[](const size_t index) const;
+    void update(const ParsingExpression &pe, const Result &result);
+  private:
+    typedef std::vector<info_type> info_list_type;
+    info_list_type info_list_;
+  };
+
   template <typename F>
   class Action : public ParsingExpression
   {
   public:
     Action(ParsingExpression *pe, F action);
-    Result parse(const char *src);
+    Result parse(const char *src) { return ParsingExpression::parse(src); }
+    Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
     ParsingExpression *pe_;
@@ -42,7 +64,8 @@ namespace peg
   class Any : public ParsingExpression
   {
   public:
-    Result parse(const char *src);
+    Result parse(const char *src) { return ParsingExpression::parse(src); }
+    Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   };
 
@@ -50,7 +73,8 @@ namespace peg
   {
   public:
     Byte(const size_t bytes);
-    Result parse(const char *src);
+    Result parse(const char *src) { return ParsingExpression::parse(src); }
+    Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
     size_t bytes_;
@@ -60,7 +84,8 @@ namespace peg
   {
   public:
     Char(const char chr);
-    Result parse(const char *src);
+    Result parse(const char *src) { return ParsingExpression::parse(src); }
+    Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
     char chr_;
@@ -70,7 +95,8 @@ namespace peg
   {
   public:
     String(const char *str);
-    Result parse(const char *src);
+    Result parse(const char *src) { return ParsingExpression::parse(src); }
+    Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
     std::string str_;
@@ -80,7 +106,8 @@ namespace peg
   {
   public:
     Range(const char first, const char last);
-    Result parse(const char *src);
+    Result parse(const char *src) { return ParsingExpression::parse(src); }
+    Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
     char first_;
@@ -91,7 +118,8 @@ namespace peg
   {
   public:
     Sequence(ParsingExpression &lhs, ParsingExpression &rhs);
-    Result parse(const char *src);
+    Result parse(const char *src) { return ParsingExpression::parse(src); }
+    Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
     ParsingExpression &lhs_;
@@ -102,7 +130,8 @@ namespace peg
   {
   public:
     OrderedChoice(ParsingExpression &lhs, ParsingExpression &rhs);
-    Result parse(const char *src);
+    Result parse(const char *src) { return ParsingExpression::parse(src); }
+    Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
     ParsingExpression &lhs_;
@@ -113,7 +142,8 @@ namespace peg
   {
   public:
     ZeroOrMore(ParsingExpression &pe);
-    Result parse(const char *src);
+    Result parse(const char *src) { return ParsingExpression::parse(src); }
+    Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
     ParsingExpression &pe_;
@@ -123,7 +153,8 @@ namespace peg
   {
   public:
     OneOrMore(ParsingExpression &pe);
-    Result parse(const char *src);
+    Result parse(const char *src) { return ParsingExpression::parse(src); }
+    Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
     ParsingExpression &pe_;
@@ -133,7 +164,8 @@ namespace peg
   {
   public:
     Optional(ParsingExpression &pe);
-    Result parse(const char *src);
+    Result parse(const char *src) { return ParsingExpression::parse(src); }
+    Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
     ParsingExpression &pe_;
@@ -143,7 +175,8 @@ namespace peg
   {
   public:
     AndPredicate(ParsingExpression &pe);
-    Result parse(const char *src);
+    Result parse(const char *src) { return ParsingExpression::parse(src); }
+    Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
     ParsingExpression &pe_;
@@ -153,7 +186,8 @@ namespace peg
   {
   public:
     NotPredicate(ParsingExpression &pe);
-    Result parse(const char *src);
+    Result parse(const char *src) { return ParsingExpression::parse(src); }
+    Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
     ParsingExpression &pe_;
@@ -164,10 +198,12 @@ namespace peg
   public:
     Rule();
     Rule(ParsingExpression &pe);
-    Result parse(const char *src);
+    Result parse(const char *src) { return ParsingExpression::parse(src); }
+    Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
     ParsingExpression *pe_;
+    mutable bool in_inspect;
   };
 
   template <typename F>
@@ -227,10 +263,16 @@ namespace peg
   }
 
   template <typename F>
-  inline Result Action<F>::parse(const char *str)
+  inline Result Action<F>::parse(ErrorInfo &err, const char *str)
   {
-    Result result = pe_->parse(str);
-    action_(str, result.rest);
+    //std::cout << __PRETTY_FUNCTION__ << std::endl;
+    Result result = pe_->parse(err, str);
+    if (result.status) {
+      //std::cout << "OK" << std::endl;
+      action_(str, result.rest);
+    } else {
+      //std::cout << "NG" << std::endl;
+    }
     return result;
   }
 
@@ -246,6 +288,9 @@ namespace peg
   ParsingExpression &char_(const char chr);
   ParsingExpression &str(const char *str);
   ParsingExpression &range(const char first, const char last);
+
+  const char *encode_char(const char ch);
+  std::string encode_str(const char *str, const size_t len, const size_t limit = 0);
 }
 
 #endif // defined(PEG_HPP_INCLUDED)
