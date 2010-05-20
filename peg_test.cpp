@@ -46,6 +46,9 @@ void PegTest::test_inspect()
   // char_
   CPPUNIT_ASSERT_EQUAL(std::string("'a'"), peg::char_('a').inspect());
 
+  // string
+  CPPUNIT_ASSERT_EQUAL(std::string("\"abc\""), peg::str("abc").inspect());
+
   // range
   CPPUNIT_ASSERT_EQUAL(std::string("[0-9]"), peg::range('0', '9').inspect());
 
@@ -87,6 +90,10 @@ void PegTest::test_parse()
   // char_
   PEG_ASSERT((peg::char_('f')[action1]).parse("foo"), true, "f", "oo");
   PEG_ASSERT((peg::char_('o')[action1]).parse("foo"), false, "", "foo");
+
+  // string
+  PEG_ASSERT((peg::str("foo")[action1]).parse("foobarbaz"), true, "foo", "barbaz");
+  PEG_ASSERT((peg::str("bar")[action1]).parse("foobarbaz"), false, "", "foobarbaz");
 
   // range
   PEG_ASSERT((peg::range('0', '3')[action1]).parse("123"), true, "1", "23");
