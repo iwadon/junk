@@ -29,6 +29,7 @@ static void action1(const char *first, const char *last)
 }
 
 #define PEG_ASSERT(PEG, STATUS, MATCHED, REST) {			\
+    str_.clear();							\
     peg::Result result = PEG;						\
     CPPUNIT_ASSERT_EQUAL(std::string(REST), std::string(result.rest));	\
     CPPUNIT_ASSERT_EQUAL(std::string(MATCHED), str_);			\
