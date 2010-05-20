@@ -14,7 +14,7 @@ namespace peg
   const char *encode_char(const char ch)
   {
     //std::cout << __PRETTY_FUNCTION__ << ": " << ch << std::endl;
-    printf("%02x\n", ch);
+    //printf("%02x\n", ch);
     static char buf[4 + 1];
     char *p = buf;
     if (isgraph(ch)) {
@@ -55,10 +55,15 @@ namespace peg
     } else {
       l = len_;
     }
-    for (size_t i = 0; i < l; ++i) {
-      s += encode_char(str[i]);
+    size_t i;
+    for (i = 0; i < l; ++i) {
+      char c = str[i];
+      if (c == '\0') {
+	break;
+      }
+      s += encode_char(c);
     }
-    if (len > l) {
+    if (i == l && len > l) {
       s += "...";
     }
     return s;
