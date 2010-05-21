@@ -18,7 +18,6 @@ namespace peg
   class ParsingExpression
   {
   public:
-    virtual Result parse(const char *src);
     virtual Result parse(ErrorInfo &err, const char *src) = 0;
     virtual std::string inspect() const = 0;
     template <typename F>
@@ -53,7 +52,6 @@ namespace peg
   {
   public:
     Action(ParsingExpression *pe, F action);
-    Result parse(const char *src) { return ParsingExpression::parse(src); }
     Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
@@ -64,7 +62,6 @@ namespace peg
   class Any : public ParsingExpression
   {
   public:
-    Result parse(const char *src) { return ParsingExpression::parse(src); }
     Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   };
@@ -73,7 +70,6 @@ namespace peg
   {
   public:
     Byte(const size_t bytes);
-    Result parse(const char *src) { return ParsingExpression::parse(src); }
     Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
@@ -84,7 +80,6 @@ namespace peg
   {
   public:
     Char(const char chr);
-    Result parse(const char *src) { return ParsingExpression::parse(src); }
     Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
@@ -95,7 +90,6 @@ namespace peg
   {
   public:
     String(const char *str);
-    Result parse(const char *src) { return ParsingExpression::parse(src); }
     Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
@@ -106,7 +100,6 @@ namespace peg
   {
   public:
     Range(const char first, const char last);
-    Result parse(const char *src) { return ParsingExpression::parse(src); }
     Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
@@ -118,7 +111,6 @@ namespace peg
   {
   public:
     Sequence(ParsingExpression &lhs, ParsingExpression &rhs);
-    Result parse(const char *src) { return ParsingExpression::parse(src); }
     Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
@@ -130,7 +122,6 @@ namespace peg
   {
   public:
     OrderedChoice(ParsingExpression &lhs, ParsingExpression &rhs);
-    Result parse(const char *src) { return ParsingExpression::parse(src); }
     Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
@@ -142,7 +133,6 @@ namespace peg
   {
   public:
     ZeroOrMore(ParsingExpression &pe);
-    Result parse(const char *src) { return ParsingExpression::parse(src); }
     Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
@@ -153,7 +143,6 @@ namespace peg
   {
   public:
     OneOrMore(ParsingExpression &pe);
-    Result parse(const char *src) { return ParsingExpression::parse(src); }
     Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
@@ -164,7 +153,6 @@ namespace peg
   {
   public:
     Optional(ParsingExpression &pe);
-    Result parse(const char *src) { return ParsingExpression::parse(src); }
     Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
@@ -175,7 +163,6 @@ namespace peg
   {
   public:
     AndPredicate(ParsingExpression &pe);
-    Result parse(const char *src) { return ParsingExpression::parse(src); }
     Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
@@ -186,7 +173,6 @@ namespace peg
   {
   public:
     NotPredicate(ParsingExpression &pe);
-    Result parse(const char *src) { return ParsingExpression::parse(src); }
     Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
@@ -198,7 +184,6 @@ namespace peg
   public:
     Rule();
     Rule(ParsingExpression &pe);
-    Result parse(const char *src) { return ParsingExpression::parse(src); }
     Result parse(ErrorInfo &err, const char *src);
     std::string inspect() const;
   private:
@@ -280,6 +265,16 @@ namespace peg
   inline std::string Action<F>::inspect() const
   {
     return pe_->inspect();
+  }
+
+  inline Result parse(ParsingExpression &pe, const char *src)
+  {
+    ErrorInfo err;
+    Result result = pe.parse(err, src);
+    if (!result.status) {
+      std::cerr << err.message() << std::endl;
+    }
+    return result;
   }
 
   extern Any any;

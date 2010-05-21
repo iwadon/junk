@@ -116,16 +116,6 @@ namespace peg
     }
   }
 
-  Result ParsingExpression::parse(const char *src)
-  {
-    ErrorInfo err;
-    Result result = parse(err, src);
-    if (!result.status) {
-      std::cout << err.message() << std::endl;
-    }
-    return result;
-  }
-
   Result Any::parse(ErrorInfo &err, const char *src)
   {
     Result result = { true };
