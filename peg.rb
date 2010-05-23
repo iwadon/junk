@@ -1,6 +1,6 @@
 module Peg
   class Result
-    attr_reader :status, :rest
+    attr_accessor :status, :rest
 
     def initialize(status, rest)
       @status, @rest = status, rest
@@ -21,6 +21,24 @@ module Peg
     def >>(other)
       Sequence.new(self, other)
     end
+
+    def /(other)
+      OrderedChoice.new(self, other)
+    end
+
+    def zero_or_more
+      ZeroOrMore.new(self)
+    end
+
+    def one_or_more
+      OneOrMore.new(self)
+    end
+    alias :+@ :one_or_more
+
+    def optional
+      Optional.new(self)
+    end
+    alias :-@ :optional
   end
 
   class Any < ParsingExpression
@@ -92,18 +110,144 @@ module Peg
     end
   end
 
+  class OrderedChoice < ParsingExpression
+    def initialize(lhs, rhs)
+      @lhs, @rhs = lhs, rhs
+    end
+
+    def inspect
+      "#{@lhs.inspect} / #{@rhs.inspect}"
+    end
+
+    def parse(src)
+      result = @lhs.parse(src)
+      if !result.status
+        result = @rhs.parse(result.rest)
+      end
+      result
+    end
+  end
+
+  class ZeroOrMore < ParsingExpression
+    def initialize(pe)
+      @pe = pe
+    end
+
+    def inspect
+      "#{@pe.inspect}*"
+    end
+
+    def parse(src)
+      result = @pe.parse(src)
+      while !result.rest.empty? and result.status
+        result = @pe.parse(result.rest)
+      end
+      result.status = true
+      result
+    end
+  end
+
+  class OneOrMore < ParsingExpression
+    def initialize(pe)
+      @pe = pe
+    end
+
+    def inspect
+      "#{@pe.inspect}+"
+    end
+
+    def parse(src)
+      result = @pe.parse(src)
+      return result unless result.status
+      while !result.rest.empty? and result.status
+        result = @pe.parse(result.rest)
+      end
+      result.status = true
+      result
+    end
+  end
+
+  class Optional < ParsingExpression
+    def initialize(pe)
+      @pe = pe
+    end
+
+    def inspect
+      "#{@pe.inspect}?"
+    end
+
+    def parse(src)
+      result = @pe.parse(src)
+      result.status = true
+      result
+    end
+  end
+
+  class AndPredicate < ParsingExpression
+    def initialize(pe)
+      @pe = pe
+    end
+
+    def inspect
+      "&#{@pe.inspect}"
+    end
+
+    def parse(src)
+      result = @pe.parse(src)
+      result.rest = src
+      result
+    end
+  end
+
+  class NotPredicate < ParsingExpression
+    def initialize(pe)
+      @pe = pe
+    end
+
+    def inspect
+      "!#{@pe.inspect}"
+    end
+
+    def parse(src)
+      result = @pe.parse(src)
+      result.status = !result.status
+      result.rest = src
+      result
+    end
+  end
+
   def any
     @any ||= Any.new
   end
   module_function :any
 
-  def char(char)
-    (@char = {})[char] ||= Char.new(char)
+  def char(ch)
+    (@char = {})[ch] ||= Char.new(ch)
   end
   module_function :char
+
+  def str(s)
+    (@str = {})[s] ||= String.new(s)
+  end
+  module_function :str
 
   def range(first, last)
     (@range ||= {})[[first, last]] ||= Range.new(first, last)
   end
   module_function :range
+
+  def optional(pe)
+    Optional.new(pe)
+  end
+  module_function :optional
+
+  def and(pe)
+    AndPredicate.new(pe)
+  end
+  module_function :and
+
+  def not(pe)
+    NotPredicate.new(pe)
+  end
+  module_function :not
 end

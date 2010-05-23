@@ -8,7 +8,7 @@ libsequencer_a_SOURCES = peg.cpp peg.hpp \
 libsequencer_a_CPPFLAGS = $(BOOST_CPPFLAGS)
 
 check_PROGRAMS = sequencer_test
-TESTS = $(check_PROGRAMS)
+TESTS = $(check_PROGRAMS) peg_test.sh
 
 sequencer_test_SOURCES = test_main.cpp function_test.cpp peg_test.cpp variable_length_value_test.cpp volume_test.cpp
 sequencer_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)

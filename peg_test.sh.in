@@ -1,0 +1,2 @@
+#!/bin/sh
+@RUBY@ -I@top_srcdir@ @top_srcdir@/peg_test.rb

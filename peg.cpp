@@ -353,7 +353,10 @@ namespace peg
   Result Optional::parse(ErrorInfo &err, const char *src)
   {
     Result result = pe_.parse(err, src);
-    result.status = true;
+    if (!result.status) {
+      result.status = true;
+      result.rest = src;
+    }
     err.update(*this, result);
     return result;
   }

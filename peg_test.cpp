@@ -107,6 +107,8 @@ void PegTest::test_parse()
   PEG_ASSERT(peg::parse((peg::char_('f') / peg::char_('b'))[action1], "foo"), true, "f", "oo");
   PEG_ASSERT(peg::parse((peg::char_('f') / peg::char_('b'))[action1], "bar"), true, "b", "ar");
   PEG_ASSERT(peg::parse((peg::char_('a') / peg::char_('z'))[action1], "baz"), false, "", "baz");
+  PEG_ASSERT(peg::parse(((peg::char_('a') >> peg::char_('b')) / (peg::char_('a') >> peg::char_('c')))[action1], "abc"), true, "ab", "c");
+  PEG_ASSERT(peg::parse(((peg::char_('a') >> peg::char_('b')) / (peg::char_('a') >> peg::char_('c')))[action1], "acd"), true, "ac", "d");
 
   // zero-or-more
   PEG_ASSERT(peg::parse((*peg::char_('a'))[action1], "aabbcc"), true, "aa", "bbcc");
@@ -118,7 +120,8 @@ void PegTest::test_parse()
 
   // optional
   PEG_ASSERT(peg::parse((-peg::char_('a'))[action1], "aaa"), true, "a", "aa");
-  PEG_ASSERT(peg::parse((+peg::char_('a'))[action1], "bbb"), false, "", "bbb");
+  PEG_ASSERT(peg::parse((-peg::char_('a'))[action1], "bbb"), true, "", "bbb");
+  PEG_ASSERT(peg::parse((-(peg::char_('a') >> peg::char_('b')))[action1], "acd"), true, "", "acd");
 
   // and-predicate
   PEG_ASSERT(peg::parse((&peg::char_('a') >> +peg::any)[action1], "abc"), true, "abc", "");

@@ -26,6 +26,8 @@ else
   AC_MSG_RESULT(no)
 fi
 
+AX_WITH_RUBY
+
 # Checks for libraries.
 AM_PATH_CPPUNIT
 AX_BOOST_BASE
@@ -46,5 +48,5 @@ AC_TYPE_UINT8_T
 AC_FUNC_MEMCMP
 AC_HEADER_STDC
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile peg_test.sh], [chmod +x peg_test.sh])
 AC_OUTPUT
