@@ -19,7 +19,7 @@ namespace peg
   {
   public:
     virtual Result parse(ErrorInfo &err, const char *src) = 0;
-    virtual std::string inspect() const = 0;
+    virtual std::string str() const = 0;
     template <typename F>
     ParsingExpression &operator[](F f);
     ParsingExpression &operator>>(ParsingExpression &rhs);
@@ -53,7 +53,7 @@ namespace peg
   public:
     Action(ParsingExpression *pe, F action);
     Result parse(ErrorInfo &err, const char *src);
-    std::string inspect() const;
+    std::string str() const;
   private:
     ParsingExpression *pe_;
     F action_;
@@ -63,7 +63,7 @@ namespace peg
   {
   public:
     Result parse(ErrorInfo &err, const char *src);
-    std::string inspect() const;
+    std::string str() const;
   };
 
   class Byte : public ParsingExpression
@@ -71,7 +71,7 @@ namespace peg
   public:
     Byte(const size_t bytes);
     Result parse(ErrorInfo &err, const char *src);
-    std::string inspect() const;
+    std::string str() const;
   private:
     size_t bytes_;
   };
@@ -81,7 +81,7 @@ namespace peg
   public:
     Char(const char chr);
     Result parse(ErrorInfo &err, const char *src);
-    std::string inspect() const;
+    std::string str() const;
   private:
     char chr_;
   };
@@ -91,7 +91,7 @@ namespace peg
   public:
     String(const char *str);
     Result parse(ErrorInfo &err, const char *src);
-    std::string inspect() const;
+    std::string str() const;
   private:
     std::string str_;
   };
@@ -101,7 +101,7 @@ namespace peg
   public:
     Range(const char first, const char last);
     Result parse(ErrorInfo &err, const char *src);
-    std::string inspect() const;
+    std::string str() const;
   private:
     char first_;
     char last_;
@@ -112,7 +112,7 @@ namespace peg
   public:
     Sequence(ParsingExpression &lhs, ParsingExpression &rhs);
     Result parse(ErrorInfo &err, const char *src);
-    std::string inspect() const;
+    std::string str() const;
   private:
     ParsingExpression &lhs_;
     ParsingExpression &rhs_;
@@ -123,7 +123,7 @@ namespace peg
   public:
     OrderedChoice(ParsingExpression &lhs, ParsingExpression &rhs);
     Result parse(ErrorInfo &err, const char *src);
-    std::string inspect() const;
+    std::string str() const;
   private:
     ParsingExpression &lhs_;
     ParsingExpression &rhs_;
@@ -134,7 +134,7 @@ namespace peg
   public:
     ZeroOrMore(ParsingExpression &pe);
     Result parse(ErrorInfo &err, const char *src);
-    std::string inspect() const;
+    std::string str() const;
   private:
     ParsingExpression &pe_;
   };
@@ -144,7 +144,7 @@ namespace peg
   public:
     OneOrMore(ParsingExpression &pe);
     Result parse(ErrorInfo &err, const char *src);
-    std::string inspect() const;
+    std::string str() const;
   private:
     ParsingExpression &pe_;
   };
@@ -154,7 +154,7 @@ namespace peg
   public:
     Optional(ParsingExpression &pe);
     Result parse(ErrorInfo &err, const char *src);
-    std::string inspect() const;
+    std::string str() const;
   private:
     ParsingExpression &pe_;
   };
@@ -164,7 +164,7 @@ namespace peg
   public:
     AndPredicate(ParsingExpression &pe);
     Result parse(ErrorInfo &err, const char *src);
-    std::string inspect() const;
+    std::string str() const;
   private:
     ParsingExpression &pe_;
   };
@@ -174,7 +174,7 @@ namespace peg
   public:
     NotPredicate(ParsingExpression &pe);
     Result parse(ErrorInfo &err, const char *src);
-    std::string inspect() const;
+    std::string str() const;
   private:
     ParsingExpression &pe_;
   };
@@ -185,10 +185,10 @@ namespace peg
     Rule();
     Rule(ParsingExpression &pe);
     Result parse(ErrorInfo &err, const char *src);
-    std::string inspect() const;
+    std::string str() const;
   private:
     ParsingExpression *pe_;
-    mutable bool in_inspect;
+    mutable bool in_str;
   };
 
   template <typename F>
@@ -262,9 +262,9 @@ namespace peg
   }
 
   template <typename F>
-  inline std::string Action<F>::inspect() const
+  inline std::string Action<F>::str() const
   {
-    return pe_->inspect();
+    return pe_->str();
   }
 
   inline Result parse(ParsingExpression &pe, const char *src)

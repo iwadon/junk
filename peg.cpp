@@ -111,7 +111,7 @@ namespace peg
     if (result.status) {
       clear();
     } else {
-      std::string msg = pe.inspect();
+      std::string msg = pe.str();
       push(msg, result);
     }
   }
@@ -128,7 +128,7 @@ namespace peg
     return result;
   }
 
-  std::string Any::inspect() const
+  std::string Any::str() const
   {
     std::string str(".");
     return str;
@@ -146,7 +146,7 @@ namespace peg
     return result;
   }
 
-  std::string Byte::inspect() const
+  std::string Byte::str() const
   {
     std::string str;
     switch (bytes_) {
@@ -179,7 +179,7 @@ namespace peg
     return result;
   }
 
-  std::string Char::inspect() const
+  std::string Char::str() const
   {
     std::string str = "'";
     str += encode_char(chr_);
@@ -206,7 +206,7 @@ namespace peg
     return result;
   }
 
-  std::string String::inspect() const
+  std::string String::str() const
   {
     std::string str = "\"";
     str += encode_str(str_.c_str(), 0);
@@ -234,7 +234,7 @@ namespace peg
     return result;
   }
 
-  std::string Range::inspect() const
+  std::string Range::str() const
   {
     std::string str = "[";
     str += first_;
@@ -263,11 +263,11 @@ namespace peg
     return result;
   }
 
-  std::string Sequence::inspect() const
+  std::string Sequence::str() const
   {
-    std::string str = lhs_.inspect();
+    std::string str = lhs_.str();
     str += " ";
-    str += rhs_.inspect();
+    str += rhs_.str();
     return str;
   }
 
@@ -287,11 +287,11 @@ namespace peg
     return result;
   }
 
-  std::string OrderedChoice::inspect() const
+  std::string OrderedChoice::str() const
   {
-    std::string str = lhs_.inspect();
+    std::string str = lhs_.str();
     str += " / ";
-    str += rhs_.inspect();
+    str += rhs_.str();
     return str;
   }
 
@@ -311,9 +311,9 @@ namespace peg
     return result;
   }
 
-  std::string ZeroOrMore::inspect() const
+  std::string ZeroOrMore::str() const
   {
-    std::string str = pe_.inspect();
+    std::string str = pe_.str();
     str += "*";
     return str;
   }
@@ -338,9 +338,9 @@ namespace peg
     return result;
   }
 
-  std::string OneOrMore::inspect() const
+  std::string OneOrMore::str() const
   {
-    std::string str = pe_.inspect();
+    std::string str = pe_.str();
     str += "+";
     return str;
   }
@@ -361,9 +361,9 @@ namespace peg
     return result;
   }
 
-  std::string Optional::inspect() const
+  std::string Optional::str() const
   {
-    std::string str = pe_.inspect();
+    std::string str = pe_.str();
     str += "?";
     return str;
   }
@@ -381,10 +381,10 @@ namespace peg
     return result;
   }
 
-  std::string AndPredicate::inspect() const
+  std::string AndPredicate::str() const
   {
     std::string str = "&";
-    str += pe_.inspect();
+    str += pe_.str();
     return str;
   }
 
@@ -402,22 +402,22 @@ namespace peg
     return result;
   }
 
-  std::string NotPredicate::inspect() const
+  std::string NotPredicate::str() const
   {
     std::string str = "!";
-    str += pe_.inspect();
+    str += pe_.str();
     return str;
   }
 
   Rule::Rule()
     : pe_(NULL)
-    , in_inspect(false)
+    , in_str(false)
   {
   }
 
   Rule::Rule(ParsingExpression &pe)
     : pe_(boost::addressof(pe))
-    , in_inspect(false)
+    , in_str(false)
   {
   }
 
@@ -428,15 +428,15 @@ namespace peg
     return result;
   }
 
-  std::string Rule::inspect() const
+  std::string Rule::str() const
   {
     std::string s;
-    if (in_inspect) {
+    if (in_str) {
       s = "[...]";
     } else {
-      in_inspect = true;
-      s += pe_->inspect();
-      in_inspect = false;
+      in_str = true;
+      s += pe_->str();
+      in_str = false;
     }
     return s;
   }

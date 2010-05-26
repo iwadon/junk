@@ -8,12 +8,12 @@
 class PegTest : public CppUnit::TestCase
 {
   CPPUNIT_TEST_SUITE(PegTest);
-  CPPUNIT_TEST(test_inspect);
+  CPPUNIT_TEST(test_str);
   CPPUNIT_TEST(test_parse);
   CPPUNIT_TEST(test_example_1);
   CPPUNIT_TEST_SUITE_END();
 public:
-  void test_inspect();
+  void test_str();
   void test_parse();
   void test_example_1();
 private:
@@ -35,47 +35,47 @@ static void action1(const char *first, const char *last)
     CPPUNIT_ASSERT_EQUAL(STATUS, result.status);			\
   }
 
-void PegTest::test_inspect()
+void PegTest::test_str()
 {
   // any
-  CPPUNIT_ASSERT_EQUAL(std::string("."), peg::any.inspect());
+  CPPUNIT_ASSERT_EQUAL(std::string("."), peg::any.str());
 
   // byte
-  CPPUNIT_ASSERT_EQUAL(std::string("[4B]"), peg::byte(4).inspect());
+  CPPUNIT_ASSERT_EQUAL(std::string("[4B]"), peg::byte(4).str());
 
   // char_
-  CPPUNIT_ASSERT_EQUAL(std::string("'a'"), peg::char_('a').inspect());
+  CPPUNIT_ASSERT_EQUAL(std::string("'a'"), peg::char_('a').str());
 
   // string
-  CPPUNIT_ASSERT_EQUAL(std::string("\"abc\""), peg::str("abc").inspect());
+  CPPUNIT_ASSERT_EQUAL(std::string("\"abc\""), peg::str("abc").str());
 
   // range
-  CPPUNIT_ASSERT_EQUAL(std::string("[0-9]"), peg::range('0', '9').inspect());
+  CPPUNIT_ASSERT_EQUAL(std::string("[0-9]"), peg::range('0', '9').str());
 
   // sequence
-  CPPUNIT_ASSERT_EQUAL(std::string("'a' 'b'"), (peg::char_('a') >> peg::char_('b')).inspect());
+  CPPUNIT_ASSERT_EQUAL(std::string("'a' 'b'"), (peg::char_('a') >> peg::char_('b')).str());
 
   // ordered choice
-  CPPUNIT_ASSERT_EQUAL(std::string("'a' / 'b'"), (peg::char_('a') / peg::char_('b')).inspect());
+  CPPUNIT_ASSERT_EQUAL(std::string("'a' / 'b'"), (peg::char_('a') / peg::char_('b')).str());
 
   // zero-or-more
-  CPPUNIT_ASSERT_EQUAL(std::string("'a'*"), (*peg::char_('a')).inspect());
+  CPPUNIT_ASSERT_EQUAL(std::string("'a'*"), (*peg::char_('a')).str());
 
   // one-or-more
-  CPPUNIT_ASSERT_EQUAL(std::string("'a'+"), (+peg::char_('a')).inspect());
+  CPPUNIT_ASSERT_EQUAL(std::string("'a'+"), (+peg::char_('a')).str());
 
   // optional
-  CPPUNIT_ASSERT_EQUAL(std::string("'a'?"), (-peg::char_('a')).inspect());
+  CPPUNIT_ASSERT_EQUAL(std::string("'a'?"), (-peg::char_('a')).str());
 
   // and-predicate
-  CPPUNIT_ASSERT_EQUAL(std::string("&'a'"), (&peg::char_('a')).inspect());
+  CPPUNIT_ASSERT_EQUAL(std::string("&'a'"), (&peg::char_('a')).str());
 
   // not-predicate
-  CPPUNIT_ASSERT_EQUAL(std::string("!'a'"), (!peg::char_('a')).inspect());
+  CPPUNIT_ASSERT_EQUAL(std::string("!'a'"), (!peg::char_('a')).str());
 
   // rule
   peg::Rule a_or_b = peg::char_('a') / peg::char_('b');
-  CPPUNIT_ASSERT_EQUAL(std::string("'a' / 'b'"), a_or_b.inspect());
+  CPPUNIT_ASSERT_EQUAL(std::string("'a' / 'b'"), a_or_b.str());
 }
 
 void PegTest::test_parse()
