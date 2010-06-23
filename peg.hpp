@@ -13,6 +13,7 @@ namespace peg
   {
     bool status;
     const char *rest;
+    std::string inspect() const;
   };
 
   class ParsingExpression
@@ -20,6 +21,7 @@ namespace peg
   public:
     virtual Result parse(ErrorInfo &err, const char *src) = 0;
     virtual std::string str() const = 0;
+    virtual std::string inspect() const = 0;
     template <typename F>
     ParsingExpression &operator[](F f);
     ParsingExpression &operator>>(ParsingExpression &rhs);
@@ -54,6 +56,7 @@ namespace peg
     Action(ParsingExpression *pe, F action);
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
+    std::string inspect() const;
   private:
     ParsingExpression *pe_;
     F action_;
@@ -64,6 +67,7 @@ namespace peg
   public:
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
+    std::string inspect() const;
   };
 
   class Byte : public ParsingExpression
@@ -72,6 +76,7 @@ namespace peg
     Byte(const size_t bytes);
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
+    std::string inspect() const;
   private:
     size_t bytes_;
   };
@@ -82,6 +87,7 @@ namespace peg
     Char(const char chr);
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
+    std::string inspect() const;
   private:
     char chr_;
   };
@@ -92,6 +98,7 @@ namespace peg
     String(const char *str);
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
+    std::string inspect() const;
   private:
     std::string str_;
   };
@@ -102,6 +109,7 @@ namespace peg
     Range(const char first, const char last);
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
+    std::string inspect() const;
   private:
     char first_;
     char last_;
@@ -113,6 +121,7 @@ namespace peg
     Sequence(ParsingExpression &lhs, ParsingExpression &rhs);
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
+    std::string inspect() const;
   private:
     ParsingExpression &lhs_;
     ParsingExpression &rhs_;
@@ -124,6 +133,7 @@ namespace peg
     OrderedChoice(ParsingExpression &lhs, ParsingExpression &rhs);
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
+    std::string inspect() const;
   private:
     ParsingExpression &lhs_;
     ParsingExpression &rhs_;
@@ -135,6 +145,7 @@ namespace peg
     ZeroOrMore(ParsingExpression &pe);
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
+    std::string inspect() const;
   private:
     ParsingExpression &pe_;
   };
@@ -145,6 +156,7 @@ namespace peg
     OneOrMore(ParsingExpression &pe);
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
+    std::string inspect() const;
   private:
     ParsingExpression &pe_;
   };
@@ -155,6 +167,7 @@ namespace peg
     Optional(ParsingExpression &pe);
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
+    std::string inspect() const;
   private:
     ParsingExpression &pe_;
   };
@@ -165,6 +178,7 @@ namespace peg
     AndPredicate(ParsingExpression &pe);
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
+    std::string inspect() const;
   private:
     ParsingExpression &pe_;
   };
@@ -175,6 +189,7 @@ namespace peg
     NotPredicate(ParsingExpression &pe);
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
+    std::string inspect() const;
   private:
     ParsingExpression &pe_;
   };
@@ -186,6 +201,7 @@ namespace peg
     Rule(ParsingExpression &pe);
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
+    std::string inspect() const;
   private:
     ParsingExpression *pe_;
     mutable bool in_str;
@@ -265,6 +281,12 @@ namespace peg
   inline std::string Action<F>::str() const
   {
     return pe_->str();
+  }
+
+  template <typename F>
+  inline std::string Action<F>::inspect() const
+  {
+    return pe_->inspect();
   }
 
   inline Result parse(ParsingExpression &pe, const char *src)

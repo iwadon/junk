@@ -13,8 +13,6 @@ namespace peg
 {
   const char *encode_char(const char ch)
   {
-    //std::cout << __PRETTY_FUNCTION__ << ": " << ch << std::endl;
-    //printf("%02x\n", ch);
     static char buf[4 + 1];
     char *p = buf;
     if (isgraph(ch)) {
@@ -32,7 +30,7 @@ namespace peg
 	*p++ = 't';
 	break;
       default:
-	snprintf(p, sizeof buf - 1, "x%02X", ch);
+	snprintf(p, sizeof buf - 1, "x%02X", static_cast<unsigned char>(ch));
 	p += 3;
 	break;
       }
@@ -66,6 +64,16 @@ namespace peg
     if (i == l && len > l) {
       s += "...";
     }
+    return s;
+  }
+
+  std::string Result::inspect() const
+  {
+    std::string s("#<peg::Result ");
+    s += status ? "OK" : "NG";
+    s += " \"";
+    s += encode_str(rest, 10);
+    s += "\">";
     return s;
   }
 
@@ -134,6 +142,12 @@ namespace peg
     return str;
   }
 
+  std::string Any::inspect() const
+  {
+    std::string str("#<peg::Any>");
+    return str;
+  }
+
   Byte::Byte(const size_t bytes)
     : bytes_(bytes)
   {
@@ -157,6 +171,12 @@ namespace peg
       str = (boost::format("[%uB]") % bytes_).str();
       break;
     }
+    return str;
+  }
+
+  std::string Byte::inspect() const
+  {
+    std::string str("#<peg::Any>");
     return str;
   }
 
@@ -187,6 +207,14 @@ namespace peg
     return str;
   }
 
+  std::string Char::inspect() const
+  {
+    std::string str("#<peg::Char '");
+    str += encode_char(chr_);
+    str += "'>";
+    return str;
+  }
+
   String::String(const char *str)
     : str_(str)
   {
@@ -211,6 +239,14 @@ namespace peg
     std::string str = "\"";
     str += encode_str(str_.c_str(), 0);
     str += "\"";
+    return str;
+  }
+
+  std::string String::inspect() const
+  {
+    std::string str("#<peg::String \"");
+    str += encode_str(str_.c_str(), 0);
+    str += "\">";
     return str;
   }
 
@@ -244,6 +280,16 @@ namespace peg
     return str;
   }
 
+  std::string Range::inspect() const
+  {
+    std::string str("#<peg::Range '");
+    str += encode_char(first_);
+    str += "'..'";
+    str += encode_char(last_);
+    str += "'>";
+    return str;
+  }
+
   Sequence::Sequence(ParsingExpression &lhs, ParsingExpression &rhs)
     : lhs_(lhs)
     , rhs_(rhs)
@@ -271,6 +317,16 @@ namespace peg
     return str;
   }
 
+  std::string Sequence::inspect() const
+  {
+    std::string str("#<peg::Sequence ");
+    str += lhs_.inspect();
+    str += ", ";
+    str += rhs_.inspect();
+    str += ">";
+    return str;
+  }
+
   OrderedChoice::OrderedChoice(ParsingExpression &lhs, ParsingExpression &rhs)
     : lhs_(lhs)
     , rhs_(rhs)
@@ -295,6 +351,16 @@ namespace peg
     return str;
   }
 
+  std::string OrderedChoice::inspect() const
+  {
+    std::string str("#<peg::OrderedChoice ");
+    str += lhs_.inspect();
+    str += ", ";
+    str += rhs_.inspect();
+    str += ">";
+    return str;
+  }
+
   ZeroOrMore::ZeroOrMore(ParsingExpression &pe)
     : pe_(pe)
   {
@@ -315,6 +381,14 @@ namespace peg
   {
     std::string str = pe_.str();
     str += "*";
+    return str;
+  }
+
+  std::string ZeroOrMore::inspect() const
+  {
+    std::string str("#<peg::ZeroOrMore ");
+    str += pe_.inspect();
+    str += ">";
     return str;
   }
 
@@ -345,6 +419,14 @@ namespace peg
     return str;
   }
 
+  std::string OneOrMore::inspect() const
+  {
+    std::string str("#<peg::OneOrMore ");
+    str += pe_.inspect();
+    str += ">";
+    return str;
+  }
+
   Optional::Optional(ParsingExpression &pe)
     : pe_(pe)
   {
@@ -368,6 +450,14 @@ namespace peg
     return str;
   }
 
+  std::string Optional::inspect() const
+  {
+    std::string str("#<peg::Optional ");
+    str += pe_.inspect();
+    str += ">";
+    return str;
+  }
+
   AndPredicate::AndPredicate(ParsingExpression &pe)
     : pe_(pe)
   {
@@ -385,6 +475,14 @@ namespace peg
   {
     std::string str = "&";
     str += pe_.str();
+    return str;
+  }
+
+  std::string AndPredicate::inspect() const
+  {
+    std::string str("#<peg::AndPredicate ");
+    str += pe_.inspect();
+    str += ">";
     return str;
   }
 
@@ -406,6 +504,14 @@ namespace peg
   {
     std::string str = "!";
     str += pe_.str();
+    return str;
+  }
+
+  std::string NotPredicate::inspect() const
+  {
+    std::string str("#<peg::NotPredicate ");
+    str += pe_.inspect();
+    str += ">";
     return str;
   }
 
@@ -439,6 +545,14 @@ namespace peg
       in_str = false;
     }
     return s;
+  }
+
+  std::string Rule::inspect() const
+  {
+    std::string str("#<peg::Rule ");
+    str += pe_->inspect();
+    str += ">";
+    return str;
   }
 
   Any any;
