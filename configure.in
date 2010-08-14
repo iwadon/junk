@@ -31,6 +31,7 @@ AX_WITH_RUBY
 # Checks for libraries.
 AM_PATH_CPPUNIT
 AX_BOOST_BASE
+AM_PATH_SDL
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdint.h])
@@ -48,5 +49,5 @@ AC_TYPE_UINT8_T
 AC_FUNC_MEMCMP
 AC_HEADER_STDC
 
-AC_CONFIG_FILES([Makefile peg_test.sh], [chmod +x peg_test.sh])
+AC_CONFIG_FILES([Makefile net_test.sh peg_test.sh], [chmod +x net_test.sh peg_test.sh])
 AC_OUTPUT
