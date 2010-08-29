@@ -42,27 +42,27 @@ namespace game
 
   Object::Object()
   {
-    pos_.x_ = (rand() * 1.0f / RAND_MAX) * 540 + 50;
-    pos_.y_ = (rand() * 1.0f / RAND_MAX) * 860 + 50;
-    spd_.x_ = (rand() * 1.0f / RAND_MAX) * 3;
-    spd_.y_ = (rand() * 1.0f / RAND_MAX) * 3;
-    acc_.x_ = 0.0f;
-    acc_.y_ = 0.1f;
+    pos_.x = (rand() * 1.0f / RAND_MAX) * 540 + 50;
+    pos_.y = (rand() * 1.0f / RAND_MAX) * 860 + 50;
+    spd_.x = (rand() * 1.0f / RAND_MAX) * 3;
+    spd_.y = (rand() * 1.0f / RAND_MAX) * 3;
+    acc_.x = 0.0f;
+    acc_.y = 0.1f;
   }
 
   void Object::move()
   {
-    if (pos_.y_ > 960 - 50) {
-      pos_.y_ = 960 - 50;
-      spd_.y_ = -spd_.y_;
+    if (pos_.y > 960 - 50) {
+      pos_.y = 960 - 50;
+      spd_.y = -spd_.y;
     }
-    if (pos_.x_ < 0 + 50) {
-      pos_.x_ = 0 + 50;
-      spd_.x_ = -spd_.x_;
+    if (pos_.x < 0 + 50) {
+      pos_.x = 0 + 50;
+      spd_.x = -spd_.x;
     }
-    if (pos_.x_ > 640 - 50) {
-      pos_.x_ = 640 - 50;
-      spd_.x_ = -spd_.x_;
+    if (pos_.x > 640 - 50) {
+      pos_.x = 640 - 50;
+      spd_.x = -spd_.x;
     }
   }
 
@@ -75,7 +75,7 @@ namespace game
   void Object::draw()
   {
     SDL_SetRenderDrawColor(0xf0, 0xf0, 0xf0, 0xff);
-    SDL_Rect rect = {pos_.x_ - 50, pos_.y_ - 50, 100, 100};
+    SDL_Rect rect = {pos_.x - 50, pos_.y - 50, 100, 100};
     SDL_RenderFillRect(&rect);
   }
 

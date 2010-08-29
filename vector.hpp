@@ -3,8 +3,8 @@
 
 struct Vector
 {
-  float x_;
-  float y_;
+  float x;
+  float y;
 
   Vector();
   Vector(const float x, const float y);
@@ -12,21 +12,21 @@ struct Vector
 };
 
 inline Vector::Vector()
-  : x_(0)
-  , y_(0)
+  : x(0)
+  , y(0)
 {
 }
 
-inline Vector::Vector(const float x, const float y)
-  : x_(x)
-  , y_(y)
+inline Vector::Vector(const float x_, const float y_)
+  : x(x_)
+  , y(y_)
 {
 }
 
 inline Vector &Vector::operator+=(const Vector &rhs)
 {
-  x_ += rhs.x_;
-  y_ += rhs.y_;
+  x += rhs.x;
+  y += rhs.y;
   return *this;
 }
 

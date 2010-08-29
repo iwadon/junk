@@ -19,11 +19,11 @@ public:
 void VectorTest::test_CTOR()
 {
   Vector v1;
-  CPPUNIT_ASSERT_EQUAL(0.0f, v1.x_);
-  CPPUNIT_ASSERT_EQUAL(0.0f, v1.y_);
+  CPPUNIT_ASSERT_EQUAL(0.0f, v1.x);
+  CPPUNIT_ASSERT_EQUAL(0.0f, v1.y);
   Vector v2(1, 2);
-  CPPUNIT_ASSERT_EQUAL(1.0f, v2.x_);
-  CPPUNIT_ASSERT_EQUAL(2.0f, v2.y_);
+  CPPUNIT_ASSERT_EQUAL(1.0f, v2.x);
+  CPPUNIT_ASSERT_EQUAL(2.0f, v2.y);
 }
 
 void VectorTest::test_ADDEQ()
@@ -31,8 +31,8 @@ void VectorTest::test_ADDEQ()
   Vector v1(1, 2);
   Vector v2(3, 4);
   v1 += v2;
-  CPPUNIT_ASSERT_EQUAL(4.0f, v1.x_);
-  CPPUNIT_ASSERT_EQUAL(6.0f, v1.y_);
+  CPPUNIT_ASSERT_EQUAL(4.0f, v1.x);
+  CPPUNIT_ASSERT_EQUAL(6.0f, v1.y);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VectorTest);

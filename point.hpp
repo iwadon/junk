@@ -5,8 +5,8 @@
 
 struct Point
 {
-  float x_;
-  float y_;
+  float x;
+  float y;
 
   Point();
   Point(const float x, const float y);
@@ -14,21 +14,21 @@ struct Point
 };
 
 inline Point::Point()
-  : x_(0)
-  , y_(0)
+  : x(0)
+  , y(0)
 {
 }
 
-inline Point::Point(const float x, const float y)
-  : x_(x)
-  , y_(y)
+inline Point::Point(const float x_, const float y_)
+  : x(x_)
+  , y(y_)
 {
 }
 
 inline Point &Point::operator+=(const Vector &rhs)
 {
-  x_ += rhs.x_;
-  y_ += rhs.y_;
+  x += rhs.x;
+  y += rhs.y;
   return *this;
 }
 
