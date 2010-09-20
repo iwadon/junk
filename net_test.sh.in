@@ -1,0 +1,3 @@
+#!/bin/sh
+@RUBY@ @srcdir@/net.rb &
+@RUBY@ @srcdir@/net.rb c

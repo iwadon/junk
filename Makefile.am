@@ -1,20 +1,25 @@
 AUTOMAKE_OPTIONS = foreign
 
-#bin_PROGRAMS = oscillator_sample s2
-bin_PROGRAMS = s2
+bin_PROGRAMS = oscillator_sample s2
 
-#oscillator_sample_SOURCES = oscillator_sample.cpp
-#oscillator_sample_CPPFLAGS = $(SDL_CFLAGS)
-#oscillator_sample_LDADD = libsequencer.a $(SDL_LIBS)
+oscillator_sample_SOURCES = oscillator_sample.cpp
+oscillator_sample_CPPFLAGS = $(SDL_CFLAGS)
+oscillator_sample_LDADD = libsdlapp.a $(SDL_LIBS)
 
 s2_SOURCES = s2.cpp
 s2_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 s2_LDADD = $(SDL_LIBS) $(BOOST_LIBS)
 
-lib_LIBRARIES = libpeg.a libsequencer.a
+lib_LIBRARIES = libpeg.a libsdlapp.a libsequencer.a
 
 libpeg_a_SOURCES = peg.cpp peg.hpp
 libpeg_a_CPPFLAGS = $(BOOST_CPPFLAGS)
+
+libsdlapp_a_SOURCES = font.cpp font.hpp \
+		      sdl_app.cpp sdl_app.hpp \
+		      texture.cpp texture.hpp \
+		      texture_pool.cpp texture_pool.hpp
+libsdlapp_a_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 
 libsequencer_a_SOURCES = oscillator.cpp oscillator.hpp \
 			 smf_track.cpp smf_track.hpp \
@@ -25,6 +30,7 @@ libsequencer_a_CPPFLAGS = $(BOOST_CPPFLAGS)
 check_PROGRAMS = peg_test \
 		 point_test \
 		 sequencer_test \
+		 sdlapp_test \
 		 vector_test
 TESTS = $(check_PROGRAMS) peg_test.sh
 
@@ -32,6 +38,13 @@ peg_test_SOURCES = test_main.cpp \
 		   peg_test.cpp
 peg_test_CPPFLAGS = $(CPPUNIT_CFLAGS)
 peg_test_LDADD = libpeg.a $(CPPUNIT_LIBS)
+
+sdlapp_test_SOURCES = test_main.cpp \
+		      font_test.cpp \
+		      texture_test.cpp \
+		      texture_pool_test.cpp
+sdlapp_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
+sdlapp_test_LDADD = libsdlapp.a $(CPPUNIT_LIBS) $(BOOST_LIBS)
 
 sequencer_test_SOURCES = test_main.cpp \
 			 function_test.cpp \
