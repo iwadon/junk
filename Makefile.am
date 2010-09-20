@@ -22,10 +22,23 @@ libsequencer_a_SOURCES = oscillator.cpp oscillator.hpp \
 			 volume.hpp
 libsequencer_a_CPPFLAGS = $(BOOST_CPPFLAGS)
 
-check_PROGRAMS = sequencer_test point_test vector_test
+check_PROGRAMS = peg_test \
+		 point_test \
+		 sequencer_test \
+		 vector_test
 TESTS = $(check_PROGRAMS) peg_test.sh
 
-sequencer_test_SOURCES = test_main.cpp function_test.cpp oscillator_test.cpp peg_test.cpp smf_track_test.cpp variable_length_value_test.cpp volume_test.cpp
+peg_test_SOURCES = test_main.cpp \
+		   peg_test.cpp
+peg_test_CPPFLAGS = $(CPPUNIT_CFLAGS)
+peg_test_LDADD = libpeg.a $(CPPUNIT_LIBS)
+
+sequencer_test_SOURCES = test_main.cpp \
+			 function_test.cpp \
+			 oscillator_test.cpp \
+			 smf_track_test.cpp \
+			 variable_length_value_test.cpp \
+			 volume_test.cpp
 sequencer_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
 sequencer_test_LDADD = libsequencer.a $(CPPUNIT_LIBS)
 
