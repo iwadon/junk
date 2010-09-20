@@ -8,13 +8,13 @@
 class FontTest : public CppUnit::TestCase
 {
   CPPUNIT_TEST_SUITE(FontTest);
-  CPPUNIT_TEST(test_draw);
+  CPPUNIT_TEST(test_draw_str);
   CPPUNIT_TEST(test_load_file);
   CPPUNIT_TEST_SUITE_END();
 public:
   void setUp();
   void tearDown();
-  void test_draw();
+  void test_draw_str();
   void test_load_file();
 private:
   SDL_Window *window_;
@@ -31,11 +31,11 @@ void FontTest::tearDown()
   SDL_DestroyWindow(window_);
 }
 
-void FontTest::test_draw()
+void FontTest::test_draw_str()
 {
   Font font;
   font.load_file("data/font5x5.png");
-  font.draw(window_, 0, 0, "Hello.");
+  font.draw_str(0, 0, "Hello.");
 }
 
 void FontTest::test_load_file()
