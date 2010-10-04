@@ -72,4 +72,7 @@ gcov-clean:
 	rm -f *.gcda *.gcno *.gcov
 
 all-local:
-	test -d $(builddir)/data || ln -s $(top_srcdir)/data .
+	test -d $(builddir)/data || ln -s $(top_srcdir)/data $(builddir)/
+
+distclean-local:
+	test ! -L $(builddir)/data || rm $(builddir)/data
