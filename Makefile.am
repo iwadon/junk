@@ -70,3 +70,6 @@ gcov: check
 
 gcov-clean:
 	rm -f *.gcda *.gcno *.gcov
+
+all-local:
+	test -d $(builddir)/data || ln -s $(top_srcdir)/data .
