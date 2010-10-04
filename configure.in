@@ -52,5 +52,7 @@ AC_TYPE_UINT8_T
 AC_FUNC_MEMCMP
 AC_HEADER_STDC
 
-AC_CONFIG_FILES([Makefile net_test.sh peg_test.sh], [chmod +x net_test.sh peg_test.sh])
+AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([net_test.sh], [chmod +x net_test.sh])
+AC_CONFIG_FILES([peg_test.sh], [chmod +x peg_test.sh])
 AC_OUTPUT
