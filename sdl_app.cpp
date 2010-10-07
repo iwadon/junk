@@ -9,11 +9,12 @@
 
 #define SHOW_WINDOW_AFTER_INITIALIZED
 
-static const uint32_t FPS_TICKS = 1000 / 60;
+static const uint32_t FPS = 60;
+static const float FRAME_INTERVAL = 1000.0f / FPS;
+static const int MAX_SKIP_FRAMES = 10;
 
 SDLApp::SDLApp(const std::string &app_name)
   : app_name_(app_name)
-  , next_ticks_(SDL_GetTicks() + FPS_TICKS)
   , font_(new Font)
 {
   set_bg_color(0x00a000ff);
@@ -34,32 +35,17 @@ int SDLApp::run(int argc, char *argv[])
   SDL_ShowWindow(window_);
 #endif
 
+  prev_ticks_ = SDL_GetTicks();
   done_ = false;
   while (!done_) {
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-      switch (event.type) {
-      case SDL_QUIT:
-	done_ = true;
-	break;
-      case SDL_WINDOWEVENT:
-	switch (event.window.event) {
-	case SDL_WINDOWEVENT_CLOSE:
-	  done_ = true;
-	  break;
-	}
-	break;
-      case SDL_KEYDOWN:
-	if (event.key.keysym.sym == SDLK_q && (event.key.keysym.mod == KMOD_LGUI || event.key.keysym.mod == KMOD_RGUI)) {
-	  done_ = true;
-	}
-	break;
-      }
+    frames_ = calculate_frames();
+    for (int i = 0; i < frames_; ++i) {
+      do_input();
+      do_move();
+      do_update();
+      fps_.update();
     }
-    do_move();
-    do_update();
     do_draw();
-    wait_next_frame();
   }
   return 0;
 }
@@ -67,6 +53,11 @@ int SDLApp::run(int argc, char *argv[])
 bool SDLApp::do_initialize(int argc, char *argv[])
 {
   srand(time(NULL));
+
+  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    std::cerr << "ERROR: SDL_Init: " << SDL_GetError() << std::endl;
+    return false;
+  }
 
   window_ = SDL_CreateWindow(app_name_.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600,
 #ifdef SHOW_WINDOW_AFTER_INITIALIZED
@@ -79,7 +70,7 @@ bool SDLApp::do_initialize(int argc, char *argv[])
     std::cerr << "ERROR: SDL_CreateWindow: " << SDL_GetError() << std::endl;
     return false;
   }
-  if (SDL_CreateRenderer(window_, -1, 0/*SDL_RENDERER_PRESENTFLIP3*/) < 0) {
+  if (SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTFLIP3/* | SDL_RENDERER_PRESENTVSYNC*/) < 0) {
     std::cerr << "ERROR: SDL_CreateRenderer: " << SDL_GetError() << std::endl;
     return false;
   }
@@ -93,6 +84,20 @@ void SDLApp::do_finalize()
 {
   finalize();
   SDL_Quit();
+}
+
+void SDLApp::do_input()
+{
+  SDL_Event event;
+  while (SDL_PollEvent(&event)) {
+    if (event.type == SDL_QUIT ||
+	event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE ||
+	event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_q && (event.key.keysym.mod == KMOD_LGUI || event.key.keysym.mod == KMOD_RGUI)) {
+      done_ = true;
+    } else {
+      input();
+    }
+  }
 }
 
 void SDLApp::do_move()
@@ -114,6 +119,11 @@ void SDLApp::do_draw()
   result = SDL_RenderClear();
   assert(result == 0);
   draw();
+  {
+    char buf[100];
+    snprintf(buf, sizeof buf, "%3dfps", fps_.latest_frames);
+    draw_string(8, 8, buf);
+  }
   SDL_RenderPresent();
 }
 
@@ -125,17 +135,34 @@ void SDLApp::set_bg_color(const uint32_t rgba)
   bg_color_[3] = (rgba & 0x000000ff) >>  0;
 }
 
-void SDLApp::wait_next_frame()
+static inline float get_frame_interval()
 {
-  uint32_t now;
-  while (true) {
-    now = SDL_GetTicks();
-    if (now > next_ticks_) {
-      break;
-    }
-    SDL_Delay(1);
+  SDLMod mod = SDL_GetModState();
+  if (mod & KMOD_CTRL) {
+    return FRAME_INTERVAL / 2;
+  } else if (mod & KMOD_SHIFT) {
+    return FRAME_INTERVAL * 10;
+  } else {
+    return FRAME_INTERVAL;
   }
-  next_ticks_ += FPS_TICKS;
+}
+
+int SDLApp::calculate_frames()
+{
+  float ticks = SDL_GetTicks();
+  float interval = get_frame_interval();
+  int frames = static_cast<int>((ticks - prev_ticks_) / interval);
+  if (frames <= 0) {
+    frames = 1;
+    SDL_Delay(static_cast<Uint32>(prev_ticks_ + interval - ticks));
+    prev_ticks_ += interval;
+  } else {
+    if (frames > MAX_SKIP_FRAMES) {
+      frames = MAX_SKIP_FRAMES;
+    }
+    prev_ticks_ = ticks;
+  }
+  return frames;
 }
 
 bool SDLApp::load_font_file(const char *filename)

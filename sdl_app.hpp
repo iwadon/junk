@@ -3,6 +3,7 @@
 
 #include <string>
 #include <SDL.h>
+#include "fps.hpp"
 
 class Font;
 
@@ -15,6 +16,7 @@ public:
 protected:
   virtual bool initialize(int /*argc*/, char */*argv*/[]) { return true; }
   virtual void finalize() {}
+  virtual void input() {}
   virtual void move() {}
   virtual void update() {}
   virtual void draw() {}
@@ -27,14 +29,18 @@ private:
   SDL_Window *window_;
   bool done_;
   uint8_t bg_color_[4];
-  uint32_t next_ticks_;
+  float prev_ticks_;
+  int frames_;
   Font *font_;
+  FPS fps_;
   bool do_initialize(int argc, char *argv[]);
   void do_finalize();
+  void do_input();
   void do_move();
   void do_update();
   void do_draw();
   void wait_next_frame();
+  int calculate_frames();
 };
 
 #endif // !defined(SDL_APP_HPP_INCLUDED)
