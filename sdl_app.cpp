@@ -4,14 +4,15 @@
 #include "sdl_app.hpp"
 #include <cassert>
 #include <iostream>
+#include <ctime>
 #include "font.hpp"
 
 #define SHOW_WINDOW_AFTER_INITIALIZED
 
+static const uint32_t FPS_TICKS = 1000 / 60;
+
 SDLApp::SDLApp(const std::string &app_name)
   : app_name_(app_name)
-  // , window_(NULL)
-  // , done_(false)
   , next_ticks_(SDL_GetTicks() + FPS_TICKS)
   , font_(new Font)
 {
@@ -48,6 +49,11 @@ int SDLApp::run(int argc, char *argv[])
 	  break;
 	}
 	break;
+      case SDL_KEYDOWN:
+	if (event.key.keysym.sym == SDLK_q && (event.key.keysym.mod == KMOD_LGUI || event.key.keysym.mod == KMOD_RGUI)) {
+	  done_ = true;
+	}
+	break;
       }
     }
     do_move();
@@ -60,7 +66,9 @@ int SDLApp::run(int argc, char *argv[])
 
 bool SDLApp::do_initialize(int argc, char *argv[])
 {
-  window_ = SDL_CreateWindow(app_name_.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 320, 240,
+  srand(time(NULL));
+
+  window_ = SDL_CreateWindow(app_name_.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600,
 #ifdef SHOW_WINDOW_AFTER_INITIALIZED
 			     0
 #else

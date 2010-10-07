@@ -29,7 +29,6 @@ private:
   uint8_t bg_color_[4];
   uint32_t next_ticks_;
   Font *font_;
-  static const uint32_t FPS_TICKS = 1000 / 60;
   bool do_initialize(int argc, char *argv[]);
   void do_finalize();
   void do_move();

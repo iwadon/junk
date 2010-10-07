@@ -8,7 +8,7 @@ oscillator_sample_LDADD = libsdlapp.a $(SDL_LIBS)
 
 s2_SOURCES = s2.cpp
 s2_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
-s2_LDADD = $(SDL_LIBS) $(BOOST_LIBS)
+s2_LDADD = libsdlapp.a $(SDL_LIBS) $(BOOST_LIBS)
 
 lib_LIBRARIES = libpeg.a libsdlapp.a libsequencer.a
 

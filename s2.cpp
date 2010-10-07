@@ -5,11 +5,20 @@
 #include <SDL.h>
 #include "point.hpp"
 #include "vector.hpp"
+#include "sdl_app.hpp"
 
-#define SHOW_WINDOW_AFTER_INITIALIZED
+//#define SHOW_WINDOW_AFTER_INITIALIZED
 
 namespace game
 {
+  static const float X_MIN = 0.0f;
+  static const float X_MAX = 800.0f;
+  static const float Y_MIN = 0.0f;
+  static const float Y_MAX = 600.0f;
+  static const float BOX_W = 10;
+  static const float BOX_H = 10;
+  static const size_t OBJ_NUM = 1000;
+
   class Object
   {
   public:
@@ -23,27 +32,26 @@ namespace game
     Vector acc_;
   };
 
-  class App
+  class App : public SDLApp
   {
   public:
-    ~App();
-    int run(int argc, char *argv[]);
+    App();
+  protected:
+    bool initialize(int argc, char *argv[]);
+    void move();
+    void update();
+    void draw();
   private:
     SDL_Window *window_;
     bool done_;
     boost::object_pool<Object> objects;
     std::list<Object *> active_objects;
-    bool initialize(int argc, char *argv[]);
-    void finalize();
-    void move();
-    void update();
-    void draw();
   };
 
   Object::Object()
   {
-    pos_.x = (rand() * 1.0f / RAND_MAX) * 540 + 50;
-    pos_.y = (rand() * 1.0f / RAND_MAX) * 860 + 50;
+    pos_.x = (rand() * 1.0f / RAND_MAX) * 540 + (BOX_W / 2);
+    pos_.y = (rand() * 1.0f / RAND_MAX) * 860 + (BOX_H / 2);
     spd_.x = (rand() * 1.0f / RAND_MAX) * 3;
     spd_.y = (rand() * 1.0f / RAND_MAX) * 3;
     acc_.x = 0.0f;
@@ -52,16 +60,16 @@ namespace game
 
   void Object::move()
   {
-    if (pos_.y > 960 - 50) {
-      pos_.y = 960 - 50;
+    if (pos_.y > Y_MAX - (BOX_H / 2)) {
+      pos_.y = Y_MAX - (BOX_H / 2);
       spd_.y = -spd_.y;
     }
-    if (pos_.x < 0 + 50) {
-      pos_.x = 0 + 50;
+    if (pos_.x < X_MIN + (BOX_W / 2)) {
+      pos_.x = X_MIN + (BOX_W / 2);
       spd_.x = -spd_.x;
     }
-    if (pos_.x > 640 - 50) {
-      pos_.x = 640 - 50;
+    if (pos_.x > X_MAX - (BOX_W / 2)) {
+      pos_.x = X_MAX - (BOX_W / 2);
       spd_.x = -spd_.x;
     }
   }
@@ -75,78 +83,23 @@ namespace game
   void Object::draw()
   {
     SDL_SetRenderDrawColor(0xf0, 0xf0, 0xf0, 0xff);
-    SDL_Rect rect = {pos_.x - 50, pos_.y - 50, 100, 100};
+    SDL_Rect rect = {pos_.x - (BOX_W / 2), pos_.y - (BOX_H / 2), BOX_W, BOX_H};
     SDL_RenderFillRect(&rect);
   }
 
-  App::~App()
+  App::App()
+    : SDLApp("s2")
   {
-    finalize();
   }
 
-  int App::run(int argc, char *argv[])
+  bool App::initialize(int /*argc*/, char */*argv*/[])
   {
-    if (!initialize(argc, argv)) {
-      return 1;
-    }
-#ifdef SHOW_WINDOW_AFTER_INITIALIZED
-    draw();
-    SDL_ShowWindow(window_);
-#endif
-
-    for (int i = 0; i < 10; ++i) {
+    for (size_t i = 0; i < OBJ_NUM; ++i) {
       Object *obj = objects.construct();
       active_objects.push_back(obj);
     }
 
-    done_ = false;
-    while (!done_) {
-      SDL_Event event;
-      while (SDL_PollEvent(&event)) {
-	switch (event.type) {
-	case SDL_QUIT:
-	  done_ = true;
-	  break;
-	case SDL_WINDOWEVENT:
-	  switch (event.window.event) {
-	  case SDL_WINDOWEVENT_CLOSE:
-	    done_ = true;
-	    break;
-	  }
-	  break;
-	}
-      }
-      move();
-      update();
-      draw();
-      SDL_Delay(1000 / 60);
-    }
-    return 0;
-  }
-
-  bool App::initialize(int argc, char *argv[])
-  {
-    window_ = SDL_CreateWindow("s2", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 960,
-#ifdef SHOW_WINDOW_AFTER_INITIALIZED
-			       0
-#else
-			       SDL_WINDOW_SHOWN
-#endif
-			       );
-    if (window_ == NULL) {
-      std::cerr << "ERROR: SDL_CreateWindow: " << SDL_GetError() << std::endl;
-      return false;
-    }
-    if (SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTFLIP3) < 0) {
-      std::cerr << "ERROR: SDL_CreateRenderer: " << SDL_GetError() << std::endl;
-      return false;
-    }
     return true;
-  }
-
-  void App::finalize()
-  {
-    SDL_Quit();
   }
 
   void App::move()
@@ -165,14 +118,9 @@ namespace game
 
   void App::draw()
   {
-    SDL_SetRenderDrawColor(0x00, 0xa0, 0x00, 0xff);
-    SDL_RenderClear();
-
     BOOST_FOREACH(Object *obj, active_objects) {
       obj->draw();
     }
-    
-    SDL_RenderPresent();
   }
 } // namespace game
 
