@@ -2,6 +2,7 @@
 #define FPS_HPP_INCLUDED 1
 
 #include <stdint.h>
+#include <SDL.h>
 
 struct FPS
 {

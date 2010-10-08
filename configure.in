@@ -12,6 +12,7 @@ AC_PROG_AWK
 AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_INSTALL
+AC_PROG_LN_S
 AC_PROG_RANLIB
 AC_PROG_CPP
 AC_PROG_MKDIR_P
@@ -37,7 +38,7 @@ AM_PATH_CPPUNIT
 AX_BOOST_BASE
 
 # Checks for header files.
-AC_CHECK_HEADERS([stdint.h])
+AC_CHECK_HEADERS([stdint.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
@@ -51,6 +52,7 @@ AC_TYPE_UINT8_T
 # Checks for library functions.
 AC_FUNC_MEMCMP
 AC_HEADER_STDC
+AC_CHECK_FUNCS([sleep])
 
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([net_test.sh], [chmod +x net_test.sh])
