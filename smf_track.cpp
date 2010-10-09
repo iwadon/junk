@@ -1,8 +1,10 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include <cstring>
 #include "smf_track.hpp"
+#ifdef STDCXX_98_HEADERS
+#include <cstring>
+#endif
 #include "variable_length_value.hpp"
 
 #ifdef SMF_TRACK_DEBUG

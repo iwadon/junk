@@ -1,9 +1,9 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include "variable_length_value.hpp"
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
-#include "variable_length_value.hpp"
 
 class VariableLengthValueTest : public CppUnit::TestCase
 {

@@ -1,9 +1,12 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include "texture.hpp"
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
-#include "texture.hpp"
+#ifdef HAVE_SDL_H
+#include <SDL.h>
+#endif
 
 class TextureTest : public CppUnit::TestCase
 {

@@ -1,13 +1,15 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include "peg.hpp"
+#ifdef STDCXX_98_HEADERS
 #include <cctype>
 #include <iostream>
+#endif
 #ifdef HAVE_BOOST
 #include <boost/format.hpp>
 #include <boost/utility.hpp>
 #endif
-#include "peg.hpp"
 
 namespace peg
 {

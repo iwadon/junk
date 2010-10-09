@@ -1,8 +1,16 @@
-#include <iostream>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+#ifdef STDCXX_98_HEADERS
 #include <list>
+#endif
+#ifdef HAVE_BOOST
 #include <boost/foreach.hpp>
 #include <boost/pool/object_pool.hpp>
+#endif
+#ifdef HAVE_SDL_H
 #include <SDL.h>
+#endif
 #include "point.hpp"
 #include "vector.hpp"
 #include "sdl_app.hpp"

@@ -1,8 +1,10 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include <cstring>
 #include "variable_length_value.hpp"
+#ifdef STDCXX_98_HEADERS
+#include <cstring>
+#endif
 
 void VariableLengthValue::data(const data_type **data, len_type *len) const
 {

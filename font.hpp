@@ -1,7 +1,7 @@
 #ifndef FONT_HPP_INCLUDED
 #define FONT_HPP_INCLUDED 1
 
-#include "texture.hpp"
+struct Texture;
 
 class Font
 {

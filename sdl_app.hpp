@@ -2,9 +2,9 @@
 #define SDL_APP_HPP_INCLUDED 1
 
 #include <string>
-#include <SDL.h>
 #include "fps.hpp"
 
+struct SDL_Window;
 class Font;
 
 class SDLApp

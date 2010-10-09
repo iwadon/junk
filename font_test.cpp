@@ -1,9 +1,12 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include "font.hpp"
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
-#include "font.hpp"
+#ifdef HAVE_SDL_H
+#include <SDL.h>
+#endif
 
 class FontTest : public CppUnit::TestCase
 {

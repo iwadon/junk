@@ -1,12 +1,17 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#ifdef HAVE_STDINT_H
-#include <stdint.h>
+#include "smf_track.hpp"
+#ifdef STDCXX_98_HEADERS
+#include <string>
+#endif
+#if defined(HAVE_TR1_CSTDINT)
+#include <tr1/cstdint>
+#elif defined(HAVE_BOOST_CSTDINT_HPP)
+#include <boost/cstdint.hpp>
 #endif
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
-#include "smf_track.hpp"
 
 class SMFTrackTest : public CppUnit::TestCase
 {

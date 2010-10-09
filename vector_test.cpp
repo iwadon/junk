@@ -1,9 +1,9 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include "vector.hpp"
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
-#include "vector.hpp"
 
 class VectorTest : public CppUnit::TestCase
 {

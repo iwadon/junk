@@ -2,9 +2,14 @@
 #include "config.h"
 #endif
 #include "sdl_app.hpp"
+#ifdef STDCXX_98_HEADERS
 #include <cassert>
 #include <iostream>
 #include <ctime>
+#endif
+#ifdef HAVE_SDL_H
+#include <SDL.h>
+#endif
 #include "font.hpp"
 
 #define SHOW_WINDOW_AFTER_INITIALIZED

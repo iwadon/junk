@@ -2,7 +2,9 @@
 #include "config.h"
 #endif
 #include "texture_pool.hpp"
+#ifdef STDCXX_98_HEADERS
 #include <cassert>
+#endif
 
 TexturePool &TexturePool::get_instance()
 {

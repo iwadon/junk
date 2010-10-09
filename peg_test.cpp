@@ -1,9 +1,9 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include "peg.hpp"
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
-#include "peg.hpp"
 
 class PegTest : public CppUnit::TestCase
 {

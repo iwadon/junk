@@ -2,7 +2,8 @@
 #define TEXTURE_HPP_INCLUDED 1
 
 #include <string>
-#include <SDL.h>
+
+struct SDL_Texture;
 
 struct Texture
 {

@@ -1,11 +1,15 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include "font.hpp"
+#ifdef STDCXX_98_HEADERS
 #include <cassert>
 #include <cstdarg>
 #include <iostream>
+#endif
+#ifdef HAVE_SDL_H
 #include <SDL.h>
-#include "font.hpp"
+#endif
 #include "texture_pool.hpp"
 
 Font::~Font()

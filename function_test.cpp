@@ -1,11 +1,11 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include "function.hpp"
 #include <functional>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 #include <boost/function.hpp>
-#include "function.hpp"
 
 class FunctionTest : public CppUnit::TestCase
 {

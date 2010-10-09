@@ -1,9 +1,9 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include "oscillator.hpp"
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
-#include "oscillator.hpp"
 
 class OscillatorTest : public CppUnit::TestCase
 {

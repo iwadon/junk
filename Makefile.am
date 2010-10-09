@@ -16,6 +16,7 @@ libpeg_a_SOURCES = peg.cpp peg.hpp
 libpeg_a_CPPFLAGS = $(BOOST_CPPFLAGS)
 
 libsdlapp_a_SOURCES = font.cpp font.hpp \
+		      fps.cpp fps.hpp \
 		      sdl_app.cpp sdl_app.hpp \
 		      texture.cpp texture.hpp \
 		      texture_pool.cpp texture_pool.hpp

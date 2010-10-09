@@ -38,7 +38,13 @@ AM_PATH_CPPUNIT
 AX_BOOST_BASE
 
 # Checks for header files.
-AC_CHECK_HEADERS([stdint.h unistd.h])
+AC_CHECK_HEADERS([SDL.h SDL_image.h])
+AX_CXX_HEADER_STDCXX_98
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+AC_CHECK_HEADERS([tr1/cstdint])
+AC_CHECK_HEADERS([boost/cstdint.hpp])
+AC_LANG_RESTORE
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
@@ -52,7 +58,6 @@ AC_TYPE_UINT8_T
 # Checks for library functions.
 AC_FUNC_MEMCMP
 AC_HEADER_STDC
-AC_CHECK_FUNCS([sleep])
 
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([net_test.sh], [chmod +x net_test.sh])

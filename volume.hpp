@@ -1,6 +1,12 @@
 #ifndef VOLUME_HPP_INCLUDED
 #define VOLUME_HPP_INCLUDED 1
 
+#if defined(HAVE_TR1_CSTDINT)
+#include <tr1/cstdint>
+#elif defined(HAVE_BOOST_CSTDINT_HPP)
+#include <boost/cstdint.hpp>
+#endif
+
 template <class V, class F>
 class Volume
 {

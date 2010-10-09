@@ -1,8 +1,11 @@
 #ifndef FPS_HPP_INCLUDED
 #define FPS_HPP_INCLUDED 1
 
-#include <stdint.h>
-#include <SDL.h>
+#if defined(HAVE_TR1_CSTDINT)
+#include <tr1/cstdint>
+#elif defined(HAVE_BOOST_CSTDINT_HPP)
+#include <boost/cstdint.hpp>
+#endif
 
 struct FPS
 {
@@ -10,23 +13,8 @@ struct FPS
   uint32_t frames;
   uint32_t latest_frames;
 
-  FPS()
-    : next_ticks(0)
-    , frames(0)
-    , latest_frames(0)
-  {
-  }
-
-  void update()
-  {
-    ++frames;
-    uint32_t now = SDL_GetTicks();
-    if (now > next_ticks) {
-      latest_frames = frames;
-      frames = 0;
-      next_ticks += 1000;
-    }
-  }
+  FPS();
+  void update();
 };
 
 #endif // !defined(FPS_HPP_INCLUDED)
