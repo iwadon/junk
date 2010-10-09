@@ -1,3 +1,8 @@
+/**
+ * @file  fps.cpp
+ * @brief FPSクラスの実装
+ */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -6,6 +11,7 @@
 #include <SDL.h>
 #endif
 
+/// コンストラクタ
 FPS::FPS()
   : next_ticks(0)
   , frames(0)
@@ -13,6 +19,7 @@ FPS::FPS()
 {
 }
 
+/// 更新
 void FPS::update()
 {
   ++frames;

@@ -1,8 +1,17 @@
+/**
+ * @file  font.hpp
+ * @brief Fontクラスの定義
+ */
+
 #ifndef FONT_HPP_INCLUDED
 #define FONT_HPP_INCLUDED 1
 
 struct Texture;
 
+/**
+ * @class Font
+ * @brief 画像に描かれたフォントを使って文字を描画する
+ */
 class Font
 {
 public:

@@ -1,3 +1,8 @@
+/**
+ * @file  font.cpp
+ * @brief Fontクラスの実装
+ */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -12,6 +17,7 @@
 #endif
 #include "texture_pool.hpp"
 
+/// コンストラクタ
 Font::~Font()
 {
   if (tex_ != NULL) {
@@ -19,6 +25,12 @@ Font::~Font()
   }
 }
 
+/**
+ * @brief ファイルを読み込む
+ * @param [in] filename ファイル名。
+ * @retval true  正常にファイルを読み込めた。
+ * @retval false ファイルを読み込んでいる最中にエラーが起きた。
+ */
 bool Font::load_file(const char *filename)
 {
   assert(filename != NULL);
@@ -26,6 +38,12 @@ bool Font::load_file(const char *filename)
   return tex_ != NULL;
 }
 
+/**
+ * @brief 文字を描画する
+ * @param [in] x   X座標。
+ * @param [in] y   Y座標。
+ * @param [in] chr 文字。
+ */
 void Font::draw_chr(const int x, const int y, const int chr)
 {
   assert(tex_ != NULL);
@@ -47,6 +65,12 @@ void Font::draw_chr(const int x, const int y, const int chr)
   }
 }
 
+/**
+ * @brief 文字列を描画する
+ * @param [in] x   X座標。
+ * @param [in] y   Y座標。
+ * @param [in] str 文字列。
+ */
 void Font::draw_str(const int x, const int y, const char *str)
 {
   assert(str != NULL);
@@ -58,6 +82,12 @@ void Font::draw_str(const int x, const int y, const char *str)
   }
 }
 
+/**
+ * @brief 指定された書式に変換された文字列を描画する
+ * @param [in] x      X座標。
+ * @param [in] y      Y座標。
+ * @param [in] format 書式文字列。printf(3)などで使われている書式を使う。
+ */
 void Font::draw_strf(const int x, const int y, const char *format, ...)
 {
   char buf[256];

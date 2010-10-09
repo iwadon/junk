@@ -78,3 +78,12 @@ all-local:
 
 distclean-local:
 	test ! -L $(builddir)/data || rm $(builddir)/data
+
+DOXYFILE = $(builddir)/Doxyfile
+
+.PHONY: dox clean-dox
+dox: $(DOXYFILE)
+	test -d $(builddir)/dox || $(MKDIR_P) $(builddir)/dox
+	$(DOXYGEN) $(DOXYFILE)
+clean-dox:
+	rm -rf $(builddir)/dox

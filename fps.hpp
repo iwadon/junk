@@ -1,3 +1,8 @@
+/**
+ * @file  fps.hpp
+ * @brief FPSクラスの定義
+ */
+
 #ifndef FPS_HPP_INCLUDED
 #define FPS_HPP_INCLUDED 1
 
@@ -7,11 +12,12 @@
 #include <boost/cstdint.hpp>
 #endif
 
+/// fpsを測る
 struct FPS
 {
-  uint32_t next_ticks;
-  uint32_t frames;
-  uint32_t latest_frames;
+  uint32_t next_ticks;		///< 次回の時刻
+  uint32_t frames;		///< 現在のフレーム数
+  uint32_t latest_frames;	///< 直前のfps
 
   FPS();
   void update();
