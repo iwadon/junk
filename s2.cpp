@@ -10,6 +10,9 @@
 #endif
 #ifdef HAVE_SDL_H
 #include <SDL.h>
+#ifdef USE_OPENGL
+#include <SDL_opengl.h>
+#endif
 #endif
 #include "point.hpp"
 #include "vector.hpp"
@@ -90,9 +93,19 @@ namespace game
 
   void Object::draw()
   {
+#ifdef USE_OPENGL
+    glBegin(GL_POLYGON);
+    glColor3f(1.0, 1.0, 1.0);
+    glVertex2f(pos_.x - (BOX_W / 2),  pos_.y - (BOX_H / 2));
+    glVertex2f(pos_.x - (BOX_W / 2),  pos_.y + (BOX_H / 2));
+    glVertex2f(pos_.x + (BOX_W / 2),  pos_.y + (BOX_H / 2));
+    glVertex2f(pos_.x + (BOX_W / 2),  pos_.y - (BOX_H / 2));
+    glEnd();
+#else
     SDL_SetRenderDrawColor(0xf0, 0xf0, 0xf0, 0xff);
     SDL_Rect rect = {pos_.x - (BOX_W / 2), pos_.y - (BOX_H / 2), BOX_W, BOX_H};
     SDL_RenderFillRect(&rect);
+#endif
   }
 
   App::App()

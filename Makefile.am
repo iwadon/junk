@@ -4,10 +4,12 @@ bin_PROGRAMS = oscillator_sample s2
 
 oscillator_sample_SOURCES = oscillator_sample.cpp
 oscillator_sample_CPPFLAGS = $(SDL_CFLAGS)
+oscillator_sample_LDFLAGS = -framework OpenGL
 oscillator_sample_LDADD = libsdlapp.a $(SDL_LIBS)
 
 s2_SOURCES = s2.cpp
 s2_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
+s2_LDFLAGS = -framework OpenGL
 s2_LDADD = libsdlapp.a $(SDL_LIBS) $(BOOST_LIBS)
 
 lib_LIBRARIES = libpeg.a libsdlapp.a libsequencer.a
