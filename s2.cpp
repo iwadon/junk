@@ -28,7 +28,7 @@ namespace game
   static const float Y_MAX = 600.0f;
   static const float BOX_W = 10;
   static const float BOX_H = 10;
-  static const size_t OBJ_NUM = 1000;
+  static const size_t OBJ_NUM = 500;
 
   class Object
   {
@@ -41,6 +41,8 @@ namespace game
     Point pos_;
     Vector spd_;
     Vector acc_;
+    float rot_;
+    float scale_;
   };
 
   class App : public SDLApp
@@ -61,12 +63,14 @@ namespace game
 
   Object::Object()
   {
-    pos_.x = (rand() * 1.0f / RAND_MAX) * 540 + (BOX_W / 2);
-    pos_.y = (rand() * 1.0f / RAND_MAX) * 860 + (BOX_H / 2);
-    spd_.x = (rand() * 1.0f / RAND_MAX) * 3;
-    spd_.y = (rand() * 1.0f / RAND_MAX) * 3;
+    pos_.x = (rand() * 1.0f / RAND_MAX) * X_MAX - (BOX_W / 2);
+    pos_.y = (rand() * 1.0f / RAND_MAX) * Y_MAX - (BOX_H / 2);
+    spd_.x = (rand() * 1.0f / RAND_MAX) * 2.5f;
+    spd_.y = (rand() * 1.0f / RAND_MAX) * 2.5f;
     acc_.x = 0.0f;
     acc_.y = 0.1f;
+    rot_ = (rand() * 1.0f / RAND_MAX) * 360.0f;
+    scale_ = (rand() * 1.0f / RAND_MAX) * 9.0f + 1.0f;
   }
 
   void Object::move()
@@ -83,6 +87,14 @@ namespace game
       pos_.x = X_MAX - (BOX_W / 2);
       spd_.x = -spd_.x;
     }
+    rot_ += 5.5f;
+    if (rot_ >= 360.0f) {
+      rot_ -= 360.0f;
+    }
+    scale_ += 0.1f;
+    if (scale_ >= 10.0f) {
+      scale_ -= 10.0f - 1.0f;
+    }
   }
 
   void Object::update()
@@ -94,13 +106,25 @@ namespace game
   void Object::draw()
   {
 #ifdef USE_OPENGL
+    glPushMatrix();
+    glTranslatef(pos_.x, pos_.y, 0.0f);
+    glRotatef(rot_, 0.0f, 0.0f, 1.0f);
+    glScalef(scale_, scale_, 1.0f);
     glBegin(GL_POLYGON);
-    glColor3f(1.0, 1.0, 1.0);
-    glVertex2f(pos_.x - (BOX_W / 2),  pos_.y - (BOX_H / 2));
-    glVertex2f(pos_.x - (BOX_W / 2),  pos_.y + (BOX_H / 2));
-    glVertex2f(pos_.x + (BOX_W / 2),  pos_.y + (BOX_H / 2));
-    glVertex2f(pos_.x + (BOX_W / 2),  pos_.y - (BOX_H / 2));
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glVertex2f(-(BOX_W / 2), -(BOX_H / 2));
+    glVertex2f(-(BOX_W / 2),  (BOX_H / 2));
+    glVertex2f( (BOX_W / 2),  (BOX_H / 2));
+    glVertex2f( (BOX_W / 2), -(BOX_H / 2));
     glEnd();
+    glBegin(GL_LINE_LOOP);
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glVertex2f(-(BOX_W / 2), -(BOX_H / 2));
+    glVertex2f(-(BOX_W / 2),  (BOX_H / 2));
+    glVertex2f( (BOX_W / 2),  (BOX_H / 2));
+    glVertex2f( (BOX_W / 2), -(BOX_H / 2));
+    glEnd();
+    glPopMatrix();
 #else
     SDL_SetRenderDrawColor(0xf0, 0xf0, 0xf0, 0xff);
     SDL_Rect rect = {pos_.x - (BOX_W / 2), pos_.y - (BOX_H / 2), BOX_W, BOX_H};
