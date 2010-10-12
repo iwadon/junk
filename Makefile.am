@@ -30,12 +30,19 @@ libsequencer_a_SOURCES = oscillator.cpp oscillator.hpp \
 			 volume.hpp
 libsequencer_a_CPPFLAGS = $(BOOST_CPPFLAGS)
 
-check_PROGRAMS = peg_test \
+check_PROGRAMS = logger_test \
+		 peg_test \
 		 point_test \
 		 sequencer_test \
 		 sdlapp_test \
 		 vector_test
 TESTS = $(check_PROGRAMS) peg_test.sh
+
+logger_test_SOURCES = test_main.cpp \
+		      logger_test.cpp \
+		      logger.cpp
+logger_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
+logger_test_LDADD = $(CPPUNIT_LIBS) $(BOOST_LIBS)
 
 peg_test_SOURCES = test_main.cpp \
 		   peg_test.cpp
