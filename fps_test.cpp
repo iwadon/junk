@@ -44,7 +44,7 @@ void FpsTest::test_update()
     CPPUNIT_ASSERT_EQUAL(static_cast<uint32_t>(i + 1), fps.frames);
     CPPUNIT_ASSERT_EQUAL(0U, fps.latest_frames);
   }
-  SDL_Delay(100);
+  SDL_Delay(100 + 50);
   fps.update();
   CPPUNIT_ASSERT_EQUAL(0U, fps.frames);
   CPPUNIT_ASSERT_EQUAL(10U, fps.latest_frames);
