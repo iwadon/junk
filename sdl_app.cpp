@@ -26,6 +26,7 @@ static const int WINDOW_HEIGHT = 600;
 SDLApp::SDLApp(const std::string &app_name)
   : app_name_(app_name)
   , font_(new Font)
+  , logger_(std::cerr, Logger::LEVEL_DEBUG)
 {
   set_bg_color(0x00a000ff);
 }
@@ -60,12 +61,14 @@ int SDLApp::run(int argc, char *argv[])
   return 0;
 }
 
+#define SDL_ERROR(format, ...) logger_.error(format ": %s", ##__VA_ARGS__, SDL_GetError())
+
 bool SDLApp::do_initialize(int argc, char *argv[])
 {
   srand(time(NULL));
 
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-    std::cerr << "ERROR: SDL_Init: " << SDL_GetError() << std::endl;
+    SDL_ERROR("SDL_Init() failed");
     return false;
   }
 
@@ -80,23 +83,22 @@ bool SDLApp::do_initialize(int argc, char *argv[])
 #endif
 			     );
   if (window_ == NULL) {
-    std::cerr << "ERROR: SDL_CreateWindow: " << SDL_GetError() << std::endl;
+    SDL_ERROR("SDL_CreateWindow() failed");
     return false;
   }
   if (SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTFLIP3/* | SDL_RENDERER_PRESENTVSYNC*/) < 0) {
-    std::cerr << "ERROR: SDL_CreateRenderer: " << SDL_GetError() << std::endl;
+    SDL_ERROR("SDL_CreateRenderer() failed");
     return false;
   }
 
 #ifdef USE_OPENGL
   glcontext_ = SDL_GL_CreateContext(window_);
   if (glcontext_ == NULL) {
-    std::cerr << "ERROR: SDL_GL_CreateContext: " << SDL_GetError() << std::endl;
+    SDL_ERROR("SDL_GL_CreateContext() failed");
     return false;
   }
   SDL_GL_SetSwapInterval(0);
 
-  //glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, 1);

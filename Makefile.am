@@ -3,9 +3,9 @@ AUTOMAKE_OPTIONS = foreign
 bin_PROGRAMS = oscillator_sample s2
 
 oscillator_sample_SOURCES = oscillator_sample.cpp
-oscillator_sample_CPPFLAGS = $(SDL_CFLAGS)
+oscillator_sample_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 oscillator_sample_LDFLAGS = -framework OpenGL
-oscillator_sample_LDADD = libsdlapp.a $(SDL_LIBS)
+oscillator_sample_LDADD = libsdlapp.a $(SDL_LIBS) $(BOOST_LIBS)
 
 s2_SOURCES = s2.cpp
 s2_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
@@ -19,6 +19,7 @@ libpeg_a_CPPFLAGS = $(BOOST_CPPFLAGS)
 
 libsdlapp_a_SOURCES = font.cpp font.hpp \
 		      fps.cpp fps.hpp \
+		      logger.cpp logger.hpp \
 		      sdl_app.cpp sdl_app.hpp \
 		      texture.cpp texture.hpp \
 		      texture_pool.cpp texture_pool.hpp
@@ -39,8 +40,7 @@ check_PROGRAMS = logger_test \
 TESTS = $(check_PROGRAMS) peg_test.sh
 
 logger_test_SOURCES = test_main.cpp \
-		      logger_test.cpp \
-		      logger.cpp
+		      logger_test.cpp
 logger_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
 logger_test_LDADD = $(CPPUNIT_LIBS) $(BOOST_LIBS)
 

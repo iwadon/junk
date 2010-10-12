@@ -3,6 +3,7 @@
 
 #include <string>
 #include "fps.hpp"
+#include "logger.hpp"
 
 #ifdef USE_OPENGL
 #ifdef HAVE_SDL_H
@@ -50,6 +51,8 @@ private:
   void do_draw();
   void wait_next_frame();
   int calculate_frames();
+protected:
+  Logger logger_;
 };
 
 #endif // !defined(SDL_APP_HPP_INCLUDED)
