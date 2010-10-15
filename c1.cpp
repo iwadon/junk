@@ -51,7 +51,7 @@ int main(int /*argc*/, char */*argv*/[])
       return 1;
     }
     
-    recv_len = recv(sock, buf, BUF_SIZE, 0);
+    recv_len = recv(sock, buf, BUF_SIZE - 1, 0);
     if (recv_len == -1) {
       perror("recv() failed");
       return 1;

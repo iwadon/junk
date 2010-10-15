@@ -1,11 +1,15 @@
 AUTOMAKE_OPTIONS = foreign
 
-bin_PROGRAMS = oscillator_sample s2
+bin_PROGRAMS = oscillator_sample c1 s1 s2
+
+c1_SOURCES = c1.cpp
 
 oscillator_sample_SOURCES = oscillator_sample.cpp
 oscillator_sample_CPPFLAGS = $(SDL_CFLAGS)
 oscillator_sample_LDFLAGS = -framework OpenGL
 oscillator_sample_LDADD = libsdlapp.a $(SDL_LIBS)
+
+s1_SOURCES = s1.cpp
 
 s2_SOURCES = s2.cpp
 s2_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
