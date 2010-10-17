@@ -15,8 +15,8 @@
 #endif
 #endif
 #include "point.hpp"
-#include "vector.hpp"
 #include "sdl_app.hpp"
+#include "vector.hpp"
 
 //#define SHOW_WINDOW_AFTER_INITIALIZED
 
@@ -26,23 +26,44 @@ namespace game
   static const float X_MAX = 800.0f;
   static const float Y_MIN = 0.0f;
   static const float Y_MAX = 600.0f;
-  static const float BOX_W = 10;
-  static const float BOX_H = 10;
+  static const float DEMOBOX_W = 10;
+  static const float DEMOBOX_H = 10;
+  static const float MYSHIP_W = 30;
+  static const float MYSHIP_H = 50;
   static const size_t OBJ_NUM = 500;
 
   class Object
   {
   public:
-    Object();
-    void move();
-    void update();
-    void draw();
-  private:
+    virtual ~Object() {}
+    virtual void initialize() {}
+    virtual void input() {}
+    virtual void move() {}
+    virtual void update();
+    virtual void draw() {}
+  protected:
     Point pos_;
     Vector spd_;
     Vector acc_;
     float rot_;
     float scale_;
+  };
+
+  class DemoBox : public Object
+  {
+  public:
+    void initialize();
+    void move();
+    void draw();
+  };
+
+  class MyShip : public Object
+  {
+  public:
+    void initialize();
+    void input();
+    void move();
+    void draw();
   };
 
   class App : public SDLApp
@@ -51,20 +72,26 @@ namespace game
     App();
   protected:
     bool initialize(int argc, char *argv[]);
+    void input();
     void move();
     void update();
     void draw();
   private:
     SDL_Window *window_;
     bool done_;
-    boost::object_pool<Object> objects;
     std::list<Object *> active_objects;
   };
 
-  Object::Object()
+  void Object::update()
   {
-    pos_.x = (rand() * 1.0f / RAND_MAX) * X_MAX - (BOX_W / 2);
-    pos_.y = (rand() * 1.0f / RAND_MAX) * Y_MAX - (BOX_H / 2);
+    spd_ += acc_;
+    pos_ += spd_;
+  }
+
+  void DemoBox::initialize()
+  {
+    pos_.x = (rand() * 1.0f / RAND_MAX) * X_MAX - (DEMOBOX_W / 2);
+    pos_.y = (rand() * 1.0f / RAND_MAX) * Y_MAX - (DEMOBOX_H / 2);
     spd_.x = (rand() * 1.0f / RAND_MAX) * 2.5f;
     spd_.y = (rand() * 1.0f / RAND_MAX) * 2.5f;
     acc_.x = 0.0f;
@@ -73,18 +100,18 @@ namespace game
     scale_ = (rand() * 1.0f / RAND_MAX) * 9.0f + 1.0f;
   }
 
-  void Object::move()
+  void DemoBox::move()
   {
-    if (pos_.y > Y_MAX - (BOX_H / 2)) {
-      pos_.y = Y_MAX - (BOX_H / 2);
+    if (pos_.y > Y_MAX - (DEMOBOX_H / 2)) {
+      pos_.y = Y_MAX - (DEMOBOX_H / 2);
       spd_.y = -spd_.y;
     }
-    if (pos_.x < X_MIN + (BOX_W / 2)) {
-      pos_.x = X_MIN + (BOX_W / 2);
+    if (pos_.x < X_MIN + (DEMOBOX_W / 2)) {
+      pos_.x = X_MIN + (DEMOBOX_W / 2);
       spd_.x = -spd_.x;
     }
-    if (pos_.x > X_MAX - (BOX_W / 2)) {
-      pos_.x = X_MAX - (BOX_W / 2);
+    if (pos_.x > X_MAX - (DEMOBOX_W / 2)) {
+      pos_.x = X_MAX - (DEMOBOX_W / 2);
       spd_.x = -spd_.x;
     }
     rot_ += 5.5f;
@@ -97,39 +124,70 @@ namespace game
     }
   }
 
-  void Object::update()
+  void DemoBox::draw()
   {
-    spd_ += acc_;
-    pos_ += spd_;
+    glPushMatrix();
+    glTranslatef(pos_.x, pos_.y, 0.0f);
+    glRotatef(rot_, 0.0f, 0.0f, 1.0f);
+    glScalef(scale_, scale_, 1.0f);
+    glBegin(GL_POLYGON);
+    glColor3f(0.7f, 0.4f, 0.2f);
+    glVertex2f(-(DEMOBOX_W / 2), -(DEMOBOX_H / 2));
+    glVertex2f(-(DEMOBOX_W / 2),  (DEMOBOX_H / 2));
+    glVertex2f( (DEMOBOX_W / 2),  (DEMOBOX_H / 2));
+    glVertex2f( (DEMOBOX_W / 2), -(DEMOBOX_H / 2));
+    glEnd();
+    glBegin(GL_LINE_LOOP);
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glVertex2f(-(DEMOBOX_W / 2), -(DEMOBOX_H / 2));
+    glVertex2f(-(DEMOBOX_W / 2),  (DEMOBOX_H / 2));
+    glVertex2f( (DEMOBOX_W / 2),  (DEMOBOX_H / 2));
+    glVertex2f( (DEMOBOX_W / 2), -(DEMOBOX_H / 2));
+    glEnd();
+    glPopMatrix();
   }
 
-  void Object::draw()
+  void MyShip::initialize()
   {
-#ifdef USE_OPENGL
+    pos_.x = (X_MAX - X_MIN) / 2;
+    pos_.y = (Y_MAX - Y_MIN) * 3 / 4;
+    spd_.x = 0;
+    spd_.y = 0;
+    acc_.x = 0;
+    acc_.y = 0;
+    rot_ = 0;
+    scale_ = 1;
+  }
+
+  void MyShip::input()
+  {
+  }
+
+  void MyShip::move()
+  {
+  }
+
+  void MyShip::draw()
+  {
     glPushMatrix();
     glTranslatef(pos_.x, pos_.y, 0.0f);
     glRotatef(rot_, 0.0f, 0.0f, 1.0f);
     glScalef(scale_, scale_, 1.0f);
     glBegin(GL_POLYGON);
     glColor3f(1.0f, 1.0f, 1.0f);
-    glVertex2f(-(BOX_W / 2), -(BOX_H / 2));
-    glVertex2f(-(BOX_W / 2),  (BOX_H / 2));
-    glVertex2f( (BOX_W / 2),  (BOX_H / 2));
-    glVertex2f( (BOX_W / 2), -(BOX_H / 2));
+    glVertex2f(-(MYSHIP_W / 2), -(MYSHIP_H / 2));
+    glVertex2f(-(MYSHIP_W / 2),  (MYSHIP_H / 2));
+    glVertex2f( (MYSHIP_W / 2),  (MYSHIP_H / 2));
+    glVertex2f( (MYSHIP_W / 2), -(MYSHIP_H / 2));
     glEnd();
     glBegin(GL_LINE_LOOP);
     glColor3f(0.0f, 0.0f, 0.0f);
-    glVertex2f(-(BOX_W / 2), -(BOX_H / 2));
-    glVertex2f(-(BOX_W / 2),  (BOX_H / 2));
-    glVertex2f( (BOX_W / 2),  (BOX_H / 2));
-    glVertex2f( (BOX_W / 2), -(BOX_H / 2));
+    glVertex2f(-(MYSHIP_W / 2), -(MYSHIP_H / 2));
+    glVertex2f(-(MYSHIP_W / 2),  (MYSHIP_H / 2));
+    glVertex2f( (MYSHIP_W / 2),  (MYSHIP_H / 2));
+    glVertex2f( (MYSHIP_W / 2), -(MYSHIP_H / 2));
     glEnd();
     glPopMatrix();
-#else
-    SDL_SetRenderDrawColor(0xf0, 0xf0, 0xf0, 0xff);
-    SDL_Rect rect = {pos_.x - (BOX_W / 2), pos_.y - (BOX_H / 2), BOX_W, BOX_H};
-    SDL_RenderFillRect(&rect);
-#endif
   }
 
   App::App()
@@ -144,11 +202,23 @@ namespace game
     }
 
     for (size_t i = 0; i < OBJ_NUM; ++i) {
-      Object *obj = objects.construct();
+      Object *obj = new DemoBox;
+      obj->initialize();
       active_objects.push_back(obj);
     }
 
+    Object *obj = new MyShip;
+    obj->initialize();
+    active_objects.push_back(obj);
+
     return true;
+  }
+
+  void App::input()
+  {
+    BOOST_FOREACH(Object *obj, active_objects) {
+      obj->input();
+    }
   }
 
   void App::move()
