@@ -48,7 +48,6 @@ private:
   void do_move();
   void do_update();
   void do_draw();
-  void wait_next_frame();
   int calculate_frames();
 };
 
