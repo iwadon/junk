@@ -117,7 +117,9 @@ gcov: check
 	$(GCOV) $(TEST_OBJECTS:.o=.gcda)
 
 .PHONY: lcov
-lcov: check
+lcov:
+	$(LCOV) -z -d $(srcdir)
+	$(MAKE) check
 	$(LCOV) -c -d $(srcdir) -o $(builddir)/app.info
 	$(GENHTML) --demangle-cpp --html-prolog $(srcdir)/lcov_prolog.html --html-epilog $(srcdir)/lcov_epilog.html -o $(lcovdir) $(builddir)/app.info -p $(abs_srcdir)
 
