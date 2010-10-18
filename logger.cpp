@@ -4,10 +4,10 @@
 #include <iostream>
 #include "logger.hpp"
 
-Logger::Logger()
-  : os_(std::cout)
-  , level_(LEVEL_DEBUG)
+Logger &Logger::get_instance()
 {
+  static Logger instance(std::cout, LEVEL_DEBUG);
+  return instance;
 }
 
 Logger::Logger(std::ostream &os, const LEVEL level)
@@ -69,4 +69,3 @@ void Logger::vlog(const Logger::LEVEL level, const char *format, va_list args)
   }
 }
 
-Logger glogger;
