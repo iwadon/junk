@@ -20,6 +20,7 @@ private:
   texture_pool_type texture_pool_;
   texture_map_type texture_map_;
   TexturePool() {}
+  texture_map_type::iterator find(const char *filename);
 };
 
 #endif // !defined(TEXTURE_POOL_HPP_INCLUDED)
