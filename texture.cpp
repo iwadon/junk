@@ -11,28 +11,33 @@
 #ifdef HAVE_SDL_IMAGE_H
 #include <SDL_image.h>
 #endif
+#include "logger.hpp"
 
 Texture::~Texture()
 {
-  SDL_DestroyTexture(texture);
-  texture = NULL;
+  if (texture != NULL) {
+    SDL_DestroyTexture(texture);
+    texture = NULL;
+    glogger.info("Texture is destroyed: %s", filename.c_str());
+  }
 }
 
 bool Texture::load_file(const char *filename_)
 {
   SDL_Surface *surface = IMG_Load(filename_);
   if (surface == NULL) {
-    std::cerr << "IMG_Load: " << IMG_GetError() << std::endl;
+    glogger.error("IMG_Load() failed: %s", IMG_GetError());
     return false;
   }
   SDL_Texture *tex = SDL_CreateTextureFromSurface(0, surface);
   if (tex == NULL) {
-    std::cerr << "can not create texture: " << SDL_GetError() << std::endl;
+    glogger.error("SDL_CreateTextureFromSurface() failed: %s", SDL_GetError());
     SDL_FreeSurface(surface);
     return false;
   }
   SDL_FreeSurface(surface);
   texture = tex;
   filename = filename_;
+  glogger.info("Texture is loaded: %s", filename.c_str());
   return true;
 }
