@@ -1,11 +1,15 @@
 AUTOMAKE_OPTIONS = foreign
 
-bin_PROGRAMS = oscillator_sample s2
+bin_PROGRAMS = oscillator_sample c1 s1 s2
+
+c1_SOURCES = c1.cpp
 
 oscillator_sample_SOURCES = oscillator_sample.cpp
 oscillator_sample_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 oscillator_sample_LDFLAGS = -framework OpenGL
 oscillator_sample_LDADD = libsdlapp.a $(SDL_LIBS) $(BOOST_LIBS)
+
+s1_SOURCES = s1.cpp
 
 s2_SOURCES = s2.cpp
 s2_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
@@ -74,19 +78,53 @@ vector_test_SOURCES = test_main.cpp vector_test.cpp
 vector_test_CPPFLAGS = $(CPPUNIT_CFLAGS)
 vector_test_LDADD = $(CPPUNIT_LIBS)
 
-AM_CXXFLAGS = -Wall -Wextra
+AM_CFLAGS = -Wall -Wextra $(COVERAGE_CFLAGS)
+AM_CXXFLAGS = -Wall -Wextra $(COVERAGE_CXXFLAGS)
+
+OBJECTS = $(c1_OBJECTS) \
+	  $(libpeg_a_OBJECTS) \
+	  $(libsdlapp_a_OBJECTS) \
+	  $(libsequencer_a_OBJECTS) \
+	  $(oscillator_sample_OBJECTS) \
+	  $(peg_test_OBJECTS) \
+	  $(point_test_OBJECTS) \
+	  $(s1_OBJECTS) \
+	  $(s2_OBJECTS) \
+	  $(sdlapp_test_OBJECTS) \
+	  $(sequencer_test_OBJECTS) \
+	  $(vector_test_OBJECTS)
+
+TEST_OBJECTS = $(libpeg_a_OBJECTS) \
+	  $(libsdlapp_a_OBJECTS) \
+	  $(libsequencer_a_OBJECTS) \
+	  $(peg_test_OBJECTS) \
+	  $(point_test_OBJECTS) \
+	  $(sdlapp_test_OBJECTS) \
+	  $(sequencer_test_OBJECTS) \
+	  $(vector_test_OBJECTS)
+
+CLEANFILES = $(OBJECTS:.o=.gcda)
+DISTCLEANFILES = $(OBJECTS:.o=.gcno) app.info
+
+GCOV = gcov -l -p
+LCOV = lcov
+GENHTML = genhtml
+lcovdir = $(builddir)/lcov
 
 gcov: check
-	gcov -l -p *.gcda
+	$(GCOV) $(TEST_OBJECTS:.o=.gcda)
 
-gcov-clean:
-	rm -f *.gcda *.gcno *.gcov
+.PHONY: lcov
+lcov: check
+	$(LCOV) -c -d $(srcdir) -o $(builddir)/app.info
+	$(GENHTML) --demangle-cpp --html-prolog $(srcdir)/lcov_prolog.html --html-epilog $(srcdir)/lcov_epilog.html -o $(lcovdir) $(builddir)/app.info
 
 all-local:
 	test -d $(builddir)/data || ln -s $(top_srcdir)/data $(builddir)/
 
 distclean-local:
 	test ! -L $(builddir)/data || rm $(builddir)/data
+	test ! -d $(lcovdir) || rm -r $(lcovdir)
 
 DOXYFILE = $(builddir)/Doxyfile
 

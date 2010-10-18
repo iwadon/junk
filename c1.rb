@@ -1,11 +1,8 @@
+# echo client
 require 'socket'
-def access(str, n = 1)
-  Addrinfo.tcp('localhost', 7777).connect do |sock|
-    n.times do
-      sock.puts(str)
-      p sock.gets
-    end
+TCPSocket.open('localhost', 7777) do |sock|
+  while str = gets
+    sock.print(str)
+    puts(sock.gets)
   end
 end
-access("HELLO", 9)
-access("exit!")

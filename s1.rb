@@ -1,13 +1,14 @@
+# echo server
 require 'socket'
-Socket.tcp_server_loop(7777) do |sock, client_addrinfo|
-  p([sock, client_addrinfo])
+Socket.tcp_server_loop(7777) do |client_sock, client_addrinfo|
+  p([client_sock, client_addrinfo])
   begin
-    while str = sock.gets
-      p str
-      sock.puts("ok!")
-      exit if /\Aexit!/ =~ str
+    while str = client_sock.gets
+      puts(str)
+      client_sock.print(str)
     end
   ensure
-    p sock.close
+    client_sock.close
+    puts("[#{client_addrinfo.inspect} is gone.]")
   end
 end
