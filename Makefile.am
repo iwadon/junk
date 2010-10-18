@@ -46,7 +46,7 @@ TESTS = $(check_PROGRAMS) peg_test.sh
 logger_test_SOURCES = test_main.cpp \
 		      logger_test.cpp
 logger_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
-logger_test_LDADD = $(CPPUNIT_LIBS) $(BOOST_LIBS)
+logger_test_LDADD = libsdlapp.a $(CPPUNIT_LIBS) $(BOOST_LIBS)
 
 peg_test_SOURCES = test_main.cpp \
 		   peg_test.cpp
