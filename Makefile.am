@@ -85,6 +85,7 @@ OBJECTS = $(c1_OBJECTS) \
 	  $(libpeg_a_OBJECTS) \
 	  $(libsdlapp_a_OBJECTS) \
 	  $(libsequencer_a_OBJECTS) \
+	  $(logger_test_OBJECTS) \
 	  $(oscillator_sample_OBJECTS) \
 	  $(peg_test_OBJECTS) \
 	  $(point_test_OBJECTS) \
