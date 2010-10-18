@@ -1,7 +1,14 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include <iostream>
 #include "logger.hpp"
+
+Logger::Logger()
+  : os_(std::cout)
+  , level_(LEVEL_DEBUG)
+{
+}
 
 Logger::Logger(std::ostream &os, const LEVEL level)
   : os_(os)
@@ -61,3 +68,5 @@ void Logger::vlog(const Logger::LEVEL level, const char *format, va_list args)
     os_ << buf << std::endl;
   }
 }
+
+Logger glogger;

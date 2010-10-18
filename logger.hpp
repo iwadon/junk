@@ -17,6 +17,7 @@ public:
     LEVEL_ERROR,
     LEVEL_FATAL,
   };
+  Logger();
   Logger(std::ostream &os, const LEVEL level);
   void log(const LEVEL level, const char *format, ...);
   void debug(const char *format, ...);
@@ -30,5 +31,7 @@ private:
   std::ostream &os_;
   LEVEL level_;
 };
+
+extern Logger glogger;
 
 #endif // !defined(LOGGER_HPP_INCLUDED)
