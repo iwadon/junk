@@ -25,6 +25,7 @@ libsdlapp_a_SOURCES = font.cpp font.hpp \
 		      fps.cpp fps.hpp \
 		      logger.cpp logger.hpp \
 		      sdl_app.cpp sdl_app.hpp \
+		      sprite.cpp sprite.hpp \
 		      texture.cpp texture.hpp \
 		      texture_pool.cpp texture_pool.hpp
 libsdlapp_a_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
@@ -56,6 +57,7 @@ peg_test_LDADD = libpeg.a $(CPPUNIT_LIBS)
 sdlapp_test_SOURCES = test_main.cpp \
 		      font_test.cpp \
 		      fps_test.cpp \
+		      sprite_test.cpp \
 		      texture_test.cpp \
 		      texture_pool_test.cpp
 sdlapp_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
