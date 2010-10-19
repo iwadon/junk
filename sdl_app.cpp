@@ -4,8 +4,8 @@
 #include "sdl_app.hpp"
 #ifdef STDCXX_98_HEADERS
 #include <cassert>
-#include <iostream>
 #include <ctime>
+#include <iostream>
 #endif
 #ifdef HAVE_SDL_H
 #include <SDL.h>
@@ -14,6 +14,7 @@
 #endif
 #endif
 #include "font.hpp"
+#include "logger.hpp"
 
 #define SHOW_WINDOW_AFTER_INITIALIZED
 
@@ -23,10 +24,9 @@ static const int MAX_SKIP_FRAMES = 10;
 static const int WINDOW_WIDTH = 800;
 static const int WINDOW_HEIGHT = 600;
 
-SDLApp::SDLApp(const std::string &app_name)
-  : app_name_(app_name)
+SDLApp::SDLApp(const SP &app_name)
+  : app_name_(app_name.c_str())
   , font_(new Font)
-  , logger_(std::cerr, Logger::LEVEL_DEBUG)
 {
   set_bg_color(0x00a000ff);
 }
@@ -61,14 +61,12 @@ int SDLApp::run(int argc, char *argv[])
   return 0;
 }
 
-#define SDL_ERROR(format, ...) logger_.error(format ": %s", ##__VA_ARGS__, SDL_GetError())
-
 bool SDLApp::do_initialize(int argc, char *argv[])
 {
   srand(time(NULL));
 
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-    SDL_ERROR("SDL_Init() failed");
+    glogger.error("SDL_Init() failed: %s", SDL_GetError());
     return false;
   }
 
@@ -83,18 +81,18 @@ bool SDLApp::do_initialize(int argc, char *argv[])
 #endif
 			     );
   if (window_ == NULL) {
-    SDL_ERROR("SDL_CreateWindow() failed");
+    glogger.error("SDL_CreateWindow() failed: %s", SDL_GetError());
     return false;
   }
   if (SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTFLIP3/* | SDL_RENDERER_PRESENTVSYNC*/) < 0) {
-    SDL_ERROR("SDL_CreateRenderer() failed");
+    glogger.error("SDL_CreateRenderer() failed: %s", SDL_GetError());
     return false;
   }
 
 #ifdef USE_OPENGL
   glcontext_ = SDL_GL_CreateContext(window_);
   if (glcontext_ == NULL) {
-    SDL_ERROR("SDL_GL_CreateContext() failed");
+    glogger.error("SDL_GL_CreateContext() failed: %s", SDL_GetError());
     return false;
   }
   SDL_GL_SetSwapInterval(0);
@@ -205,7 +203,7 @@ int SDLApp::calculate_frames()
   return frames;
 }
 
-bool SDLApp::load_font_file(const char *filename)
+bool SDLApp::load_font_file(const SP &filename)
 {
   assert(font_ != NULL);
   return font_->load_file(filename);

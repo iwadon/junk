@@ -3,7 +3,7 @@
 
 #include <string>
 #include "fps.hpp"
-#include "logger.hpp"
+#include "sp.hpp"
 
 #ifdef USE_OPENGL
 #ifdef HAVE_SDL_H
@@ -17,7 +17,7 @@ class Font;
 class SDLApp
 {
 public:
-  SDLApp(const std::string &app_name);
+  SDLApp(const SP &app_name);
   virtual ~SDLApp();
   int run(int argc, char *argv[]);
 protected:
@@ -28,7 +28,7 @@ protected:
   virtual void update() {}
   virtual void draw() {}
   void set_bg_color(const uint32_t rgba);
-  bool load_font_file(const char *filename);
+  bool load_font_file(const SP &filename);
   void draw_chr(int x, int y, int chr);
   void draw_string(int x, int y, const char *str);
 private:
@@ -50,8 +50,6 @@ private:
   void do_update();
   void do_draw();
   int calculate_frames();
-protected:
-  Logger logger_;
 };
 
 #endif // !defined(SDL_APP_HPP_INCLUDED)

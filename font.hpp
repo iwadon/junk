@@ -6,6 +6,8 @@
 #ifndef FONT_HPP_INCLUDED
 #define FONT_HPP_INCLUDED 1
 
+#include "sp.hpp"
+
 struct Texture;
 
 /**
@@ -16,9 +18,9 @@ class Font
 {
 public:
   ~Font();
-  bool load_file(const char *filename);
+  bool load_file(const SP &filename);
   void draw_chr(const int x, const int y, const int chr);
-  void draw_str(const int x, const int y, const char *str);
+  void draw_str(const int x, const int y, const SP &str);
   void draw_strf(const int x, const int y, const char *format, ...);
 private:
   Texture *tex_;

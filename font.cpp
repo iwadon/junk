@@ -10,11 +10,11 @@
 #ifdef STDCXX_98_HEADERS
 #include <cassert>
 #include <cstdarg>
-#include <iostream>
 #endif
 #ifdef HAVE_SDL_H
 #include <SDL.h>
 #endif
+#include "logger.hpp"
 #include "texture.hpp"
 #include "texture_pool.hpp"
 
@@ -32,9 +32,9 @@ Font::~Font()
  * @retval true  正常にファイルを読み込めた。
  * @retval false ファイルを読み込んでいる最中にエラーが起きた。
  */
-bool Font::load_file(const char *filename)
+bool Font::load_file(const SP &filename)
 {
-  assert(filename != NULL);
+  assert(filename.data() != NULL);
   tex_ = TexturePool::get_instance().load_file(filename);
   return tex_ != NULL;
 }
@@ -62,7 +62,7 @@ void Font::draw_chr(const int x, const int y, const int chr)
   int result;
   result = SDL_RenderCopy(tex_->texture, &srcrect, &dstrect);
   if (result != 0) {
-    std::cerr << "SDL_RenderCopy: " << SDL_GetError() << std::endl;
+    glogger.error("SDL_RenderCopy() failed: %s", SDL_GetError());
   }
 }
 
@@ -72,12 +72,12 @@ void Font::draw_chr(const int x, const int y, const int chr)
  * @param [in] y   Y座標。
  * @param [in] str 文字列。
  */
-void Font::draw_str(const int x, const int y, const char *str)
+void Font::draw_str(const int x, const int y, const SP &str)
 {
-  assert(str != NULL);
+  assert(str.data() != NULL);
   int x_ = x;
   int y_ = y;
-  for (const char *p = str; *p != '\0'; ++p) {
+  for (const char *p = str.data(); *p != '\0'; ++p) {
     draw_chr(x_, y_, *p);
     x_ += 8;
   }
@@ -91,6 +91,7 @@ void Font::draw_str(const int x, const int y, const char *str)
  */
 void Font::draw_strf(const int x, const int y, const char *format, ...)
 {
+  assert(format != NULL);
   char buf[256];
   va_list args;
   va_start(args, format);
