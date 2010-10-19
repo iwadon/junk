@@ -2,9 +2,6 @@
 #include "config.h"
 #endif
 #include "texture.hpp"
-#ifdef STDCXX_98_HEADERS
-#include <iostream>
-#endif
 #ifdef HAVE_SDL_H
 #include <SDL.h>
 #endif
@@ -13,18 +10,24 @@
 #endif
 #include "logger.hpp"
 
+Texture::Texture()
+  : texture(NULL)
+  , filename("")
+{
+}
+
 Texture::~Texture()
 {
   if (texture != NULL) {
     SDL_DestroyTexture(texture);
     texture = NULL;
-    glogger.info("Texture is destroyed: %s", filename.c_str());
+    glogger.info("Texture %p(%s) is destroyed.", this, filename.c_str());
   }
 }
 
-bool Texture::load_file(const char *filename_)
+bool Texture::load_file(const SP &filename_)
 {
-  SDL_Surface *surface = IMG_Load(filename_);
+  SDL_Surface *surface = IMG_Load(filename_.c_str());
   if (surface == NULL) {
     glogger.error("IMG_Load() failed: %s", IMG_GetError());
     return false;
@@ -37,7 +40,7 @@ bool Texture::load_file(const char *filename_)
   }
   SDL_FreeSurface(surface);
   texture = tex;
-  filename = filename_;
-  glogger.info("Texture is loaded: %s", filename.c_str());
+  filename_.CopyToString(&filename);
+  glogger.info("Texture %p(%s) loaded.", this, filename.c_str());
   return true;
 }

@@ -15,6 +15,7 @@
 #ifdef HAVE_SDL_H
 #include <SDL.h>
 #endif
+#include "texture.hpp"
 #include "texture_pool.hpp"
 
 /// コンストラクタ
