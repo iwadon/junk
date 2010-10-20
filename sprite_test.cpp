@@ -18,6 +18,7 @@ void SpriteTest::test_load_texture_file()
 {
   Sprite s;
   CPPUNIT_ASSERT_EQUAL(true, s.load_texture_file("data/blue_box.png"));
+  CPPUNIT_ASSERT_EQUAL(false, s.load_texture_file("UNKNOWN FILE"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SpriteTest);

@@ -3,8 +3,12 @@
 
 #include "sp.hpp"
 
+struct Texture;
+
 struct Sprite
 {
+  Texture *texture;
+  Sprite();
   bool load_texture_file(const SP &filename);
 };
 
