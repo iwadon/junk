@@ -61,6 +61,7 @@ sdlapp_test_SOURCES = test_main.cpp \
 		      texture_test.cpp \
 		      texture_pool_test.cpp
 sdlapp_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
+sdlapp_test_LDFLAGS = -framework OpenGL
 sdlapp_test_LDADD = libsdlapp.a $(CPPUNIT_LIBS) $(BOOST_LIBS)
 
 sequencer_test_SOURCES = test_main.cpp \

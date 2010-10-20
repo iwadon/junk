@@ -7,6 +7,7 @@
 #ifdef HAVE_BOOST
 #include <boost/foreach.hpp>
 #include <boost/pool/object_pool.hpp>
+#include <boost/shared_ptr.hpp>
 #endif
 #ifdef HAVE_SDL_H
 #include <SDL.h>
@@ -14,8 +15,11 @@
 #include <SDL_opengl.h>
 #endif
 #endif
+#include "logger.hpp"
 #include "point.hpp"
 #include "sdl_app.hpp"
+#include "sprite.hpp"
+#include "texture.hpp"
 #include "vector.hpp"
 
 //#define SHOW_WINDOW_AFTER_INITIALIZED
@@ -52,9 +56,12 @@ namespace game
   class DemoBox : public Object
   {
   public:
+    DemoBox();
     void initialize();
     void move();
     void draw();
+  private:
+    boost::shared_ptr<Sprite> sprite_;
   };
 
   class MyShip : public Object
@@ -88,6 +95,11 @@ namespace game
     pos_ += spd_;
   }
 
+  DemoBox::DemoBox()
+    : sprite_(new Sprite)
+  {
+  }
+
   void DemoBox::initialize()
   {
     pos_.x = (rand() * 1.0f / RAND_MAX) * X_MAX - (DEMOBOX_W / 2);
@@ -97,7 +109,10 @@ namespace game
     acc_.x = 0.0f;
     acc_.y = 0.1f;
     rot_ = (rand() * 1.0f / RAND_MAX) * 360.0f;
-    scale_ = (rand() * 1.0f / RAND_MAX) * 9.0f + 1.0f;
+    //scale_ = (rand() * 1.0f / RAND_MAX) * 9.0f + 1.0f;
+    scale_ = 1.0f;
+    SDL_Rect r = {0, 0, 100, 100};
+    sprite_->set_texture("data/blue_box.png", &r);
   }
 
   void DemoBox::move()
@@ -118,32 +133,21 @@ namespace game
     if (rot_ >= 360.0f) {
       rot_ -= 360.0f;
     }
-    scale_ += 0.1f;
-    if (scale_ >= 10.0f) {
-      scale_ -= 10.0f - 1.0f;
+#if 0
+    scale_ += 0.03f;
+    if (scale_ >= 3.0f) {
+      scale_ -= 3.0f - 0.03f;
     }
+#endif
   }
 
   void DemoBox::draw()
   {
     glPushMatrix();
-    glTranslatef(pos_.x, pos_.y, 0.0f);
-    glRotatef(rot_, 0.0f, 0.0f, 1.0f);
-    glScalef(scale_, scale_, 1.0f);
-    glBegin(GL_POLYGON);
-    glColor3f(0.7f, 0.4f, 0.2f);
-    glVertex2f(-(DEMOBOX_W / 2), -(DEMOBOX_H / 2));
-    glVertex2f(-(DEMOBOX_W / 2),  (DEMOBOX_H / 2));
-    glVertex2f( (DEMOBOX_W / 2),  (DEMOBOX_H / 2));
-    glVertex2f( (DEMOBOX_W / 2), -(DEMOBOX_H / 2));
-    glEnd();
-    glBegin(GL_LINE_LOOP);
-    glColor3f(0.0f, 0.0f, 0.0f);
-    glVertex2f(-(DEMOBOX_W / 2), -(DEMOBOX_H / 2));
-    glVertex2f(-(DEMOBOX_W / 2),  (DEMOBOX_H / 2));
-    glVertex2f( (DEMOBOX_W / 2),  (DEMOBOX_H / 2));
-    glVertex2f( (DEMOBOX_W / 2), -(DEMOBOX_H / 2));
-    glEnd();
+    sprite_->pos = pos_;
+    sprite_->rot = rot_;
+    sprite_->scale = scale_;
+    sprite_->draw();
     glPopMatrix();
   }
 

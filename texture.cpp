@@ -40,6 +40,15 @@ bool Texture::load_file(const SP &filename_)
   }
   SDL_FreeSurface(surface);
   texture = tex;
+  int w, h;
+  if (SDL_QueryTexture(texture, NULL, NULL, &w, &h) == -1) {
+    glogger.error("SDL_QueryTexture() failed: %s", SDL_GetError());
+    SDL_DestroyTexture(texture);
+    texture = NULL;
+    return false;
+  }
+  width = w;
+  height = h;
   filename_.CopyToString(&filename);
   glogger.info("Texture %p(%s) loaded.", this, filename.c_str());
   return true;

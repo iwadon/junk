@@ -8,6 +8,8 @@ struct SDL_Texture;
 struct Texture
 {
   SDL_Texture *texture;
+  uint32_t width;
+  uint32_t height;
   std::string filename;
   Texture();
   ~Texture();
