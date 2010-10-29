@@ -57,6 +57,7 @@ peg_test_LDADD = libpeg.a $(CPPUNIT_LIBS)
 sdlapp_test_SOURCES = test_main.cpp \
 		      font_test.cpp \
 		      fps_test.cpp \
+		      object_test.cpp \
 		      sprite_test.cpp \
 		      texture_test.cpp \
 		      texture_pool_test.cpp
