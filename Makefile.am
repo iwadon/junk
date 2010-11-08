@@ -109,13 +109,16 @@ TEST_OBJECTS = $(libpeg_a_OBJECTS) \
 	  $(sequencer_test_OBJECTS) \
 	  $(vector_test_OBJECTS)
 
-CLEANFILES = $(OBJECTS:.o=.gcda)
+CLEANFILES = $(OBJECTS:.o=.gcda) \
+	     dox-warning.txt
 DISTCLEANFILES = $(OBJECTS:.o=.gcno) app.info
 
 GCOV = gcov -l -p
 LCOV = lcov
 GENHTML = genhtml
 lcovdir = $(builddir)/lcov
+DOXYFILE = $(builddir)/Doxyfile
+doxdir = $(builddir)/dox
 
 gcov: check
 	$(GCOV) $(TEST_OBJECTS:.o=.gcda)
@@ -133,12 +136,10 @@ all-local:
 distclean-local:
 	test ! -L $(builddir)/data || rm $(builddir)/data
 	test ! -d $(lcovdir) || rm -r $(lcovdir)
-
-DOXYFILE = $(builddir)/Doxyfile
+	test ! -d $(doxdir) || rm -r $(doxdir)
 
 .PHONY: dox clean-dox
 dox: $(DOXYFILE)
-	test -d $(builddir)/dox || $(MKDIR_P) $(builddir)/dox
-	$(DOXYGEN) $(DOXYFILE)
+	(test -d $(doxdir) || $(MKDIR_P) $(doxdir)) && $(DOXYGEN) $(DOXYFILE)
 clean-dox:
-	rm -rf $(builddir)/dox
+	rm -r $(doxdir)
