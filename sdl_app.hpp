@@ -5,10 +5,8 @@
 #include "fps.hpp"
 #include "sp.hpp"
 
-#ifdef USE_OPENGL
 #ifdef HAVE_SDL_H
 #include <SDL.h>
-#endif
 #endif
 
 struct SDL_Window;
@@ -40,9 +38,7 @@ private:
   int frames_;
   Font *font_;
   FPS fps_;
-#ifdef USE_OPENGL
   SDL_GLContext glcontext_;
-#endif
   bool do_initialize(int argc, char *argv[]);
   void do_finalize();
   void do_input();

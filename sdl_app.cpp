@@ -9,9 +9,7 @@
 #endif
 #ifdef HAVE_SDL_H
 #include <SDL.h>
-#ifdef USE_OPENGL
 #include <SDL_opengl.h>
-#endif
 #endif
 #include "font.hpp"
 #include "logger.hpp"
@@ -71,13 +69,9 @@ bool SDLApp::do_initialize(int argc, char *argv[])
   }
 
   window_ = SDL_CreateWindow(app_name_.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT,
-#ifdef SHOW_WINDOW_AFTER_INITIALIZED
-			     0
-#else
-			     SDL_WINDOW_SHOWN
-#endif
-#ifdef USE_OPENGL
-			     | SDL_WINDOW_OPENGL
+			     SDL_WINDOW_OPENGL
+#ifndef SHOW_WINDOW_AFTER_INITIALIZED
+			     | SDL_WINDOW_SHOWN
 #endif
 			     );
   if (window_ == NULL) {
@@ -89,7 +83,6 @@ bool SDLApp::do_initialize(int argc, char *argv[])
     return false;
   }
 
-#ifdef USE_OPENGL
   glcontext_ = SDL_GL_CreateContext(window_);
   if (glcontext_ == NULL) {
     glogger.error("SDL_GL_CreateContext() failed: %s", SDL_GetError());
@@ -103,7 +96,6 @@ bool SDLApp::do_initialize(int argc, char *argv[])
   glDisable(GL_DEPTH_TEST);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-#endif
 
   initialize(argc, argv);
 
@@ -142,27 +134,14 @@ void SDLApp::do_update()
 
 void SDLApp::do_draw()
 {
-#ifdef USE_OPENGL
   glClear(GL_COLOR_BUFFER_BIT);
-#else
-  int result;
-
-  result = SDL_SetRenderDrawColor(bg_color_[0], bg_color_[1], bg_color_[2], bg_color_[3]);
-  assert(result == 0);
-  result = SDL_RenderClear();
-  assert(result == 0);
-#endif
   draw();
   {
     char buf[100];
     snprintf(buf, sizeof buf, "%3dfps", fps_.latest_frames);
     draw_string(8, 8, buf);
   }
-#ifdef USE_OPENGL
   SDL_GL_SwapWindow(window_);
-#else
-  SDL_RenderPresent();
-#endif
 }
 
 void SDLApp::set_bg_color(const uint32_t rgba)
