@@ -90,11 +90,15 @@ WARN_LOGFILE           = "@builddir@/dox-warning.txt"
 INPUT                  = "@srcdir@/font.cpp" "@srcdir@/font.hpp" \
 		         "@srcdir@/fps.cpp" "@srcdir@/fps.hpp" \
 			 "@srcdir@/function.hpp" \
+		         "@srcdir@/logger.cpp" "@srcdir@/logger.hpp" \
+			 "@srcdir@/lot_box.hpp" \
 			 "@srcdir@/oscillator.cpp" "@srcdir@/oscillator.hpp" \
 			 "@srcdir@/peg.cpp" "@srcdir@/peg.hpp" \
 			 "@srcdir@/point.hpp" \
 		         "@srcdir@/sdl_app.cpp" "@srcdir@/sdl_app.hpp" \
 		         "@srcdir@/smf_track.cpp" "@srcdir@/smf_track.hpp" \
+			 "@srcdir@/sp.hpp" \
+		         "@srcdir@/sprite.cpp" "@srcdir@/sprite.hpp" \
 		         "@srcdir@/texture.cpp" "@srcdir@/texture.hpp" \
 		         "@srcdir@/texture_pool.cpp" "@srcdir@/texture_pool.hpp" \
 			 "@srcdir@/variable_length_value.hpp" \

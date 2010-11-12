@@ -11,9 +11,7 @@
 #endif
 #ifdef HAVE_SDL_H
 #include <SDL.h>
-#ifdef USE_OPENGL
 #include <SDL_opengl.h>
-#endif
 #endif
 #include "logger.hpp"
 #include "point.hpp"

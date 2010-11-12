@@ -38,6 +38,7 @@ libsequencer_a_SOURCES = oscillator.cpp oscillator.hpp \
 libsequencer_a_CPPFLAGS = $(BOOST_CPPFLAGS)
 
 check_PROGRAMS = logger_test \
+		 lot_box_test \
 		 peg_test \
 		 point_test \
 		 sequencer_test \
@@ -50,6 +51,11 @@ logger_test_SOURCES = test_main.cpp \
 logger_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
 logger_test_LDADD = libsdlapp.a $(CPPUNIT_LIBS) $(BOOST_LIBS)
 
+lot_box_test_SOURCES = test_main.cpp \
+		       lot_box_test.cpp
+lot_box_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
+lot_box_test_LDADD = $(CPPUNIT_LIBS) $(BOOST_LIBS)
+
 peg_test_SOURCES = test_main.cpp \
 		   peg_test.cpp
 peg_test_CPPFLAGS = $(CPPUNIT_CFLAGS)
@@ -58,6 +64,7 @@ peg_test_LDADD = libpeg.a $(CPPUNIT_LIBS)
 sdlapp_test_SOURCES = test_main.cpp \
 		      font_test.cpp \
 		      fps_test.cpp \
+		      object_test.cpp \
 		      sprite_test.cpp \
 		      texture_test.cpp \
 		      texture_pool_test.cpp
@@ -109,13 +116,16 @@ TEST_OBJECTS = $(libpeg_a_OBJECTS) \
 	  $(sequencer_test_OBJECTS) \
 	  $(vector_test_OBJECTS)
 
-CLEANFILES = $(OBJECTS:.o=.gcda)
+CLEANFILES = $(OBJECTS:.o=.gcda) \
+	     dox-warning.txt
 DISTCLEANFILES = $(OBJECTS:.o=.gcno) app.info
 
 GCOV = gcov -l -p
 LCOV = lcov
 GENHTML = genhtml
 lcovdir = $(builddir)/lcov
+DOXYFILE = $(builddir)/Doxyfile
+doxdir = $(builddir)/dox
 
 gcov: check
 	$(GCOV) $(TEST_OBJECTS:.o=.gcda)
@@ -133,12 +143,10 @@ all-local:
 distclean-local:
 	test ! -L $(builddir)/data || rm $(builddir)/data
 	test ! -d $(lcovdir) || rm -r $(lcovdir)
-
-DOXYFILE = $(builddir)/Doxyfile
+	test ! -d $(doxdir) || rm -r $(doxdir)
 
 .PHONY: dox clean-dox
 dox: $(DOXYFILE)
-	test -d $(builddir)/dox || $(MKDIR_P) $(builddir)/dox
-	$(DOXYGEN) $(DOXYFILE)
+	(test -d $(doxdir) || $(MKDIR_P) $(doxdir)) && $(DOXYGEN) $(DOXYFILE)
 clean-dox:
-	rm -rf $(builddir)/dox
+	rm -r $(doxdir)
