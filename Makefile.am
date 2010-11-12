@@ -21,7 +21,8 @@ lib_LIBRARIES = libpeg.a libsdlapp.a libsequencer.a
 libpeg_a_SOURCES = peg.cpp peg.hpp
 libpeg_a_CPPFLAGS = $(BOOST_CPPFLAGS)
 
-libsdlapp_a_SOURCES = font.cpp font.hpp \
+libsdlapp_a_SOURCES = controller.cpp controller.hpp \
+		      font.cpp font.hpp \
 		      fps.cpp fps.hpp \
 		      logger.cpp logger.hpp \
 		      sdl_app.cpp sdl_app.hpp \

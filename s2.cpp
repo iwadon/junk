@@ -41,7 +41,7 @@ namespace game
   public:
     virtual ~Object() {}
     virtual void initialize() {}
-    virtual void input() {}
+    virtual void input(SDLApp &/*app*/) {}
     virtual void move() {}
     virtual void update();
     virtual void draw() {}
@@ -68,7 +68,7 @@ namespace game
   {
   public:
     void initialize();
-    void input();
+    void input(SDLApp &app);
     void move();
     void draw();
   };
@@ -163,8 +163,23 @@ namespace game
     scale_ = 1;
   }
 
-  void MyShip::input()
+  void MyShip::input(SDLApp &app)
   {
+    const Controller::Data &data = app.controller().latest_data();
+    acc_.x = 0;
+    acc_.y = 0;
+    if (data.key.status & 0x01) {
+      acc_.y = -0.1;
+    }
+    if (data.key.status & 0x02) {
+      acc_.y = 0.1;
+    }
+    if (data.key.status & 0x04) {
+      acc_.x = -0.1;
+    }
+    if (data.key.status & 0x08) {
+      acc_.x = 0.1;
+    }
   }
 
   void MyShip::move()
@@ -221,7 +236,7 @@ namespace game
   void App::input()
   {
     BOOST_FOREACH(Object *obj, active_objects) {
-      obj->input();
+      obj->input(*this);
     }
   }
 

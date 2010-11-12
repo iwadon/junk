@@ -3,6 +3,7 @@
 
 #include <string>
 #include "fps.hpp"
+#include "controller.hpp"
 #include "sp.hpp"
 
 #ifdef USE_OPENGL
@@ -20,6 +21,7 @@ public:
   SDLApp(const SP &app_name);
   virtual ~SDLApp();
   int run(int argc, char *argv[]);
+  Controller controller() const { return controller_; }
 protected:
   virtual bool initialize(int /*argc*/, char */*argv*/[]) { return true; }
   virtual void finalize() {}
@@ -43,6 +45,7 @@ private:
 #ifdef USE_OPENGL
   SDL_GLContext glcontext_;
 #endif
+  Controller controller_;
   bool do_initialize(int argc, char *argv[]);
   void do_finalize();
   void do_input();

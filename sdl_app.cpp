@@ -84,7 +84,7 @@ bool SDLApp::do_initialize(int argc, char *argv[])
     glogger.error("SDL_CreateWindow() failed: %s", SDL_GetError());
     return false;
   }
-  if (SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTFLIP3/* | SDL_RENDERER_PRESENTVSYNC*/) < 0) {
+  if (SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTFLIP3 | SDL_RENDERER_PRESENTVSYNC) < 0) {
     glogger.error("SDL_CreateRenderer() failed: %s", SDL_GetError());
     return false;
   }
@@ -125,9 +125,10 @@ void SDLApp::do_input()
 	event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_q && (event.key.keysym.mod == KMOD_LGUI || event.key.keysym.mod == KMOD_RGUI)) {
       done_ = true;
     } else {
-      input();
+      controller_.update(event);
     }
   }
+  input();
 }
 
 void SDLApp::do_move()
