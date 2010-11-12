@@ -37,6 +37,7 @@ libsequencer_a_SOURCES = oscillator.cpp oscillator.hpp \
 libsequencer_a_CPPFLAGS = $(BOOST_CPPFLAGS)
 
 check_PROGRAMS = logger_test \
+		 lot_box_test \
 		 peg_test \
 		 point_test \
 		 sequencer_test \
@@ -48,6 +49,11 @@ logger_test_SOURCES = test_main.cpp \
 		      logger_test.cpp
 logger_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
 logger_test_LDADD = libsdlapp.a $(CPPUNIT_LIBS) $(BOOST_LIBS)
+
+lot_box_test_SOURCES = test_main.cpp \
+		       lot_box_test.cpp
+lot_box_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
+lot_box_test_LDADD = $(CPPUNIT_LIBS) $(BOOST_LIBS)
 
 peg_test_SOURCES = test_main.cpp \
 		   peg_test.cpp
