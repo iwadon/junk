@@ -165,6 +165,12 @@ void SMFTrackTest::test_stop()
   CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
   t.update();
   CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
+
+  t.play();
+  t.pause();
+  t.stop();
+  CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
+  CPPUNIT_ASSERT_EQUAL(false, t.is_paused());
 }
 
 void SMFTrackTest::test_update()

@@ -126,6 +126,7 @@ void SMFTrack::play()
 
 void SMFTrack::stop()
 {
+  resume();
   data_ = NULL;
   SET_STATE(STATE_STOPPED);
 }
