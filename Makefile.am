@@ -43,7 +43,6 @@ check_PROGRAMS = logger_test \
 		 point_test \
 		 sequencer_test \
 		 sdlapp_test \
-		 stl_vector_test \
 		 vector_test
 TESTS = $(check_PROGRAMS) peg_test.sh
 
@@ -81,10 +80,6 @@ sequencer_test_SOURCES = test_main.cpp \
 			 volume_test.cpp
 sequencer_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
 sequencer_test_LDADD = libsequencer.a $(CPPUNIT_LIBS)
-
-stl_vector_test_SOURCES = test_main.cpp stl_vector_test.cpp
-stl_vector_test_CPPFLAGS = $(CPPUNIT_CFLAGS)
-stl_vector_test_LDADD = $(CPPUNIT_LIBS)
 
 point_test_SOURCES = test_main.cpp point_test.cpp
 point_test_CPPFLAGS = $(CPPUNIT_CFLAGS)
