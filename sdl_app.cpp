@@ -63,7 +63,7 @@ bool SDLApp::do_initialize(int argc, char *argv[])
 {
   srand(time(NULL));
 
-  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
     glogger.error("SDL_Init() failed: %s", SDL_GetError());
     return false;
   }
@@ -97,14 +97,29 @@ bool SDLApp::do_initialize(int argc, char *argv[])
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
+  SDL_AudioSpec fmt;
+  fmt.freq = 48000;
+  fmt.format = AUDIO_S16;
+  fmt.channels = 2;
+  fmt.samples = 512;
+  fmt.callback = SDLApp::audio_callback;
+  fmt.userdata = this;
+  if (SDL_OpenAudio(&fmt, NULL) < 0) {
+    glogger.error("SDL_OpenAudio() failed: %s", SDL_GetError());
+    return false;
+  }
+
   initialize(argc, argv);
 
+  SDL_PauseAudio(0);
   return true;
 }
 
 void SDLApp::do_finalize()
 {
+  SDL_PauseAudio(1);
   finalize();
+  SDL_CloseAudio();
   SDL_Quit();
 }
 
@@ -199,4 +214,10 @@ void SDLApp::draw_string(int x, int y, const char *str)
 {
   assert(font_ != NULL);
   font_->draw_str(x, y, str);
+}
+
+void SDLApp::audio_callback(void *userdata, Uint8 *stream, int len)
+{
+  SDLApp *app = reinterpret_cast<SDLApp *>(userdata);
+  app->mix_audio(stream, len);
 }

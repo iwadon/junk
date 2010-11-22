@@ -27,6 +27,7 @@ protected:
   virtual void move() {}
   virtual void update() {}
   virtual void draw() {}
+  virtual void mix_audio(uint8_t */*buf*/, size_t /*len*/) {}
   void set_bg_color(const uint32_t rgba);
   bool load_font_file(const SP &filename);
   void draw_chr(int x, int y, int chr);
@@ -49,6 +50,7 @@ private:
   void do_update();
   void do_draw();
   int calculate_frames();
+  static void audio_callback(void *userdata, Uint8 *stream, int len);
 };
 
 #endif // !defined(SDL_APP_HPP_INCLUDED)
