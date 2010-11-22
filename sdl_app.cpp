@@ -98,6 +98,7 @@ bool SDLApp::do_initialize(int argc, char *argv[])
   glLoadIdentity();
 
   SDL_AudioSpec fmt;
+  memset(&fmt, 0, sizeof fmt);
   fmt.freq = 48000;
   fmt.format = AUDIO_S16;
   fmt.channels = 2;
