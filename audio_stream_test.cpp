@@ -1,29 +1,23 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include "vector.hpp"
+#include "oscillator.hpp"
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 
 class TestAudioStream
 {
 public:
-  TestAudioStream()
-    : n_(0)
-    , m_(0.0f)
+  virtual size_t read(int16_t *buf, size_t len, float ratio)
   {
-  }
-  virtual size_t read(uint8_t *buf, size_t len, float ratio)
-  {
+    osc_.set_frequency(ratio);
     for (size_t i = 0; i < len; ++i) {
-      buf[i] = n_ + m_;
-      m_ += ratio;
+      buf[i] = osc_.value() * 32767;
     }
     return len;
   }
 private:
-  uint8_t n_;
-  float m_;
+  Oscillator osc_;
 };
 
 class AudioStreamTest : public CppUnit::TestCase
@@ -38,22 +32,26 @@ public:
 void AudioStreamTest::test_read()
 {
   TestAudioStream as;
-  uint8_t buf[10];
+  int16_t buf[10];
 
   size_t read_samples = as.read(buf, 10, 1.0f);
   CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), read_samples);
-  static const uint8_t result1[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  static const int16_t result1[] = {0, 32767, 0, -32767, 0, 32767, 0, -32767, 0, 32767};
   CPPUNIT_ASSERT_EQUAL(0, memcmp(buf, result1, 10));
 
   read_samples = as.read(buf, 10, 1.5f);
   CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), read_samples);
-  static const uint8_t result2[] = {10, 11, 13, 14, 16, 17, 19, 20, 22, 23};
-  CPPUNIT_ASSERT_EQUAL(0, memcmp(buf, result2, 10));
+  static const int16_t result2[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  for (int i = 0; i < 10; ++i) {
+    CPPUNIT_ASSERT_EQUAL(result2[i], buf[i]);
+  }
 
   read_samples = as.read(buf, 10, 0.5f);
   CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), read_samples);
-  static const uint8_t result3[] = {25, 25, 26, 26, 27, 27, 28, 28, 29, 29};
-  CPPUNIT_ASSERT_EQUAL(0, memcmp(buf, result3, 10));
+  static const int16_t result3[] = {0, 23169, 32767, 23169, 0, -23169, -32767, -23169, 0, 23169};
+  for (int i = 0; i < 10; ++i) {
+    CPPUNIT_ASSERT_EQUAL(result3[i], buf[i]);
+  }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(AudioStreamTest);

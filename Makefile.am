@@ -50,7 +50,7 @@ TESTS = $(check_PROGRAMS) peg_test.sh
 audio_stream_test_SOURCES = test_main.cpp \
 			    audio_stream_test.cpp
 audio_stream_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
-audio_stream_test_LDADD = libsdlapp.a $(CPPUNIT_LIBS) $(BOOST_LIBS)
+audio_stream_test_LDADD = libsequencer.a $(CPPUNIT_LIBS) $(BOOST_LIBS)
 
 logger_test_SOURCES = test_main.cpp \
 		      logger_test.cpp
