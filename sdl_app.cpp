@@ -64,7 +64,7 @@ bool SDLApp::do_initialize(int argc, char *argv[])
   srand(time(NULL));
 
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
-    glogger.error("SDL_Init() failed: %s", SDL_GetError());
+    ERROR("SDL_Init() failed: %s", SDL_GetError());
     return false;
   }
 
@@ -75,17 +75,17 @@ bool SDLApp::do_initialize(int argc, char *argv[])
 #endif
 			     );
   if (window_ == NULL) {
-    glogger.error("SDL_CreateWindow() failed: %s", SDL_GetError());
+    ERROR("SDL_CreateWindow() failed: %s", SDL_GetError());
     return false;
   }
   if (SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTFLIP3 | SDL_RENDERER_PRESENTVSYNC) < 0) {
-    glogger.error("SDL_CreateRenderer() failed: %s", SDL_GetError());
+    ERROR("SDL_CreateRenderer() failed: %s", SDL_GetError());
     return false;
   }
 
   glcontext_ = SDL_GL_CreateContext(window_);
   if (glcontext_ == NULL) {
-    glogger.error("SDL_GL_CreateContext() failed: %s", SDL_GetError());
+    ERROR("SDL_GL_CreateContext() failed: %s", SDL_GetError());
     return false;
   }
   SDL_GL_SetSwapInterval(0);
@@ -106,7 +106,7 @@ bool SDLApp::do_initialize(int argc, char *argv[])
   fmt.callback = SDLApp::audio_callback;
   fmt.userdata = this;
   if (SDL_OpenAudio(&fmt, NULL) < 0) {
-    glogger.error("SDL_OpenAudio() failed: %s", SDL_GetError());
+    ERROR("SDL_OpenAudio() failed: %s", SDL_GetError());
     return false;
   }
 
