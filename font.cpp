@@ -62,7 +62,7 @@ void Font::draw_chr(const int x, const int y, const int chr)
   int result;
   result = SDL_RenderCopy(tex_->texture, &srcrect, &dstrect);
   if (result != 0) {
-    glogger.error("SDL_RenderCopy() failed: %s", SDL_GetError());
+    ERROR("SDL_RenderCopy() failed: %s", SDL_GetError());
   }
 }
 

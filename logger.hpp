@@ -32,6 +32,10 @@ private:
   LEVEL level_;
 };
 
-#define glogger Logger::get_instance()
+#define DEBUG(...) Logger::get_instance().debug(__VA_ARGS__)
+#define INFO(...) Logger::get_instance().info(__VA_ARGS__)
+#define WARN(...) Logger::get_instance().warn(__VA_ARGS__)
+#define ERROR(...) Logger::get_instance().error(__VA_ARGS__)
+#define FATAL(...) Logger::get_instance().fatal(__VA_ARGS__)
 
 #endif // !defined(LOGGER_HPP_INCLUDED)
