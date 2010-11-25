@@ -217,6 +217,11 @@ void SDLApp::draw_string(int x, int y, const char *str)
   font_->draw_str(x, y, str);
 }
 
+/**
+ * @param [in]    userdata 任意のデータへのポインタ。ここではSDLAppクラスへのポインタが渡されている。
+ * @param [inout] stream   オーディオの出力データを格納するメモリの先頭アドレス。
+ * @param [in]    len      streamが指すメモリの大きさ。バイト単位。サンプル単位ではないことに注意すること。
+ */
 void SDLApp::audio_callback(void *userdata, Uint8 *stream, int len)
 {
   SDLApp *app = reinterpret_cast<SDLApp *>(userdata);
