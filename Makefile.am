@@ -7,7 +7,7 @@ c1_SOURCES = c1.cpp
 oscillator_sample_SOURCES = oscillator_sample.cpp
 oscillator_sample_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 oscillator_sample_LDFLAGS = -framework OpenGL
-oscillator_sample_LDADD = libsdlapp.a $(SDL_LIBS) $(BOOST_LIBS)
+oscillator_sample_LDADD = libsequencer.a libsdlapp.a $(SDL_LIBS) $(BOOST_LIBS)
 
 s1_SOURCES = s1.cpp
 

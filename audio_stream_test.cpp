@@ -31,22 +31,26 @@ public:
 
 void AudioStreamTest::test_read()
 {
-  TestAudioStream as;
   int16_t buf[10];
 
+  TestAudioStream as;
   size_t read_samples = as.read(buf, 10, 1.0f);
   CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), read_samples);
   static const int16_t result1[] = {0, 32767, 0, -32767, 0, 32767, 0, -32767, 0, 32767};
   CPPUNIT_ASSERT_EQUAL(0, memcmp(buf, result1, 10));
 
-  read_samples = as.read(buf, 10, 1.5f);
+  TestAudioStream as2;
+  read_samples = as2.read(buf, 10, 1.5f);
   CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), read_samples);
+  //static const int16_t result2[] = {0, -23169, 32767, -23169, 0, 23169, -32767, 23169, 0, -23169};
   static const int16_t result2[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   for (int i = 0; i < 10; ++i) {
+    fprintf(stderr, " %d", i);
     CPPUNIT_ASSERT_EQUAL(result2[i], buf[i]);
   }
 
-  read_samples = as.read(buf, 10, 0.5f);
+  TestAudioStream as3;
+  read_samples = as3.read(buf, 10, 0.5f);
   CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), read_samples);
   static const int16_t result3[] = {0, 23169, 32767, 23169, 0, -23169, -32767, -23169, 0, 23169};
   for (int i = 0; i < 10; ++i) {
