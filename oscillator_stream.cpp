@@ -17,3 +17,8 @@ size_t OscillatorStream::read(void *buf, const size_t len, const float ratio)
   }
     return len;
 }
+
+void OscillatorStream::set_sample_rate(const float rate)
+{
+  osc_.set_sample_rate(rate);
+}

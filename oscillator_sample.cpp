@@ -1,7 +1,7 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include "oscillator.hpp"
+#include "oscillator_stream.hpp"
 #include "sdl_app.hpp"
 
 class OscillatorSampleApp : public SDLApp
@@ -13,14 +13,13 @@ protected:
   void draw();
   void mix_audio(uint8_t *buf, size_t len);
 private:
-  Oscillator osc_;
+  OscillatorStream os_;
 };
 
 OscillatorSampleApp::OscillatorSampleApp()
   : SDLApp("oscillator_sample")
 {
-  osc_.set_sample_rate(48000);
-  osc_.set_frequency(440);
+  os_.set_sample_rate(48000);
 }
 
 bool OscillatorSampleApp::initialize(int /*argc*/, char */*argv*/[])
@@ -43,9 +42,7 @@ void OscillatorSampleApp::draw()
 void OscillatorSampleApp::mix_audio(uint8_t *buf, size_t len)
 {
   int16_t src[len / 2];
-  for (size_t i = 0; i < len / 2; ++i) {
-    src[i] = osc_.value() * 32767;
-  }
+  os_.read(src, len / 2, 440);
   SDL_MixAudio(buf, reinterpret_cast<uint8_t *>(src), len, SDL_MIX_MAXVOLUME);
 }
 
