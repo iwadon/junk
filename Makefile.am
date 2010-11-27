@@ -31,7 +31,9 @@ libsdlapp_a_SOURCES = controller.cpp controller.hpp \
 		      texture_pool.cpp texture_pool.hpp
 libsdlapp_a_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 
-libsequencer_a_SOURCES = oscillator.cpp oscillator.hpp \
+libsequencer_a_SOURCES = audio_stream.hpp \
+			 oscillator.cpp oscillator.hpp \
+			 oscillator_stream.cpp oscillator_stream.hpp \
 			 smf_track.cpp smf_track.hpp \
 			 variable_length_value.cpp variable_length_value.hpp \
 			 volume.hpp
