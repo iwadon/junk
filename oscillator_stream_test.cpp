@@ -5,16 +5,16 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 
-class AudioStreamTest : public CppUnit::TestCase
+class OscillatorStreamTest : public CppUnit::TestCase
 {
-  CPPUNIT_TEST_SUITE(AudioStreamTest);
+  CPPUNIT_TEST_SUITE(OscillatorStreamTest);
   CPPUNIT_TEST(test_read);
   CPPUNIT_TEST_SUITE_END();
 public:
   void test_read();
 };
 
-void AudioStreamTest::test_read()
+void OscillatorStreamTest::test_read()
 {
   int16_t buf[10];
 
@@ -43,4 +43,4 @@ void AudioStreamTest::test_read()
   }
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(AudioStreamTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(OscillatorStreamTest);

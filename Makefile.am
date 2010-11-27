@@ -39,9 +39,9 @@ libsequencer_a_SOURCES = audio_stream.hpp \
 			 volume.hpp
 libsequencer_a_CPPFLAGS = $(BOOST_CPPFLAGS)
 
-check_PROGRAMS = audio_stream_test \
-		 logger_test \
+check_PROGRAMS = logger_test \
 		 lot_box_test \
+		 oscillator_stream_test \
 		 peg_test \
 		 point_test \
 		 sequencer_test \
@@ -49,10 +49,10 @@ check_PROGRAMS = audio_stream_test \
 		 vector_test
 TESTS = $(check_PROGRAMS) peg_test.sh
 
-audio_stream_test_SOURCES = test_main.cpp \
-			    audio_stream_test.cpp
-audio_stream_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
-audio_stream_test_LDADD = libsequencer.a $(CPPUNIT_LIBS) $(BOOST_LIBS)
+oscillator_stream_test_SOURCES = test_main.cpp \
+			    oscillator_stream_test.cpp
+oscillator_stream_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
+oscillator_stream_test_LDADD = libsequencer.a $(CPPUNIT_LIBS) $(BOOST_LIBS)
 
 logger_test_SOURCES = test_main.cpp \
 		      logger_test.cpp
