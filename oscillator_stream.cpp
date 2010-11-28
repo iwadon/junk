@@ -6,6 +6,8 @@
 #include <tr1/cstdint>
 #elif defined(HAVE_BOOST_CSTDINT_HPP)
 #include <boost/cstdint.hpp>
+#elif defined(HAVE_STDINT_H)
+#include <stdint.h>
 #endif
 
 size_t OscillatorStream::read(void *buf, const size_t len, const float ratio)

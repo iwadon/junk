@@ -4,9 +4,11 @@
 #ifndef SP_HPP_INCLUDED
 #define SP_HPP_INCLUDED 1
 
+#ifdef STDCXX_98_HEADERS
 #include <cstddef>
 #include <cstring>
 #include <string>
+#endif
 
 class SP
 {

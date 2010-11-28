@@ -9,6 +9,8 @@
 #include <tr1/cstdint>
 #elif defined(HAVE_BOOST_CSTDINT_HPP)
 #include <boost/cstdint.hpp>
+#elif defined(HAVE_STDINT_H)
+#include <stdint.h>
 #endif
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>

@@ -1,8 +1,10 @@
 #ifndef OSCILLATOR_STREAM_HPP_INCLUDED
 #define OSCILLATOR_STREAM_HPP_INCLUDED 1
 
-#include "audio_stream.hpp"
+#ifdef STDCXX_98_HEADERS
 #include <cstddef>
+#endif
+#include "audio_stream.hpp"
 #include "oscillator.hpp"
 
 class OscillatorStream
