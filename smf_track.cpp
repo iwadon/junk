@@ -5,6 +5,7 @@
 #ifdef STDCXX_98_HEADERS
 #include <cstring>
 #endif
+#include "logger.hpp"
 #include "variable_length_value.hpp"
 
 #ifdef SMF_TRACK_DEBUG
@@ -95,16 +96,16 @@ void SMFTrack::update()
 bool SMFTrack::setup(const data_type *data, const size_t size)
 {
   if (size < 8) {
-    // data is too short
+    ERROR("Too short data");
     return false;
   }
   if (memcmp(data, "MTrk", 4) != 0) {
-    // data is not MTrk format
+    ERROR("Not MTrk data");
     return false;
   }
   size_t data_size = data[4] << 24 | data[5] << 16 | data[6] << 8 | data[7];
   if (data_size > size - 8) {
-    // data size is too big
+    ERROR("Too large data");
     return false;
   }
   data_ = data + 8;
