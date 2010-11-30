@@ -6,6 +6,7 @@
 #include <cstring>
 #endif
 #include "logger.hpp"
+#include "sp.hpp"
 #include "variable_length_value.hpp"
 
 #ifdef SMF_TRACK_DEBUG
@@ -29,6 +30,7 @@ SMFTrack::SMFTrack()
 
 void SMFTrack::update()
 {
+  //DEBUG("%s: %d %d", __PRETTY_FUNCTION__, is_playing(), is_paused());
   if (!is_playing() || is_paused()) {
     return;
   }
@@ -43,42 +45,88 @@ void SMFTrack::update()
   }
   do {
     data_type data = *data_cur_;
+    //DEBUG("%p: data=%02x", this, static_cast<uint8_t>(data));
     switch (data) {
     case 0x00 ... 0x7f:
       // running status
       break;
     case 0x80 ... 0x8f:
       // note off
+      DEBUG("%p: %2dch note of %d %d", this, (data & 0x0f) + 1, data_cur_[1], data_cur_[2]);
       data_cur_ += 3;
       break;
     case 0x90 ... 0x9f:
       // note on
+      DEBUG("%p: %2dch note on %d %d", this, (data & 0x0f) + 1, data_cur_[1], data_cur_[2]);
       data_cur_ += 3;
       break;
     case 0xa0 ... 0xaf:
       // polyphonic pressure
+      DEBUG("%p: %2dch polyphonic pressure %d %d", this, (data & 0x0f) + 1, data_cur_[1], data_cur_[2]);
+      data_cur_ += 3;
       break;
     case 0xb0 ... 0xbf:
       // control change
+      DEBUG("%p: control change %d %d", this, data_cur_[1], data_cur_[2]);
+      data_cur_ += 3;
       break;
     case 0xc0 ... 0xcf:
       // program change
+      DEBUG("%p: program change %d", this, data_cur_[1]);
+      data_cur_ += 2;
       break;
     case 0xd0 ... 0xdf:
       // channel pressure
+      DEBUG("%p: channel pressure %d", this, data_cur_[1]);
+      data_cur_ += 2;
       break;
     case 0xe0 ... 0xef:
       // pitch bend
+      DEBUG("%p: pitch bend %d", this, (data_cur_[2] * 128 + data_cur_[1]) - 8192);
+      data_cur_ += 3;
       break;
     case 0xff:
       // meta event
+      //DEBUG("%p:   meta event: %02x", this, static_cast<uint8_t>(data_cur_[1]));
       switch (data_cur_[1]) {
+      case 0x03:
+	// sequence name or track name
+	{
+	  std::string name(data_cur_ + 3, data_cur_[2]);
+	  DEBUG("%p: track name = %s", this, name.c_str());
+	}
+	data_cur_ += 3 + data_cur_[2];
+	break;
+      case 0x09:
+	// device name
+	{
+	  std::string name(data_cur_ + 3, data_cur_[2]);
+	  DEBUG("%p: device name = %s", this, name.c_str());
+	}
+	data_cur_ += 3 + data_cur_[2];
+	break;
       case 0x2f:
 	// end of track
+	INFO("%p: end of track", this);
 	stop();
+	break;
+      case 0x51:
+	// Tempo setting
+	DEBUG("%p:     Tempo setting", this);
+	data_cur_ += 2 + 1 + 3;
+	break;
+      case 0x54:
+	// SMPTE offset
+	DEBUG("%p:     SMPTE offset", this);
+	data_cur_ += 2 + 1 + 5;
+	break;
+      case 0x58:
+	DEBUG("%p:     Time signature", this);
+	data_cur_ += 2 + 1 + 4;
 	break;
       default:
 	// unsupported
+	DEBUG("%p:     unsupported", this);
 	break;
       }
       break;
@@ -123,6 +171,7 @@ void SMFTrack::play()
   data_cur_ = data_;
   SET_STATE(STATE_PLAYING);
   update_wait_time();
+  INFO("%p: play track", this);
 }
 
 void SMFTrack::stop()
@@ -130,6 +179,7 @@ void SMFTrack::stop()
   resume();
   data_ = NULL;
   SET_STATE(STATE_STOPPED);
+  INFO("%p: stop track", this);
 }
 
 void SMFTrack::pause()

@@ -16,6 +16,7 @@ public:
   SP() : ptr_(NULL), len_(0) {}
   SP(const char *str) : ptr_(str), len_(str == NULL ? 0 : strlen(str)) {}
   SP(const std::string &str) : ptr_(str.data()), len_(str.size()) {}
+  SP(const char *offset, const size_t size) : ptr_(offset), len_(size) {}
   const char *data() const { return ptr_; }
   size_t size() const { return len_; }
   const char *c_str() const { return ptr_; }

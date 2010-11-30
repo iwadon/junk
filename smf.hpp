@@ -18,6 +18,9 @@ public:
   SMF();
   ~SMF();
   bool load_file(const SP &filename);
+  void play();
+  void update();
+  bool is_playing() const;
 private:
   data_type *data_;
   uint32_t delta_time_;
