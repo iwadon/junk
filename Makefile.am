@@ -38,6 +38,8 @@ libsdlapp_a_SOURCES = controller.cpp controller.hpp \
 libsdlapp_a_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 
 libsequencer_a_SOURCES = audio_stream.hpp \
+			 channel.cpp channel.hpp \
+			 instrument.cpp instrument.hpp \
 			 oscillator.cpp oscillator.hpp \
 			 oscillator_stream.cpp oscillator_stream.hpp \
 			 smf.cpp smf.hpp \

@@ -68,7 +68,7 @@ void SMF::update()
 {
   for (std::vector<track_ptr_type>::iterator i = tracks_.begin(); i != tracks_.end(); ++i) {
     track_ptr_type t(*i);
-    t->update();
+    t->update(*inst_);
   }
 }
 

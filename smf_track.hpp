@@ -4,10 +4,19 @@
 #define SMF_TRACK_DEBUG 1
 
 #include <cstdlib>
+#if defined(HAVE_TR1_CSTDINT)
+#include <tr1/cstdint>
+#elif defined(HAVE_BOOST_CSTDINT_HPP)
+#include <boost/cstdint.hpp>
+#elif defined(HAVE_STDINT_H)
 #include <stdint.h>
+#endif
+
 #ifdef SMF_TRACK_DEBUG
 #include <string>
 #endif
+
+class Instrument;
 
 class SMFTrack
 {
@@ -23,6 +32,7 @@ public:
   static const FLAG FLAG_PAUSED = 1 << 0;
   SMFTrack();
   void update();
+  void update(Instrument &inst);
   bool setup(const data_type *data, const size_t len);
   void play();
   void stop();

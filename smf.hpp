@@ -10,6 +10,8 @@
 #include "smf_track.hpp"
 #include "sp.hpp"
 
+class Instrument;
+
 class SMF
 {
 public:
@@ -25,6 +27,7 @@ private:
   data_type *data_;
   uint32_t delta_time_;
   std::vector<track_ptr_type> tracks_;
+  Instrument *inst_;		// XXX
   bool parse_data();
 };
 
