@@ -5,10 +5,14 @@
 #ifdef HAVE_SDL_H
 #include <SDL.h>
 #endif
+#include "instrument.hpp"
 #include "logger.hpp"
+
+static Instrument dummy_inst_;
 
 SMF::SMF()
   : data_(NULL)
+  , inst_(&dummy_inst_)
 {
 }
 
