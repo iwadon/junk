@@ -33,24 +33,24 @@ bool SMF::load_file(const SP &filename)
 {
   SDL_RWops *ctx = SDL_RWFromFile(filename.data(), "rb");
   if (ctx == NULL) {
-    ERROR("SDL_RWFromFile() failed: %s", SDL_GetError());
+    SDL_ERROR("SDL_RWFromFile");
     return false;
   }
   size_t data_len_ = SDL_RWseek(ctx, 0, RW_SEEK_END);
   SDL_RWseek(ctx, 0, RW_SEEK_SET);
   void *p = SDL_malloc(data_len_);
   if (p == NULL) {
-    ERROR("SDL_malloc() failed: %s", SDL_GetError());
+    SDL_ERROR("SDL_malloc");
     return false;
   }
   SDL_free(data_);
   data_ = reinterpret_cast<data_type *>(p);
   if (SDL_RWread(ctx, data_, data_len_, 1) != 1) {
-    ERROR("SDL_RWread() failed: %s", SDL_GetError());
+    SDL_ERROR("SDL_RWread");
     return false;
   }
   if (SDL_RWclose(ctx) == -1) {
-    ERROR("SDL_RWclose() failed: %s", SDL_GetError());
+    SDL_ERROR("SDL_RWclose");
     return false;
   }
   return parse_data();

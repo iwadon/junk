@@ -57,7 +57,7 @@ void Sprite::draw()
   glTranslatef(-(texture->width * scale / 2.0f), -(texture->height * scale / 2.0f), 0.0f);
   glScalef(scale, scale, 1.0f);
   if (SDL_RenderCopy(texture->texture, &rect, &dst) == -1) {
-    ERROR("SDL_RenderCopy() failed: %s", SDL_GetError());
+    SDL_ERROR("SDL_RenderCopy");
   }
   glPopMatrix();
 }

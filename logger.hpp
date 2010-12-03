@@ -38,4 +38,9 @@ private:
 #define ERROR(...) Logger::get_instance().error(__VA_ARGS__)
 #define FATAL(...) Logger::get_instance().fatal(__VA_ARGS__)
 
+#ifdef HAVE_SDL_H
+#include <SDL.h>
+#define SDL_ERROR(func_name) ERROR("%s() failed: %s", func_name, SDL_GetError())
+#endif
+
 #endif // !defined(LOGGER_HPP_INCLUDED)

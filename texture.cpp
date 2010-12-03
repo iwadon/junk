@@ -34,7 +34,7 @@ bool Texture::load_file(const SP &filename_)
   }
   SDL_Texture *tex = SDL_CreateTextureFromSurface(0, surface);
   if (tex == NULL) {
-    ERROR("SDL_CreateTextureFromSurface() failed: %s", SDL_GetError());
+    SDL_ERROR("SDL_CreateTextureFromSurface");
     SDL_FreeSurface(surface);
     return false;
   }
@@ -42,7 +42,7 @@ bool Texture::load_file(const SP &filename_)
   texture = tex;
   int w, h;
   if (SDL_QueryTexture(texture, NULL, NULL, &w, &h) == -1) {
-    ERROR("SDL_QueryTexture() failed: %s", SDL_GetError());
+    SDL_ERROR("SDL_QueryTexture");
     SDL_DestroyTexture(texture);
     texture = NULL;
     return false;
