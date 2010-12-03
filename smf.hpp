@@ -23,11 +23,12 @@ public:
   void play();
   void update();
   bool is_playing() const;
+  void set_instrument(Instrument *inst) { inst_ = inst; }
 private:
   data_type *data_;
   uint32_t delta_time_;
   std::vector<track_ptr_type> tracks_;
-  Instrument *inst_;		// XXX
+  Instrument *inst_;
   bool parse_data();
 };
 

@@ -8,7 +8,7 @@ class Instrument
 {
 public:
   static const size_t NUM_CHANNELS = 16;
-  Channel &channel(int no);
+  virtual Channel &channel(int no);
 private:
   Channel channels_[NUM_CHANNELS];
 };
