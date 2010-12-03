@@ -68,4 +68,3 @@ void Logger::vlog(const Logger::LEVEL level, const char *format, va_list args)
     os_ << buf << std::endl;
   }
 }
-

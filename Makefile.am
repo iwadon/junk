@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-bin_PROGRAMS = oscillator_sample c1 s1 s2 smf_dump
+bin_PROGRAMS = oscillator_sample c1 s1 s2 smf_dump smf_play
 
 c1_SOURCES = c1.cpp
 
@@ -19,6 +19,11 @@ s2_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_LIBS)
 smf_dump_SOURCES = smf_dump.cpp
 smf_dump_CPPFLAGS = $(BOOST_CPPFLAGS)
 smf_dump_LDADD = libsequencer.a liblogger.a $(BOOST_LIBS)
+
+smf_play_SOURCES = smf_play.cpp
+smf_play_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
+smf_play_LDFLAGS = -framework OpenGL
+smf_play_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_LIBS)
 
 lib_LIBRARIES = liblogger.a libpeg.a libsdlapp.a libsequencer.a
 
