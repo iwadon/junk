@@ -156,7 +156,7 @@ void SDLApp::do_draw()
   {
     char buf[100];
     snprintf(buf, sizeof buf, "%3dfps", fps_.latest_frames);
-    draw_string(8, 8, buf);
+    draw_str(8, 8, buf);
   }
   SDL_GL_SwapWindow(window_);
 }
@@ -211,10 +211,19 @@ void SDLApp::draw_chr(int x, int y, int chr)
   font_->draw_chr(x, y, chr);
 }
 
-void SDLApp::draw_string(int x, int y, const char *str)
+void SDLApp::draw_str(int x, int y, const char *str)
 {
   assert(font_ != NULL);
   font_->draw_str(x, y, str);
+}
+
+void SDLApp::draw_strf(int x, int y, const char *format, ...)
+{
+  assert(font_ != NULL);
+  va_list args;
+  va_start(args, format);
+  font_->draw_strfv(x, y, format, args);
+  va_end(args);
 }
 
 /**

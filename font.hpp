@@ -22,6 +22,7 @@ public:
   void draw_chr(const int x, const int y, const int chr);
   void draw_str(const int x, const int y, const SP &str);
   void draw_strf(const int x, const int y, const char *format, ...);
+  void draw_strfv(const int x, const int y, const char *format, va_list args);
 private:
   Texture *tex_;
 };

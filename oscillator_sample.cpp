@@ -32,10 +32,10 @@ bool OscillatorSampleApp::initialize(int /*argc*/, char */*argv*/[])
 
 void OscillatorSampleApp::draw()
 {
-  draw_string(0, 0, "Hello.");
-  draw_string(0, 8, "Hello.");
-  draw_string(0, 16, "Hello.");
-  draw_string(100, 100, "Hello.");
+  draw_str(0, 0, "Hello.");
+  draw_str(0, 8, "Hello.");
+  draw_str(0, 16, "Hello.");
+  draw_str(100, 100, "Hello.");
   draw_chr(0, 0, 'A');
 }
 

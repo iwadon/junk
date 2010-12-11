@@ -31,7 +31,8 @@ protected:
   void set_bg_color(const uint32_t rgba);
   bool load_font_file(const SP &filename);
   void draw_chr(int x, int y, int chr);
-  void draw_string(int x, int y, const char *str);
+  void draw_str(int x, int y, const char *str);
+  void draw_strf(int x, int y, const char *format, ...);
 private:
   std::string app_name_;
   SDL_Window *window_;

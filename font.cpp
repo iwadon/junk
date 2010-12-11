@@ -92,10 +92,16 @@ void Font::draw_str(const int x, const int y, const SP &str)
 void Font::draw_strf(const int x, const int y, const char *format, ...)
 {
   assert(format != NULL);
-  char buf[256];
   va_list args;
   va_start(args, format);
-  vsnprintf(buf, sizeof buf, format, args);
+  draw_strfv(x, y, format, args);
   va_end(args);
+}
+
+void Font::draw_strfv(const int x, const int y, const char *format, va_list args)
+{
+  assert(format != NULL);
+  char buf[256];
+  vsnprintf(buf, sizeof buf, format, args);
   draw_str(x, y, buf);
 }
