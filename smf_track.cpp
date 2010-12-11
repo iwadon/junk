@@ -8,6 +8,7 @@
 #include "channel.hpp"
 #include "instrument.hpp"
 #include "logger.hpp"
+#include "smf.hpp"
 #include "sp.hpp"
 #include "variable_length_value.hpp"
 
@@ -20,8 +21,9 @@
 static const SMFTrack::data_type MTHD[4] = {'M', 'T', 'h', 'd'};
 static const SMFTrack::data_type MTRK[4] = {'M', 'T', 'r', 'k'};
 
-SMFTrack::SMFTrack()
-  : data_(NULL)
+SMFTrack::SMFTrack(SMF &smf)
+  : smf_(smf)
+  , data_(NULL)
   , data_end_(NULL)
   , data_cur_(NULL)
   , wait_time_(0)
@@ -42,7 +44,7 @@ void SMFTrack::update(Instrument &inst)
     return;
   }
   if (wait_time_ > 0) {
-    --wait_time_;
+    wait_time_ -= smf_.ticks_add();
     if (wait_time_ > 0) {
       return;
     }
@@ -97,7 +99,7 @@ void SMFTrack::update(Instrument &inst)
       case 0x09: // FF 09 len text		Device Name
       case 0x20: // FF 20 01 cc			MIDI Channel Prefix
       case 0x54: // FF 54 05 hr mn se fr ff	SMPTE Offset
-      case 0x58: // FF 58 04 nn dd cc bb		Time Signature
+      case 0x58: // FF 58 04 nn dd cc bb	Time Signature
       case 0x59: // FF 59 02 sf mi		Key Signature
       case 0x7f: // FF 7F len data		Sequencer Specific Meta-Event
 	// not implemented
@@ -107,9 +109,7 @@ void SMFTrack::update(Instrument &inst)
 	stop();
 	break;
       case 0x51: // FF 51 03 tttttt		Set Tempo(in microseconds per MIDI quarter-note)
-	{
-	  uint32_t value = (static_cast<uint8_t>(data_cur_[3]) << 16) | (static_cast<uint8_t>(data_cur_[4]) << 8) | static_cast<uint8_t>(data_cur_[5]);
-	}
+	smf_.set_tempo(reinterpret_cast<const uint8_t *>(data_cur_) + 3);
 	data_cur_ += 2 + 1 + 3;
 	break;
       default:
@@ -193,7 +193,7 @@ void SMFTrack::update_wait_time()
   VariableLengthValue::len_type vlv_len = delta_time.set_data(data_cur_, 0);
   data_cur_ += vlv_len;
   assert(data_cur_ <= data_end_);
-  wait_time_ = delta_time.value();
+  wait_time_ += delta_time.value();
 }
 
 static const char *state_string[] = {

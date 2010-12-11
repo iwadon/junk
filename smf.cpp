@@ -88,14 +88,15 @@ bool SMF::parse_data()
   }
   uint16_t format = VALUE16(data_ + 8);
   uint16_t num_tracks = VALUE16(data_ + 10);
-  uint16_t delta_time_ = VALUE16(data_ + 12);
-  if ((delta_time_ & 0x8000) != 0) {
-    ERROR("Not implemented for negative value of delta time");
+  time_base_ = VALUE16(data_ + 12);
+  DEBUG("time_base_ = %u", time_base_);
+  if ((time_base_ & 0x8000) != 0) {
+    ERROR("Not implemented for negative value of the time base");
     return false;
   }
   data_type *p = data_ + 14;
   for (uint16_t i = 0; i < num_tracks; ++i) {
-    track_ptr_type t(new SMFTrack);
+    track_ptr_type t(new SMFTrack(*this));
     size_t chunk_size = 8 + VALUE32(p + 4);
     if (!t->setup(reinterpret_cast<SMFTrack::data_type *>(p), chunk_size)) {
       ERROR("Error at Track %d", i + 1);
@@ -109,3 +110,9 @@ bool SMF::parse_data()
 
 #undef VALUE16
 #undef VALUE32
+
+void SMF::set_tempo(const uint8_t *data)
+{
+  uint32_t value = (data[0] << 16) | (data[1] << 8) | data[2];
+  ticks_add_ = (1000000.0f * time_base_) / (value * 60);
+}

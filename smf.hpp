@@ -24,9 +24,13 @@ public:
   void update();
   bool is_playing() const;
   void set_instrument(Instrument *inst) { inst_ = inst; }
+  uint32_t time_base() const { return time_base_; }
+  void set_tempo(const uint8_t *data);
+  float ticks_add() const { return ticks_add_; }
 private:
   data_type *data_;
-  uint32_t delta_time_;
+  uint32_t time_base_;
+  float ticks_add_;
   std::vector<track_ptr_type> tracks_;
   Instrument *inst_;
   bool parse_data();

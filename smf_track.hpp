@@ -16,6 +16,7 @@
 #include <string>
 #endif
 
+class SMF;
 class Instrument;
 
 class SMFTrack
@@ -30,7 +31,7 @@ public:
   };
   typedef uint32_t FLAG;
   static const FLAG FLAG_PAUSED = 1 << 0;
-  SMFTrack();
+  SMFTrack(SMF &smf);
   void update();
   void update(Instrument &inst);
   bool setup(const data_type *data, const size_t len);
@@ -44,10 +45,11 @@ public:
   std::string inspect() const;
 #endif
 private:
+  SMF &smf_;
   const data_type *data_;
   const data_type *data_end_;
   const data_type *data_cur_;
-  size_t wait_time_;
+  float wait_time_;
   STATE state_;
   FLAG flag_;
   void update_wait_time();
