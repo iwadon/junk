@@ -12,8 +12,10 @@ static Instrument dummy_inst_;
 
 SMF::SMF()
   : data_(NULL)
+  , time_base_(48)
   , inst_(&dummy_inst_)
 {
+  set_ticks_add_(800000);
 }
 
 SMF::~SMF()
@@ -89,7 +91,6 @@ bool SMF::parse_data()
   uint16_t format = VALUE16(data_ + 8);
   uint16_t num_tracks = VALUE16(data_ + 10);
   time_base_ = VALUE16(data_ + 12);
-  DEBUG("time_base_ = %u", time_base_);
   if ((time_base_ & 0x8000) != 0) {
     ERROR("Not implemented for negative value of the time base");
     return false;
@@ -113,6 +114,10 @@ bool SMF::parse_data()
 
 void SMF::set_tempo(const uint8_t *data)
 {
-  uint32_t value = (data[0] << 16) | (data[1] << 8) | data[2];
+  set_ticks_add_((data[0] << 16) | (data[1] << 8) | data[2]);
+}
+
+void SMF::set_ticks_add_(const uint32_t value)
+{
   ticks_add_ = (1000000.0f * time_base_) / (value * 60);
 }

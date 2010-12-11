@@ -34,6 +34,7 @@ private:
   std::vector<track_ptr_type> tracks_;
   Instrument *inst_;
   bool parse_data();
+  void set_ticks_add_(const uint32_t value);
 };
 
 #endif // !defined(SMF_HPP_INCLUDED)
