@@ -16,7 +16,7 @@ class Instrument
 public:
   static const size_t NUM_CHANNELS = 16;
   virtual Channel &channel(int no);
-  void mix_audio(uint8_t *buf, size_t len);
+  bool mix_audio(uint8_t *buf, size_t len);
 private:
   Channel channels_[NUM_CHANNELS];
 };

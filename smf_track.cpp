@@ -34,12 +34,6 @@ SMFTrack::SMFTrack(SMF &smf)
 
 void SMFTrack::update()
 {
-  Instrument dummy;
-  update(dummy);
-}
-
-void SMFTrack::update(Instrument &inst)
-{
   if (!is_playing() || is_paused()) {
     return;
   }
@@ -54,7 +48,7 @@ void SMFTrack::update(Instrument &inst)
   }
   do {
     data_type data = *data_cur_;
-    Channel &ch = inst.channel(data & 0x0f);
+    Channel &ch = smf_.instrument().channel(data & 0x0f);
     switch (data) {
     case 0x00 ... 0x7f:
       // Running Status
@@ -194,6 +188,11 @@ void SMFTrack::update_wait_time()
   data_cur_ += vlv_len;
   assert(data_cur_ <= data_end_);
   wait_time_ += delta_time.value();
+}
+
+bool SMFTrack::mix_audio(uint8_t *buf, const size_t len)
+{
+  return smf_.instrument().mix_audio(buf, len);
 }
 
 static const char *state_string[] = {

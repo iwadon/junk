@@ -2,6 +2,9 @@
 #include "config.h"
 #endif
 #include "smf.hpp"
+#ifdef HAVE_BOOST
+#include <boost/foreach.hpp>
+#endif
 #ifdef HAVE_SDL_H
 #include <SDL.h>
 #endif
@@ -74,7 +77,7 @@ void SMF::update()
 {
   for (std::vector<track_ptr_type>::iterator i = tracks_.begin(); i != tracks_.end(); ++i) {
     track_ptr_type t(*i);
-    t->update(*inst_);
+    t->update();
   }
 }
 
@@ -120,4 +123,12 @@ void SMF::set_tempo(const uint8_t *data)
 void SMF::set_ticks_add_(const uint32_t value)
 {
   ticks_add_ = (1000000.0f * time_base_) / (value * 60);
+}
+
+bool SMF::mix_audio(uint8_t *buf, const size_t len)
+{
+  BOOST_FOREACH(track_ptr_type t, tracks_) {
+    t->mix_audio(buf, len);
+  }
+  return true;
 }

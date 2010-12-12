@@ -44,6 +44,7 @@ public:
 #ifdef SMF_TRACK_DEBUG
   std::string inspect() const;
 #endif
+  bool mix_audio(uint8_t *buf, const size_t len);
 private:
   SMF &smf_;
   const data_type *data_;

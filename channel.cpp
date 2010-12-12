@@ -31,3 +31,8 @@ void Channel::channel_pressure(int no)
 void Channel::pitch_bend_change(int value)
 {
 }
+
+bool Channel::mix_audio(uint8_t *buf, const size_t len)
+{
+  return true;
+}
