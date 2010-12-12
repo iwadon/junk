@@ -96,6 +96,7 @@ sdlapp_test_LDADD = libsdlapp.a liblogger.a $(CPPUNIT_LIBS) $(BOOST_LIBS)
 
 sequencer_test_SOURCES = test_main.cpp \
 			 function_test.cpp \
+			 observer_test.cpp \
 			 oscillator_test.cpp \
 			 smf_test.cpp \
 			 smf_track_test.cpp \
