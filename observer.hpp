@@ -8,30 +8,32 @@
 #include <boost/foreach.hpp>
 #endif
 
+class Subject;
+
 class Observer
 {
 public:
   virtual ~Observer() {}
-  virtual void notify() {}
+  virtual void update(Subject *subject) = 0;
 };
 
 class Subject
 {
 public:
-  void add_observer(Observer *o)
+  void attach(Observer *o)
   {
     observers_.push_back(o);
   }
 
-  void remove_observer(Observer *o)
+  void detach(Observer *o)
   {
     observers_.remove(o);
   }
 
-  void notify_observers()
+  void notify()
   {
     BOOST_FOREACH(Observer *o, observers_) {
-      o->notify();
+      o->update(this);
     }
   }
 private:

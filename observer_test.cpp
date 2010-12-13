@@ -10,7 +10,7 @@ static int n = 0;
 class TestObserver : public Observer
 {
 public:
-  void notify()
+  void update(Subject */*subject*/)
   {
     ++n;
   }
@@ -30,13 +30,13 @@ void ObserverTest::test_notify()
   Subject s;
   TestObserver o;
   n = 0;
-  s.notify_observers();
+  s.notify();
   CPPUNIT_ASSERT_EQUAL(0, n);
-  s.add_observer(&o);
-  s.notify_observers();
+  s.attach(&o);
+  s.notify();
   CPPUNIT_ASSERT_EQUAL(1, n);
-  s.remove_observer(&o);
-  s.notify_observers();
+  s.detach(&o);
+  s.notify();
   CPPUNIT_ASSERT_EQUAL(1, n);
 }
 
