@@ -78,8 +78,16 @@ void Font::draw_str(const int x, const int y, const SP &str)
   int x_ = x;
   int y_ = y;
   for (const char *p = str.data(); *p != '\0'; ++p) {
-    draw_chr(x_, y_, *p);
-    x_ += 8;
+    switch (*p) {
+    case '\n':
+      x_ = 0;
+      y_ += 8;
+      break;
+    default:
+      draw_chr(x_, y_, *p);
+      x_ += 8;
+      break;
+    }
   }
 }
 
