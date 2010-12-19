@@ -80,7 +80,7 @@ void Font::draw_str(const int x, const int y, const SP &str)
   for (const char *p = str.data(); *p != '\0'; ++p) {
     switch (*p) {
     case '\n':
-      x_ = 0;
+      x_ = x;
       y_ += 8;
       break;
     default:
