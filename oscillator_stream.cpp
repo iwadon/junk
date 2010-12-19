@@ -10,10 +10,10 @@
 #include <stdint.h>
 #endif
 
-size_t OscillatorStream::read(void *buf, const size_t len, const float ratio)
+size_t OscillatorStream::read(void *buf, const size_t len, const float freq)
 {
   int16_t *p = reinterpret_cast<int16_t *>(buf);
-  osc_.set_frequency(ratio);
+  osc_.set_frequency(freq);
   for (size_t i = 0; i < len; ++i) {
     p[i] = osc_.value() * 32767;
   }
