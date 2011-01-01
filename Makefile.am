@@ -50,6 +50,7 @@ libsequencer_a_SOURCES = audio_stream.hpp \
 			 smf.cpp smf.hpp \
 			 smf_track.cpp smf_track.hpp \
 			 variable_length_value.cpp variable_length_value.hpp \
+			 voice.cpp voice.hpp \
 			 volume.hpp
 libsequencer_a_CPPFLAGS = $(BOOST_CPPFLAGS)
 
@@ -95,12 +96,14 @@ sdlapp_test_LDFLAGS = -framework OpenGL
 sdlapp_test_LDADD = libsdlapp.a liblogger.a $(CPPUNIT_LIBS) $(BOOST_LIBS)
 
 sequencer_test_SOURCES = test_main.cpp \
+			 channel_test.cpp \
 			 function_test.cpp \
 			 observer_test.cpp \
 			 oscillator_test.cpp \
 			 smf_test.cpp \
 			 smf_track_test.cpp \
 			 variable_length_value_test.cpp \
+			 voice_test.cpp \
 			 volume_test.cpp
 sequencer_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
 sequencer_test_LDADD = libsequencer.a liblogger.a $(CPPUNIT_LIBS)

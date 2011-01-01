@@ -79,6 +79,7 @@ void SMF::update()
     track_ptr_type t(*i);
     t->update();
   }
+  inst_->update();
 }
 
 #define VALUE16(addr) (((addr)[0] << 8) | (addr)[1])
@@ -91,7 +92,7 @@ bool SMF::parse_data()
     ERROR("Not SMF format");
     return false;
   }
-  uint16_t format = VALUE16(data_ + 8);
+  //uint16_t format = VALUE16(data_ + 8);
   uint16_t num_tracks = VALUE16(data_ + 10);
   time_base_ = VALUE16(data_ + 12);
   if ((time_base_ & 0x8000) != 0) {
@@ -131,4 +132,9 @@ bool SMF::mix_audio(uint8_t *buf, const size_t len)
     t->mix_audio(buf, len);
   }
   return true;
+}
+
+std::string SMF::inspect() const
+{
+  return inst_->inspect();
 }

@@ -29,6 +29,7 @@ public:
   void set_tempo(const uint8_t *data);
   float ticks_add() const { return ticks_add_; }
   bool mix_audio(uint8_t *buf, const size_t len);
+  std::string inspect() const;
 private:
   data_type *data_;
   uint32_t time_base_;

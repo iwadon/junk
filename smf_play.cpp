@@ -58,7 +58,8 @@ void SmfPlayApp::update()
 
 void SmfPlayApp::draw()
 {
-  draw_strf(8, 24, "%s", smf_.is_playing() ? "PLAYING" : "-");
+  //draw_strf(8, 24, "%s", smf_.is_playing() ? "PLAYING" : "-");
+  draw_strf(8, 32, "%s", smf_.inspect().c_str());
 }
 
 void SmfPlayApp::mix_audio(uint8_t *buf, size_t len)
