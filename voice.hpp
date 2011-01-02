@@ -33,6 +33,7 @@ private:
   int note_;
   int velocity_;
   OscillatorStream os_;
+  float note_to_ratio(const int note);
 };
 
 #endif // !defined(VOICE_HPP_INCLUDED)

@@ -9,15 +9,17 @@
 #elif defined(HAVE_STDINT_H)
 #include <stdint.h>
 #endif
+#include "logger.hpp"
 
 size_t OscillatorStream::read(void *buf, const size_t len, const float freq)
 {
+  //INFO("%s: buf=%p, len=%zu, freq=%f", __PRETTY_FUNCTION__, buf, len, freq);
   int16_t *p = reinterpret_cast<int16_t *>(buf);
   osc_.set_frequency(freq);
-  for (size_t i = 0; i < len; ++i) {
+  for (size_t i = 0; i < (len / 2); ++i) {
     p[i] = osc_.value() * 32767;
   }
-    return len;
+  return len;
 }
 
 void OscillatorStream::set_sample_rate(const float rate)

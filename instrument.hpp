@@ -37,6 +37,15 @@ private:
   boost::array<Channel *, NUM_CHANNELS> channels_;
   boost::object_pool<Voice> voice_pool_;
   std::list<Voice *> active_voices_;
+  struct MixBuffer
+  {
+    uint8_t *addr;
+    size_t len;
+    MixBuffer();
+    ~MixBuffer();
+    bool prepare(const size_t len);
+  };
+  MixBuffer mix_buf_;
 };
 
 #endif // !defined(INSTRUMENT_HPP_INCLUDED)

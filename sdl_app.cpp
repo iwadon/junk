@@ -31,7 +31,8 @@ SDLApp::SDLApp(const SP &app_name)
 
 SDLApp::~SDLApp()
 {
-  finalize();
+  do_finalize();
+  delete font_;
 }
 
 int SDLApp::run(int argc, char *argv[])
@@ -97,19 +98,40 @@ bool SDLApp::do_initialize(int argc, char *argv[])
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  SDL_AudioSpec fmt;
-  memset(&fmt, 0, sizeof fmt);
-  fmt.freq = 48000;
-  fmt.format = AUDIO_S16SYS;
-  fmt.channels = 2;
-  fmt.samples = 512;
-  fmt.callback = SDLApp::audio_callback;
-  fmt.userdata = this;
-  if (SDL_OpenAudio(&fmt, NULL) < 0) {
+  SDL_AudioSpec spec;
+  memset(&spec, 0, sizeof spec);
+  spec.freq = 48000;
+  spec.format = AUDIO_S16MSB;
+  spec.channels = 1;
+  spec.samples = 512;
+  spec.callback = SDLApp::audio_callback;
+  spec.userdata = this;
+  if (SDL_OpenAudio(&spec, &audio_spec_) < 0) {
     SDL_ERROR("SDL_OpenAudio");
     return false;
   }
 
+  INFO("Audio Drivers:");
+  int num_audio_drivers = SDL_GetNumAudioDrivers();
+  const char *current_audio_driver = SDL_GetCurrentAudioDriver();
+  for (int i = 0; i < num_audio_drivers; ++i) {
+    const char *audio_driver = SDL_GetAudioDriver(i);
+    INFO("  %d: %s%s", i, audio_driver, !strcmp(audio_driver, current_audio_driver) ? " (current)" : "");
+  }
+
+  INFO("Audio Spec:");
+  INFO("  freq: %d", audio_spec_.freq);
+  INFO("  format: %u (%s, %s, %s, %ubit)", audio_spec_.format,
+       SDL_AUDIO_ISSIGNED(audio_spec_.format) ? "signed" : "unsigned",
+       SDL_AUDIO_ISBIGENDIAN(audio_spec_.format) ? "big-endian" : "little-endian",
+       SDL_AUDIO_ISFLOAT(audio_spec_.format) ? "float" : "integer",
+       SDL_AUDIO_BITSIZE(audio_spec_.format));
+  INFO("  channels: %u", audio_spec_.channels);
+  INFO("  silence: %u", audio_spec_.silence);
+  INFO("  samples: %u", audio_spec_.samples);
+  INFO("  padding: %u", audio_spec_.padding);
+  INFO("  size: %u", audio_spec_.size);
+  
   initialize(argc, argv);
 
   SDL_PauseAudio(0);
@@ -121,7 +143,18 @@ void SDLApp::do_finalize()
   SDL_PauseAudio(1);
   finalize();
   SDL_CloseAudio();
+
+  SDL_GL_DeleteContext(glcontext_);
+  glcontext_ = NULL;
+  INFO("Deleted an OpenGL context.");
+  SDL_DestroyRenderer(window_);
+  INFO("Destroy the rendering context.");
+  SDL_DestroyWindow(window_);
+  window_ = NULL;
+  INFO("Destroy a window.");
+
   SDL_Quit();
+  INFO("Quit SDL system.");
 }
 
 void SDLApp::do_input()

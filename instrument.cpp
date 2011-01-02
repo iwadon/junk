@@ -5,7 +5,11 @@
 #ifdef HAVE_BOOST
 #include <boost/foreach.hpp>
 #endif
+#ifdef HAVE_SDL_H
+#include <SDL.h>
+#endif
 #include "channel.hpp"
+#include "logger.hpp"
 #include "voice.hpp"
 
 Instrument::Instrument()
@@ -41,8 +45,12 @@ Channel &Instrument::channel(int no)
 
 bool Instrument::mix_audio(uint8_t *buf, const size_t len)
 {
+  if (!mix_buf_.prepare(len)) {
+    return false;
+  }
   BOOST_FOREACH(Voice *v, active_voices_) {
-    v->mix_audio(buf, len);
+    v->mix_audio(mix_buf_.addr, len);
+    SDL_MixAudio(buf, mix_buf_.addr, len, SDL_MIX_MAXVOLUME);
   }
   return true;
 }
@@ -79,4 +87,35 @@ std::string Instrument::inspect() const
     s += "\n";
   }
   return s;
+}
+
+Instrument::MixBuffer::MixBuffer()
+  : addr(NULL)
+  , len(0)
+{
+  INFO("Mix buffer initialized.");
+}
+
+Instrument::MixBuffer::~MixBuffer()
+{
+  SDL_free(addr);
+  INFO("Mix buffer destroyed.");
+}
+
+bool Instrument::MixBuffer::prepare(const size_t new_len)
+{
+  if (new_len != len) {
+    if (addr != NULL) {
+      SDL_free(addr);
+    }
+    addr = reinterpret_cast<uint8_t *>(SDL_malloc(len));
+    if (addr == NULL) {
+      SDL_ERROR("SDL_malloc");
+      len = 0;
+      return false;
+    }
+    INFO("Mix buffer size has changed: %zu -> %zu", len, new_len);
+    len = new_len;
+  }
+  return true;
 }

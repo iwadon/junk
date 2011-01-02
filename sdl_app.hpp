@@ -44,6 +44,7 @@ private:
   FPS fps_;
   SDL_GLContext glcontext_;
   Controller controller_;
+  SDL_AudioSpec audio_spec_;
   bool do_initialize(int argc, char *argv[]);
   void do_finalize();
   void do_input();
