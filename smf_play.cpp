@@ -5,59 +5,91 @@
 #include <cstddef>
 #include <iostream>
 #endif
+#include "frame_wait_timer.hpp"
 #include "instrument.hpp"
 #include "logger.hpp"
-#include "sdl_app.hpp"
 #include "smf.hpp"
 
-class SmfPlayApp : public SDLApp
+class App
 {
 public:
-  SmfPlayApp();
+  App();
+  ~App();
+  int run(int argc, char *argv[]);
   bool initialize(int argc, char *argv[]);
   void update();
-  void draw();
   void mix_audio(uint8_t *buf, size_t len);
 private:
   SMF smf_;
   Instrument inst_;
+  FrameWaitTimer fwt_;
+  SDL_AudioSpec audio_spec_;
+  static void sdl_audio_callback(void *userdata, Uint8 *stream, int len);
 };
 
-SmfPlayApp::SmfPlayApp()
-  : SDLApp("SMF Play")
+App::App()
+  : fwt_(60, 10)
 {
 }
 
-bool SmfPlayApp::initialize(int argc, char *argv[])
+App::~App()
 {
-  if (!load_font_file("data/font5x5.png")) {
+  SDL_PauseAudio(1);
+  SDL_CloseAudio();
+  SDL_Quit();
+}
+
+int App::run(int argc, char *argv[])
+{
+  if (argc != 2) {
+    return 1;
+  }
+
+  if (SDL_Init(SDL_INIT_AUDIO) < 0) {
+    SDL_ERROR("SDL_Init()");
+    return 1;
+  }
+
+  SDL_AudioSpec spec;
+  memset(&spec, 0, sizeof spec);
+  spec.freq = 48000;
+  spec.format = AUDIO_S16LSB;
+  spec.channels = 1;
+  spec.samples = 512;
+  spec.callback = App::sdl_audio_callback;
+  spec.userdata = this;
+  if (SDL_OpenAudio(&spec, &audio_spec_) < 0) {
+    SDL_ERROR("SDL_OpenAudio");
     return false;
   }
-  if (argc >= 2 && !smf_.load_file(argv[1])) {
-    return false;
-  }
+  SDL_PauseAudio(0);
+
+  smf_.set_instrument(&inst_);
+  smf_.load_file(argv[1]);
   smf_.play();
-  return true;
+  fwt_.reset();
+  bool done = false;
+  while (!done) {
+    int frames = fwt_.wait();
+    for (int i = 0; i < frames; ++i) {
+      smf_.update();
+      if (!smf_.is_playing()) {
+	done = true;
+	break;
+      }
+    }
+  }
+  return 0;
 }
 
-void SmfPlayApp::update()
+void App::sdl_audio_callback(void *userdata, Uint8 *stream, int len)
 {
-  smf_.update();
-}
-
-void SmfPlayApp::draw()
-{
-  //draw_strf(8, 24, "%s", smf_.is_playing() ? "PLAYING" : "-");
-  draw_strf(8, 32, "%s", smf_.inspect().c_str());
-}
-
-void SmfPlayApp::mix_audio(uint8_t *buf, size_t len)
-{
-  smf_.mix_audio(buf, len);
+  App *app = reinterpret_cast<App *>(userdata);
+  app->smf_.mix_audio(stream, len);
 }
 
 int main(int argc, char *argv[])
 {
-  SmfPlayApp app;
+  App app;
   return app.run(argc, argv);
 }
