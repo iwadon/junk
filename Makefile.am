@@ -22,7 +22,6 @@ smf_dump_LDADD = libsequencer.a liblogger.a $(BOOST_LIBS)
 
 smf_play_SOURCES = smf_play.cpp
 smf_play_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
-smf_play_LDFLAGS = -framework OpenGL
 smf_play_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_LIBS)
 
 lib_LIBRARIES = liblogger.a libpeg.a libsdlapp.a libsequencer.a
