@@ -44,15 +44,15 @@ public:
 #ifdef SMF_TRACK_DEBUG
   std::string inspect() const;
 #endif
-  bool mix_audio(uint8_t *buf, const size_t len);
 private:
   SMF &smf_;
   const data_type *data_;
   const data_type *data_end_;
   const data_type *data_cur_;
-  float wait_time_;
+  uint32_t wait_time_;
   STATE state_;
   FLAG flag_;
+  data_type prev_status_byte;
   void update_wait_time();
 #ifdef SMF_TRACK_DEBUG
   void set_state(const STATE new_state);

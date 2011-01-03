@@ -11,18 +11,20 @@
 #include "instrument.hpp"
 #include "logger.hpp"
 
-static Instrument dummy_inst_;
-
 SMF::SMF()
   : data_(NULL)
   , time_base_(48)
-  , inst_(&dummy_inst_)
+  , inst_(NULL)
+  , tempo_(800000)
 {
-  set_ticks_add_(800000);
+  set_ticks_add_();
 }
 
 SMF::~SMF()
 {
+  BOOST_FOREACH(track_ptr_type t, tracks_) {
+    delete t;
+  }
   SDL_free(data_);
 }
 
@@ -75,11 +77,18 @@ void SMF::play()
 
 void SMF::update()
 {
-  for (std::vector<track_ptr_type>::iterator i = tracks_.begin(); i != tracks_.end(); ++i) {
-    track_ptr_type t(*i);
-    t->update();
+  ticks_ += ticks_add_;
+  int ticks_i = ticks_;
+  ticks_ -= ticks_i;
+  for (int i = 0; i < ticks_i; ++i) {
+    for (std::vector<track_ptr_type>::iterator i = tracks_.begin(); i != tracks_.end(); ++i) {
+      track_ptr_type t(*i);
+      t->update();
+    }
   }
-  inst_->update();
+  if (inst_ != NULL) {
+    inst_->update();
+  }
 }
 
 #define VALUE16(addr) (((addr)[0] << 8) | (addr)[1])
@@ -92,13 +101,16 @@ bool SMF::parse_data()
     ERROR("Not SMF format");
     return false;
   }
-  //uint16_t format = VALUE16(data_ + 8);
+  uint16_t format = VALUE16(data_ + 8);
+  INFO("format %u", format);
   uint16_t num_tracks = VALUE16(data_ + 10);
+  INFO("%u track(s)", num_tracks);
   time_base_ = VALUE16(data_ + 12);
   if ((time_base_ & 0x8000) != 0) {
     ERROR("Not implemented for negative value of the time base");
     return false;
   }
+  set_ticks_add_();
   data_type *p = data_ + 14;
   for (uint16_t i = 0; i < num_tracks; ++i) {
     track_ptr_type t(new SMFTrack(*this));
@@ -118,23 +130,30 @@ bool SMF::parse_data()
 
 void SMF::set_tempo(const uint8_t *data)
 {
-  set_ticks_add_((data[0] << 16) | (data[1] << 8) | data[2]);
+  tempo_ = (data[0] << 16) | (data[1] << 8) | data[2];
+  set_ticks_add_();
 }
 
-void SMF::set_ticks_add_(const uint32_t value)
+void SMF::set_ticks_add_()
 {
-  ticks_add_ = (1000000.0f * time_base_) / (value * 60);
+  ticks_add_ = (1000000.0f * time_base_) / (tempo_ * 60);
 }
 
 bool SMF::mix_audio(uint8_t *buf, const size_t len)
 {
-  BOOST_FOREACH(track_ptr_type t, tracks_) {
-    t->mix_audio(buf, len);
+  if (inst_ != NULL) {
+    return inst_->mix_audio(buf, len);
+  } else {
+    return false;
   }
-  return true;
 }
 
 std::string SMF::inspect() const
 {
-  return inst_->inspect();
+  if (inst_ != NULL) {
+    return inst_->inspect();
+  } else {
+    std::string s("SMF::inspect: inst_ is NULL");
+    return s;
+  }
 }

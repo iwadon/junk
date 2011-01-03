@@ -38,7 +38,7 @@ void SMFTrack::update()
     return;
   }
   if (wait_time_ > 0) {
-    wait_time_ -= smf_.ticks_add();
+    --wait_time_;
     if (wait_time_ > 0) {
       return;
     }
@@ -49,10 +49,14 @@ void SMFTrack::update()
   do {
     data_type data = *data_cur_;
     Channel &ch = smf_.instrument().channel(data & 0x0f);
+  retry:
     switch (data) {
     case 0x00 ... 0x7f:
       // Running Status
-      break;
+      data = prev_status_byte;
+      --data_cur_;
+      goto retry;
+      //break;
     case 0x80 ... 0x8f:
       ch.note_off(data_cur_[1], data_cur_[2]);
       data_cur_ += 3;
@@ -81,6 +85,15 @@ void SMFTrack::update()
       ch.pitch_bend_change((data_cur_[2] * 128 + data_cur_[1]) - 8192);
       data_cur_ += 3;
       break;
+    case 0xf0:
+    case 0xf7:
+      // SysEx event
+      {
+	VariableLengthValue delta_time;
+	VariableLengthValue::len_type vlv_len = delta_time.set_data(data_cur_ + 1, 0);
+	data_cur_ += vlv_len;
+      }
+      break;
     case 0xff:
       switch (data_cur_[1]) {
       case 0x01: // FF 01 len text		Text Event
@@ -108,13 +121,17 @@ void SMFTrack::update()
 	break;
       default:
 	// unsupported meta-events
+	INFO("Unimplemented meta events: %02x", static_cast<uint8_t>(data_cur_[1]));
+	data_cur_ += 2 + 1 + data_cur_[2];
 	break;
       }
       break;
     default:
       // unsupported events
+      INFO("Unimplemented events: %02x", static_cast<uint8_t>(data));
       break;
     }
+    prev_status_byte = data;
     if (!is_playing()) {
       break;
     }
@@ -132,9 +149,10 @@ bool SMFTrack::setup(const data_type *data, const size_t size)
     ERROR("Not MTrk data");
     return false;
   }
-  size_t data_size = data[4] << 24 | data[5] << 16 | data[6] << 8 | data[7];
+  const uint8_t *d = reinterpret_cast<const uint8_t *>(data);
+  size_t data_size = d[4] << 24 | d[5] << 16 | d[6] << 8 | d[7];
   if (data_size > size - 8) {
-    ERROR("Too large data");
+    ERROR("Too large data: %zu %zu %02x%02x%02x%02x", data_size, size - 8);
     return false;
   }
   data_ = data + 8;
@@ -188,11 +206,6 @@ void SMFTrack::update_wait_time()
   data_cur_ += vlv_len;
   assert(data_cur_ <= data_end_);
   wait_time_ += delta_time.value();
-}
-
-bool SMFTrack::mix_audio(uint8_t *buf, const size_t len)
-{
-  return smf_.instrument().mix_audio(buf, len);
 }
 
 static const char *state_string[] = {
