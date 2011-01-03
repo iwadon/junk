@@ -33,6 +33,7 @@ void Instrument::update()
   BOOST_FOREACH(Channel *c, channels_) {
     c->update();
   }
+  SDL_LockAudio();
   for (std::list<Voice *>::iterator i = active_voices_.begin(); i != active_voices_.end();) {
     Voice *v = *i;
     if (v->is_playing()) {
@@ -43,6 +44,7 @@ void Instrument::update()
       destroy_voice(v);
     }
   }
+  SDL_UnlockAudio();
 }
 
 Channel &Instrument::channel(int no)
