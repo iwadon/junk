@@ -25,6 +25,8 @@ static const int WINDOW_HEIGHT = 600;
 SDLApp::SDLApp(const SP &app_name)
   : app_name_(app_name.c_str())
   , font_(new Font)
+  , frame_wait_timer_(FPS, MAX_SKIP_FRAMES)
+  , prev_mod_(KMOD_NONE)
 {
   set_bg_color(0x00a000ff);
 }
@@ -45,10 +47,10 @@ int SDLApp::run(int argc, char *argv[])
   SDL_ShowWindow(window_);
 #endif
 
-  prev_ticks_ = SDL_GetTicks();
+  frame_wait_timer_.reset();
   done_ = false;
   while (!done_) {
-    frames_ = calculate_frames();
+    frames_ = frame_wait_timer_.wait();
     for (int i = 0; i < frames_; ++i) {
       do_input();
       do_move();
@@ -166,6 +168,7 @@ void SDLApp::do_input()
 	event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_q && (event.key.keysym.mod == KMOD_LGUI || event.key.keysym.mod == KMOD_RGUI)) {
       done_ = true;
     } else {
+      set_fps();
       controller_.update(event);
     }
   }
@@ -202,34 +205,18 @@ void SDLApp::set_bg_color(const uint32_t rgba)
   bg_color_[3] = (rgba & 0x000000ff) >>  0;
 }
 
-static inline float get_frame_interval()
+void SDLApp::set_fps()
 {
   SDLMod mod = SDL_GetModState();
-  if (mod & KMOD_CTRL) {
-    return FRAME_INTERVAL / 2;
+  SDLMod on_mod = static_cast<SDLMod>(mod & ~prev_mod_);
+  if (on_mod & KMOD_CTRL) {
+    frame_wait_timer_.set_fps(FPS * 2);
   } else if (mod & KMOD_SHIFT) {
-    return FRAME_INTERVAL * 10;
+    frame_wait_timer_.set_fps(FPS / 10);
   } else {
-    return FRAME_INTERVAL;
+    frame_wait_timer_.set_fps(FPS);
   }
-}
-
-int SDLApp::calculate_frames()
-{
-  float ticks = SDL_GetTicks();
-  float interval = get_frame_interval();
-  int frames = static_cast<int>((ticks - prev_ticks_) / interval);
-  if (frames <= 0) {
-    frames = 1;
-    SDL_Delay(static_cast<Uint32>(prev_ticks_ + interval - ticks));
-    prev_ticks_ += interval;
-  } else {
-    if (frames > MAX_SKIP_FRAMES) {
-      frames = MAX_SKIP_FRAMES;
-    }
-    prev_ticks_ = ticks;
-  }
-  return frames;
+  prev_mod_ = mod;
 }
 
 bool SDLApp::load_font_file(const SP &filename)

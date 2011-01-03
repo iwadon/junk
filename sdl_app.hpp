@@ -2,13 +2,13 @@
 #define SDL_APP_HPP_INCLUDED 1
 
 #include <string>
-#include "fps.hpp"
-#include "controller.hpp"
-#include "sp.hpp"
-
 #ifdef HAVE_SDL_H
 #include <SDL.h>
 #endif
+#include "controller.hpp"
+#include "fps.hpp"
+#include "frame_wait_timer.hpp"
+#include "sp.hpp"
 
 struct SDL_Window;
 class Font;
@@ -45,13 +45,15 @@ private:
   SDL_GLContext glcontext_;
   Controller controller_;
   SDL_AudioSpec audio_spec_;
+  FrameWaitTimer frame_wait_timer_;
+  SDLMod prev_mod_;
   bool do_initialize(int argc, char *argv[]);
   void do_finalize();
   void do_input();
   void do_move();
   void do_update();
   void do_draw();
-  int calculate_frames();
+  void set_fps();
   static void audio_callback(void *userdata, Uint8 *stream, int len);
 };
 
