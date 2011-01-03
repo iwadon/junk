@@ -25,7 +25,7 @@ public:
   static const size_t NUM_CHANNELS = 16;
   static const size_t NUM_VOICES = 16;
   Instrument();
-  virtual ~Instrument() {}
+  virtual ~Instrument();
   void update();
   virtual Channel &channel(int no);
   bool mix_audio(uint8_t *buf, size_t len);
