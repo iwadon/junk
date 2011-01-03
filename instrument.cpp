@@ -21,6 +21,13 @@ Instrument::Instrument()
   }
 }
 
+Instrument::~Instrument()
+{
+  for (size_t i = 0; i < NUM_CHANNELS; ++i) {
+    delete channels_[i];
+  }
+}
+
 void Instrument::update()
 {
   BOOST_FOREACH(Channel *c, channels_) {
@@ -49,7 +56,7 @@ bool Instrument::mix_audio(uint8_t *buf, const size_t len)
     return false;
   }
   BOOST_FOREACH(Voice *v, active_voices_) {
-    v->mix_audio(mix_buf_.addr, len);
+    v->mix_audio(mix_buf_.addr, mix_buf_.len);
     SDL_MixAudio(buf, mix_buf_.addr, len, SDL_MIX_MAXVOLUME);
   }
   return true;
@@ -93,13 +100,11 @@ Instrument::MixBuffer::MixBuffer()
   : addr(NULL)
   , len(0)
 {
-  INFO("Mix buffer initialized.");
 }
 
 Instrument::MixBuffer::~MixBuffer()
 {
   SDL_free(addr);
-  INFO("Mix buffer destroyed.");
 }
 
 bool Instrument::MixBuffer::prepare(const size_t new_len)
@@ -108,7 +113,7 @@ bool Instrument::MixBuffer::prepare(const size_t new_len)
     if (addr != NULL) {
       SDL_free(addr);
     }
-    addr = reinterpret_cast<uint8_t *>(SDL_malloc(len));
+    addr = reinterpret_cast<uint8_t *>(SDL_malloc(new_len));
     if (addr == NULL) {
       SDL_ERROR("SDL_malloc");
       len = 0;
