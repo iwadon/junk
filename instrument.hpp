@@ -29,9 +29,9 @@ public:
   void update();
   virtual Channel &channel(int no);
   bool mix_audio(uint8_t *buf, size_t len);
-  Voice *new_voice(int note, int velocity);
+  Voice *new_voice(Channel *channel, int note, int velocity);
   void destroy_voice(Voice *voice);
-  void stop_voices(int note);
+  void stop_voices(Channel *channel, int note);
   std::string inspect() const;
 private:
   boost::array<Channel *, NUM_CHANNELS> channels_;

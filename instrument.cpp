@@ -64,9 +64,9 @@ bool Instrument::mix_audio(uint8_t *buf, const size_t len)
   return true;
 }
 
-Voice *Instrument::new_voice(int note, int velocity)
+Voice *Instrument::new_voice(Channel *channel, int note, int velocity)
 {
-  Voice *voice = voice_pool_.construct(note, velocity);
+  Voice *voice = voice_pool_.construct(channel, note, velocity);
   if (voice != NULL) {
     active_voices_.push_back(voice);
   }
@@ -79,10 +79,10 @@ void Instrument::destroy_voice(Voice *voice)
   voice_pool_.destroy(voice);
 }
 
-void Instrument::stop_voices(int note)
+void Instrument::stop_voices(Channel *channel, int note)
 {
   BOOST_FOREACH(Voice *v, active_voices_) {
-    if (v->note() == note) {
+    if (v->channel() == channel && v->note() == note) {
       v->stop();
     }
   }

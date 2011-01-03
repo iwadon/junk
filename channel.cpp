@@ -25,7 +25,7 @@ void Channel::note_on(int note, int velocity)
     note_off(note, velocity);
     return;
   }
-  Voice *voice = inst_.new_voice(note, velocity);
+  Voice *voice = inst_.new_voice(this, note, velocity);
   if (voice == NULL) {
     ERROR("can't allocate the Voice object: note=%d, velocity=%d", note, velocity);
     return;
@@ -35,7 +35,7 @@ void Channel::note_on(int note, int velocity)
 
 void Channel::note_off(int note, int /*velocity*/)
 {
-  inst_.stop_voices(note);
+  inst_.stop_voices(this, note);
 }
 
 void Channel::polyphonic_pressure(int /*note*/, int /*velocity*/)

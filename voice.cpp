@@ -6,8 +6,9 @@
 #include "voice.hpp"
 #include "logger.hpp"
 
-Voice::Voice(int note, int velocity)
+Voice::Voice(Channel *channel, int note, int velocity)
   : state_(STATE_NONE)
+  , channel_(channel)
   , note_(note)
   , velocity_(velocity)
 {
