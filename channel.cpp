@@ -21,6 +21,10 @@ void Channel::update()
 
 void Channel::note_on(int note, int velocity)
 {
+  if (velocity == 0) {
+    note_off(note, velocity);
+    return;
+  }
   Voice *voice = inst_.new_voice(note, velocity);
   if (voice == NULL) {
     ERROR("can't allocate the Voice object: note=%d, velocity=%d", note, velocity);
