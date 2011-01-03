@@ -14,6 +14,7 @@
 #endif
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
+#include "instrument.hpp"
 #include "smf.hpp"
 
 class SMFTrackTest : public CppUnit::TestCase
@@ -57,6 +58,8 @@ static const SMFTrack::data_type MTRK_01[] =
 void SMFTrackTest::test_is_playing()
 {
   SMF smf;
+  Instrument inst;
+  smf.set_instrument(&inst);
   SMFTrack t(smf);
   CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
   t.setup(MTRK_00, sizeof MTRK_00);
@@ -70,6 +73,8 @@ void SMFTrackTest::test_is_playing()
 void SMFTrackTest::test_inspect()
 {
   SMF smf;
+  Instrument inst;
+  smf.set_instrument(&inst);
   SMFTrack t(smf);
   CPPUNIT_ASSERT_EQUAL(std::string("#<SMFTrack NONE>"), t.inspect());
   t.setup(MTRK_01, sizeof MTRK_01);
@@ -93,6 +98,8 @@ void SMFTrackTest::test_inspect()
 void SMFTrackTest::test_pause()
 {
   SMF smf;
+  Instrument inst;
+  smf.set_instrument(&inst);
   SMFTrack t(smf);
   t.setup(MTRK_00, sizeof MTRK_00);
   CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
@@ -120,6 +127,8 @@ void SMFTrackTest::test_pause()
 void SMFTrackTest::test_play()
 {
   SMF smf;
+  Instrument inst;
+  smf.set_instrument(&inst);
   SMFTrack t(smf);
   t.setup(MTRK_01, sizeof MTRK_01);
   CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
@@ -136,6 +145,8 @@ void SMFTrackTest::test_play()
 void SMFTrackTest::test_resume()
 {
   SMF smf;
+  Instrument inst;
+  smf.set_instrument(&inst);
   SMFTrack t(smf);
   t.setup(MTRK_00, sizeof MTRK_00);
   t.pause();
@@ -154,6 +165,8 @@ void SMFTrackTest::test_resume()
 void SMFTrackTest::test_setup()
 {
   SMF smf;
+  Instrument inst;
+  smf.set_instrument(&inst);
   SMFTrack t(smf);
   CPPUNIT_ASSERT_EQUAL(true, t.setup(MTRK_00, sizeof MTRK_00));
   CPPUNIT_ASSERT_EQUAL(false, t.setup("ABCDEFG", 7));
@@ -164,6 +177,8 @@ void SMFTrackTest::test_setup()
 void SMFTrackTest::test_stop()
 {
   SMF smf;
+  Instrument inst;
+  smf.set_instrument(&inst);
   SMFTrack t(smf);
   t.setup(MTRK_01, sizeof MTRK_01);
   CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
