@@ -14,6 +14,7 @@
 SMF::SMF()
   : data_(NULL)
   , time_base_(48)
+  , ticks_(0)
   , inst_(NULL)
   , tempo_(800000)
 {
