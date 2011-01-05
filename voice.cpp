@@ -43,7 +43,7 @@ bool Voice::is_playing() const
 
 bool Voice::mix_audio(uint8_t *buf, const size_t len)
 {
-  os_.read(buf, len, 440 * note_to_ratio(note_));
+  os_.read(buf, len, 440 * note_to_ratio(note_), velocity_ / 127.0f * 0.1f);
   return true;
 }
 

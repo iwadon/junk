@@ -11,13 +11,14 @@
 #endif
 #include "logger.hpp"
 
-size_t OscillatorStream::read(void *buf, const size_t len, const float freq)
+size_t OscillatorStream::read(void *buf, const size_t len, const float freq, const float volume)
 {
   //INFO("%s: buf=%p, len=%zu, freq=%f", __PRETTY_FUNCTION__, buf, len, freq);
   int16_t *p = reinterpret_cast<int16_t *>(buf);
   osc_.set_frequency(freq);
+  float v = volume * 32767;
   for (size_t i = 0; i < (len / 2); ++i) {
-    p[i] = osc_.value() * 32767;
+    p[i] = osc_.value() * v;
   }
   return len;
 }

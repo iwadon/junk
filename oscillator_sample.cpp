@@ -42,7 +42,7 @@ void OscillatorSampleApp::draw()
 void OscillatorSampleApp::mix_audio(uint8_t *buf, size_t len)
 {
   int16_t src[len / 2];
-  os_.read(src, len / 2, 440);
+  os_.read(src, len / 2, 440, 1.0f);
   SDL_MixAudio(buf, reinterpret_cast<uint8_t *>(src), len, SDL_MIX_MAXVOLUME);
 }
 

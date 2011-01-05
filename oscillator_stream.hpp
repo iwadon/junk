@@ -10,7 +10,7 @@
 class OscillatorStream
 {
 public:
-  virtual size_t read(void *buf, const size_t len, const float freq);
+  virtual size_t read(void *buf, const size_t len, const float freq, const float volume);
   virtual void set_sample_rate(const float rate);
 private:
   Oscillator osc_;
