@@ -6,6 +6,8 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 #include <string>
+#include "channel.hpp"
+#include "instrument.hpp"
 
 class VoiceTest : public CppUnit::TestCase
 {
@@ -58,9 +60,11 @@ void VoiceTest::test_note()
 
 void VoiceTest::test_inspect()
 {
-  Voice v1(60, 64);
+  Instrument i;
+  Channel c(i, "ch");
+  Voice v1(&c, 60, 64);
   CPPUNIT_ASSERT_EQUAL(format("#<Voice:%p     NONE  C4 64>", &v1), v1.inspect());
-  Voice v2(61, 127);
+  Voice v2(&c, 61, 127);
   CPPUNIT_ASSERT_EQUAL(format("#<Voice:%p     NONE C#4 127>", &v2), v2.inspect());
 }
 
