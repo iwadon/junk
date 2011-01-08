@@ -17,26 +17,24 @@ public:
 void OscillatorStreamTest::test_read()
 {
   int16_t buf[10];
-
   OscillatorStream os1;
-  size_t read_samples = os1.read(buf, 10, 1.0f, 1.0f);
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), read_samples);
+  size_t read_size = os1.read(buf, sizeof buf, 1.0f, 1.0f);
+  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(sizeof buf), read_size);
   static const int16_t result1[] = {0, 32767, 0, -32767, 0, 32767, 0, -32767, 0, 32767};
   CPPUNIT_ASSERT_EQUAL(0, memcmp(buf, result1, 10));
 
   OscillatorStream os2;
-  read_samples = os2.read(buf, 10, 1.5f, 1.0f);
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), read_samples);
-  //static const int16_t result2[] = {0, -23169, 32767, -23169, 0, 23169, -32767, 23169, 0, -23169};
-  static const int16_t result2[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  read_size = os2.read(buf, sizeof buf, 1.5f, 1.0f);
+  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(sizeof buf), read_size);
+  static const int16_t result2[] = {0, 23169, -32767, 23169, 0, -23169, 32767, -23169, 0, 23169};
+  //static const int16_t result2[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   for (int i = 0; i < 10; ++i) {
-    fprintf(stderr, " %d", i);
     CPPUNIT_ASSERT_EQUAL(result2[i], buf[i]);
   }
 
   OscillatorStream os3;
-  read_samples = os3.read(buf, 10, 0.5f, 1.0f);
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), read_samples);
+  read_size = os3.read(buf, sizeof buf, 0.5f, 1.0f);
+  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(sizeof buf), read_size);
   static const int16_t result3[] = {0, 23169, 32767, 23169, 0, -23169, -32767, -23169, 0, 23169};
   for (int i = 0; i < 10; ++i) {
     CPPUNIT_ASSERT_EQUAL(result3[i], buf[i]);

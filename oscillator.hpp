@@ -11,7 +11,9 @@ public:
 private:
   float sample_rate_;
   float frequency_;
-  int sample_num_;
+  float phase_;
+  float delta_theta_;
+  void setup();
 };
 
 #endif // !defined(OSCILLATOR_HPP_INCLUDED)
