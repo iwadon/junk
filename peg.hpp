@@ -7,6 +7,7 @@
 #include <utility>
 #include <vector>
 #endif
+#include "logger.hpp"
 
 namespace peg
 {
@@ -297,7 +298,7 @@ namespace peg
     ErrorInfo err;
     Result result = pe.parse(err, src);
     if (!result.status) {
-      std::cerr << err.message() << std::endl;
+      ERROR(err.message().c_str());
     }
     return result;
   }
