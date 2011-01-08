@@ -25,6 +25,7 @@ public:
   void warn(const char *format, ...);
   void error(const char *format, ...);
   void fatal(const char *format, ...);
+  void set_level(const LEVEL level) { level_ = level; }
 protected:
   void vlog(const Logger::LEVEL, const char *format, va_list args);
 private:

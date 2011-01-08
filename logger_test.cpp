@@ -19,6 +19,7 @@ class LoggerTest : public CppUnit::TestCase
   CPPUNIT_TEST(test_log_warn);
   CPPUNIT_TEST(test_log_error);
   CPPUNIT_TEST(test_log_fatal);
+  CPPUNIT_TEST(test_set_level);
   CPPUNIT_TEST_SUITE_END();
 public:
   void test_debug();
@@ -31,6 +32,7 @@ public:
   void test_log_warn();
   void test_log_error();
   void test_log_fatal();
+  void test_set_level();
 };
 
 #if 0
@@ -129,5 +131,17 @@ DEFUN_TEST_FUNC(log_info, "INFO: Hello.\n", "INFO: Hello.\n", "", "", "", log, L
 DEFUN_TEST_FUNC(log_warn, "WARN: Hello.\n", "WARN: Hello.\n", "WARN: Hello.\n", "", "", log, Logger::LEVEL_WARN, "Hello.");
 DEFUN_TEST_FUNC(log_error, "ERROR: Hello.\n", "ERROR: Hello.\n", "ERROR: Hello.\n", "ERROR: Hello.\n", "", log, Logger::LEVEL_ERROR, "Hello.");
 DEFUN_TEST_FUNC(log_fatal, "FATAL: Hello.\n", "FATAL: Hello.\n", "FATAL: Hello.\n", "FATAL: Hello.\n", "FATAL: Hello.\n", log, Logger::LEVEL_FATAL, "Hello.");
+
+void LoggerTest::test_set_level()
+{
+  std::stringstream oss;
+  Logger logger(oss, Logger::LEVEL_DEBUG);
+  logger.debug("Hello.");
+  CPPUNIT_ASSERT_EQUAL(std::string("DEBUG: Hello.\n"), oss.str());
+  oss.str("");
+  logger.set_level(Logger::LEVEL_INFO);
+  logger.debug("Hello.");
+  CPPUNIT_ASSERT_EQUAL(std::string(""), oss.str());
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LoggerTest);
