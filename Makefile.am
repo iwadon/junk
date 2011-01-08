@@ -24,7 +24,7 @@ smf_play_SOURCES = smf_play.cpp
 smf_play_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 smf_play_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_LIBS)
 
-lib_LIBRARIES = liblogger.a libpeg.a libsdlapp.a libsequencer.a
+lib_LIBRARIES = liblogger.a libpeg.a libsdlapp.a libsequencer.a libtest_main.a
 
 liblogger_a_SOURCES = logger.cpp logger.hpp
 liblogger_a_CPPFLAGS = $(BOOST_CPPFLAGS)
@@ -54,6 +54,10 @@ libsequencer_a_SOURCES = audio_stream.hpp \
 			 volume.hpp
 libsequencer_a_CPPFLAGS = $(BOOST_CPPFLAGS)
 
+libtest_main_a_SOURCES = test_main.cpp
+libtest_main_a_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
+libtest_main_a_LIBADD = liblogger.a
+
 check_PROGRAMS = logger_test \
 		 lot_box_test \
 		 oscillator_stream_test \
@@ -63,29 +67,25 @@ check_PROGRAMS = logger_test \
 		 sdlapp_test \
 		 vector_test
 TESTS = $(check_PROGRAMS) peg_test.sh
+TEST_LIBS = libtest_main.a liblogger.a
 
-oscillator_stream_test_SOURCES = test_main.cpp \
-			    oscillator_stream_test.cpp
+oscillator_stream_test_SOURCES = oscillator_stream_test.cpp
 oscillator_stream_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
-oscillator_stream_test_LDADD = libsequencer.a $(CPPUNIT_LIBS) $(BOOST_LIBS)
+oscillator_stream_test_LDADD = libsequencer.a $(TEST_LIBS) $(CPPUNIT_LIBS) $(BOOST_LIBS)
 
-logger_test_SOURCES = test_main.cpp \
-		      logger_test.cpp
+logger_test_SOURCES = logger_test.cpp
 logger_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
-logger_test_LDADD = liblogger.a $(CPPUNIT_LIBS) $(BOOST_LIBS)
+logger_test_LDADD = $(TEST_LIBS) $(CPPUNIT_LIBS) $(BOOST_LIBS)
 
-lot_box_test_SOURCES = test_main.cpp \
-		       lot_box_test.cpp
+lot_box_test_SOURCES = lot_box_test.cpp
 lot_box_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
-lot_box_test_LDADD = $(CPPUNIT_LIBS) $(BOOST_LIBS)
+lot_box_test_LDADD = $(TEST_LIBS) $(CPPUNIT_LIBS) $(BOOST_LIBS)
 
-peg_test_SOURCES = test_main.cpp \
-		   peg_test.cpp
+peg_test_SOURCES = peg_test.cpp
 peg_test_CPPFLAGS = $(CPPUNIT_CFLAGS)
-peg_test_LDADD = libpeg.a $(CPPUNIT_LIBS)
+peg_test_LDADD = libpeg.a $(TEST_LIBS) $(CPPUNIT_LIBS)
 
-sdlapp_test_SOURCES = test_main.cpp \
-		      font_test.cpp \
+sdlapp_test_SOURCES = font_test.cpp \
 		      fps_test.cpp \
 		      object_test.cpp \
 		      sprite_test.cpp \
@@ -93,10 +93,9 @@ sdlapp_test_SOURCES = test_main.cpp \
 		      texture_pool_test.cpp
 sdlapp_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 sdlapp_test_LDFLAGS = -framework OpenGL
-sdlapp_test_LDADD = libsdlapp.a liblogger.a $(CPPUNIT_LIBS) $(BOOST_LIBS)
+sdlapp_test_LDADD = libsdlapp.a $(TEST_LIBS) $(CPPUNIT_LIBS) $(BOOST_LIBS)
 
-sequencer_test_SOURCES = test_main.cpp \
-			 channel_test.cpp \
+sequencer_test_SOURCES = channel_test.cpp \
 			 function_test.cpp \
 			 observer_test.cpp \
 			 oscillator_test.cpp \
@@ -106,15 +105,15 @@ sequencer_test_SOURCES = test_main.cpp \
 			 voice_test.cpp \
 			 volume_test.cpp
 sequencer_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
-sequencer_test_LDADD = libsequencer.a liblogger.a $(CPPUNIT_LIBS)
+sequencer_test_LDADD = libsequencer.a $(TEST_LIBS) $(CPPUNIT_LIBS)
 
-point_test_SOURCES = test_main.cpp point_test.cpp
+point_test_SOURCES = point_test.cpp
 point_test_CPPFLAGS = $(CPPUNIT_CFLAGS)
-point_test_LDADD = $(CPPUNIT_LIBS)
+point_test_LDADD = $(TEST_LIBS) $(CPPUNIT_LIBS)
 
-vector_test_SOURCES = test_main.cpp vector_test.cpp
+vector_test_SOURCES = vector_test.cpp
 vector_test_CPPFLAGS = $(CPPUNIT_CFLAGS)
-vector_test_LDADD = $(CPPUNIT_LIBS)
+vector_test_LDADD = $(TEST_LIBS) $(CPPUNIT_LIBS)
 
 AM_CFLAGS = -Wall -Wextra $(COVERAGE_CFLAGS)
 AM_CXXFLAGS = -Wall -Wextra $(COVERAGE_CXXFLAGS)
