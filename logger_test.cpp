@@ -142,6 +142,10 @@ void LoggerTest::test_set_level()
   logger.set_level(Logger::LEVEL_INFO);
   logger.debug("Hello.");
   CPPUNIT_ASSERT_EQUAL(std::string(""), oss.str());
+  oss.str("");
+  logger.set_level(Logger::LEVEL_DEBUG);
+  logger.debug("Hello.");
+  CPPUNIT_ASSERT_EQUAL(std::string("DEBUG: Hello.\n"), oss.str());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LoggerTest);
