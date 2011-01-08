@@ -82,8 +82,8 @@ lot_box_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
 lot_box_test_LDADD = $(TEST_LIBS) $(CPPUNIT_LIBS) $(BOOST_LIBS)
 
 peg_test_SOURCES = peg_test.cpp
-peg_test_CPPFLAGS = $(CPPUNIT_CFLAGS)
-peg_test_LDADD = libpeg.a $(TEST_LIBS) $(CPPUNIT_LIBS)
+peg_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
+peg_test_LDADD = libpeg.a $(TEST_LIBS) $(CPPUNIT_LIBS) $(BOOST_LIBS)
 
 sdlapp_test_SOURCES = font_test.cpp \
 		      fps_test.cpp \
