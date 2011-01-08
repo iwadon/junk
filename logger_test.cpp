@@ -90,32 +90,32 @@ void LoggerTest::test_log()
 #define DEFUN_TEST_FUNC(name, output1, output2, output3, output4, output5, func, ...) \
   void LoggerTest::test_ ## name()					\
   {									\
-    std::ostringstream oss;						\
     {									\
+      std::ostringstream oss;						\
       Logger logger(oss, Logger::LEVEL_DEBUG);				\
       logger.func(__VA_ARGS__);						\
       CPPUNIT_ASSERT_EQUAL(std::string(output1), oss.str());		\
-      oss.str("");							\
     }									\
     {									\
+      std::ostringstream oss;						\
       Logger logger(oss, Logger::LEVEL_INFO);				\
       logger.func(__VA_ARGS__);						\
       CPPUNIT_ASSERT_EQUAL(std::string(output2), oss.str());		\
-      oss.str("");							\
     }									\
     {									\
+      std::ostringstream oss;						\
       Logger logger(oss, Logger::LEVEL_WARN);				\
       logger.func(__VA_ARGS__);						\
       CPPUNIT_ASSERT_EQUAL(std::string(output3), oss.str());		\
-      oss.str("");							\
     }									\
     {									\
+      std::ostringstream oss;						\
       Logger logger(oss, Logger::LEVEL_ERROR);				\
       logger.func(__VA_ARGS__);						\
       CPPUNIT_ASSERT_EQUAL(std::string(output4), oss.str());		\
-      oss.str("");							\
     }									\
     {									\
+      std::ostringstream oss;						\
       Logger logger(oss, Logger::LEVEL_FATAL);				\
       logger.func(__VA_ARGS__);						\
       CPPUNIT_ASSERT_EQUAL(std::string(output5), oss.str());		\
