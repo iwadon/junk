@@ -8,13 +8,13 @@
 class OscillatorTest : public CppUnit::TestCase
 {
   CPPUNIT_TEST_SUITE(OscillatorTest);
-  CPPUNIT_TEST(test_update);
+  CPPUNIT_TEST(test_value);
   CPPUNIT_TEST_SUITE_END();
 public:
-  void test_update();
+  void test_value();
 };
 
-void OscillatorTest::test_update()
+void OscillatorTest::test_value()
 {
   Oscillator osc;
   osc.set_sample_rate(4.0f);
