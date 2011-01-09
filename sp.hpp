@@ -20,6 +20,7 @@ public:
   const char *data() const { return ptr_; }
   size_t size() const { return len_; }
   const char *c_str() const { return ptr_; }
+  std::string str() const { return std::string(empty() ? "" : ptr_, len_); }
   bool empty() const { return len_ == 0; }
   bool operator==(const SP &x) const { return (len_ == x.len_) || (memcmp(ptr_, x.ptr_, len_) == 0); }
   void CopyToString(std::string *target) const { target->assign(empty() ? "" : ptr_, len_); }
