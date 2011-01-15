@@ -4,6 +4,9 @@
 #include "oscillator_factory.hpp"
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
+#ifdef HAVE_BOOST
+#include <boost/shared_ptr.hpp>
+#endif
 #include "oscillator.hpp"
 
 class OscillatorFactoryTest : public CppUnit::TestCase
@@ -18,9 +21,9 @@ public:
 void OscillatorFactoryTest::test_create()
 {
   OscillatorFactory of;
-  Oscillator *o = of.create("sin");
+  boost::shared_ptr<Oscillator> o(of.create("sin"));
   CPPUNIT_ASSERT(o != NULL);
-  o = of.create("unknown");
+  o = boost::shared_ptr<Oscillator>(of.create("unknown"));
   CPPUNIT_ASSERT(o == NULL);
 }
 
