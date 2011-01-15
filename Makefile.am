@@ -68,23 +68,24 @@ check_PROGRAMS = logger_test \
 		 sdlapp_test \
 		 vector_test
 TESTS = $(check_PROGRAMS) peg_test.sh
-TEST_LIBS = libtest_main.a liblogger.a
+TEST_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
+TEST_LIBS = libtest_main.a liblogger.a $(CPPUNIT_LIBS) $(BOOST_PROGRAM_OPTIONS_LIB)
 
 oscillator_stream_test_SOURCES = oscillator_stream_test.cpp
-oscillator_stream_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
-oscillator_stream_test_LDADD = libsequencer.a $(TEST_LIBS) $(CPPUNIT_LIBS) $(BOOST_LIBS)
+oscillator_stream_test_CPPFLAGS = $(TEST_CPPFLAGS)
+oscillator_stream_test_LDADD = libsequencer.a $(TEST_LIBS)
 
 logger_test_SOURCES = logger_test.cpp
-logger_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
-logger_test_LDADD = $(TEST_LIBS) $(CPPUNIT_LIBS) $(BOOST_LIBS)
+logger_test_CPPFLAGS = $(TEST_CPPFLAGS)
+logger_test_LDADD = $(TEST_LIBS)
 
 lot_box_test_SOURCES = lot_box_test.cpp
-lot_box_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
-lot_box_test_LDADD = $(TEST_LIBS) $(CPPUNIT_LIBS) $(BOOST_LIBS)
+lot_box_test_CPPFLAGS = $(TEST_CPPFLAGS)
+lot_box_test_LDADD = $(TEST_LIBS)
 
 peg_test_SOURCES = peg_test.cpp
-peg_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
-peg_test_LDADD = libpeg.a $(TEST_LIBS) $(CPPUNIT_LIBS) $(BOOST_LIBS)
+peg_test_CPPFLAGS = $(TEST_CPPFLAGS)
+peg_test_LDADD = libpeg.a $(TEST_LIBS)
 
 sdlapp_test_SOURCES = font_test.cpp \
 		      fps_test.cpp \
@@ -92,9 +93,9 @@ sdlapp_test_SOURCES = font_test.cpp \
 		      sprite_test.cpp \
 		      texture_test.cpp \
 		      texture_pool_test.cpp
-sdlapp_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
+sdlapp_test_CPPFLAGS = $(SDL_CFLAGS) $(TEST_CPPFLAGS)
 sdlapp_test_LDFLAGS = -framework OpenGL
-sdlapp_test_LDADD = libsdlapp.a $(TEST_LIBS) $(CPPUNIT_LIBS) $(BOOST_LIBS)
+sdlapp_test_LDADD = libsdlapp.a $(TEST_LIBS)
 
 sequencer_test_SOURCES = channel_test.cpp \
 			 function_test.cpp \
@@ -106,16 +107,16 @@ sequencer_test_SOURCES = channel_test.cpp \
 			 variable_length_value_test.cpp \
 			 voice_test.cpp \
 			 volume_test.cpp
-sequencer_test_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
-sequencer_test_LDADD = libsequencer.a $(TEST_LIBS) $(CPPUNIT_LIBS)
+sequencer_test_CPPFLAGS = $(TEST_CPPFLAGS)
+sequencer_test_LDADD = libsequencer.a $(TEST_LIBS)
 
 point_test_SOURCES = point_test.cpp
-point_test_CPPFLAGS = $(CPPUNIT_CFLAGS)
-point_test_LDADD = $(TEST_LIBS) $(CPPUNIT_LIBS)
+point_test_CPPFLAGS = $(TEST_CPPFLAGS)
+point_test_LDADD = $(TEST_LIBS)
 
 vector_test_SOURCES = vector_test.cpp
-vector_test_CPPFLAGS = $(CPPUNIT_CFLAGS)
-vector_test_LDADD = $(TEST_LIBS) $(CPPUNIT_LIBS)
+vector_test_CPPFLAGS = $(TEST_CPPFLAGS)
+vector_test_LDADD = $(TEST_LIBS)
 
 AM_CFLAGS = -Wall -Wextra $(COVERAGE_CFLAGS)
 AM_CXXFLAGS = -Wall -Wextra $(COVERAGE_CXXFLAGS)
