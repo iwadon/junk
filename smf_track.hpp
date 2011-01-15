@@ -28,6 +28,7 @@ public:
     STATE_INITIALIZED,
     STATE_PLAYING,
     STATE_STOPPED,
+    NUM_STATES
   };
   typedef uint32_t FLAG;
   static const FLAG FLAG_PAUSED = 1 << 0;

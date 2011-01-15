@@ -60,30 +60,37 @@ void SMFTrack::update()
     case 0x80 ... 0x8f:
       ch.note_off(data_cur_[1], data_cur_[2]);
       data_cur_ += 3;
+      assert(data_cur_ <= data_end_);
       break;
     case 0x90 ... 0x9f:
       ch.note_on(data_cur_[1], data_cur_[2]);
       data_cur_ += 3;
+      assert(data_cur_ <= data_end_);
       break;
     case 0xa0 ... 0xaf:
       ch.polyphonic_pressure(data_cur_[1], data_cur_[2]);
       data_cur_ += 3;
+      assert(data_cur_ <= data_end_);
       break;
     case 0xb0 ... 0xbf:
       ch.control_change(data_cur_[1], data_cur_[2]);
       data_cur_ += 3;
+      assert(data_cur_ <= data_end_);
       break;
     case 0xc0 ... 0xcf:
       ch.program_change(data_cur_[1]);
       data_cur_ += 2;
+      assert(data_cur_ <= data_end_);
       break;
     case 0xd0 ... 0xdf:
       ch.channel_pressure(data_cur_[1]);
       data_cur_ += 2;
+      assert(data_cur_ <= data_end_);
       break;
     case 0xe0 ... 0xef:
       ch.pitch_bend_change((data_cur_[2] * 128 + data_cur_[1]) - 8192);
       data_cur_ += 3;
+      assert(data_cur_ <= data_end_);
       break;
     case 0xf0:
     case 0xf7:
@@ -92,6 +99,7 @@ void SMFTrack::update()
 	VariableLengthValue delta_time;
 	VariableLengthValue::len_type vlv_len = delta_time.set_data(data_cur_ + 1, 0);
 	data_cur_ += vlv_len;
+	assert(data_cur_ <= data_end_);
       }
       break;
     case 0xff:
@@ -111,6 +119,7 @@ void SMFTrack::update()
       case 0x7f: // FF 7F len data		Sequencer Specific Meta-Event
 	// not implemented
 	data_cur_ += 2 + 1 + data_cur_[2];
+	assert(data_cur_ <= data_end_);
 	break;
       case 0x2f: // FF 2F 00			End of Track
 	stop();
@@ -118,11 +127,13 @@ void SMFTrack::update()
       case 0x51: // FF 51 03 tttttt		Set Tempo(in microseconds per MIDI quarter-note)
 	smf_.set_tempo(reinterpret_cast<const uint8_t *>(data_cur_) + 3);
 	data_cur_ += 2 + 1 + 3;
+	assert(data_cur_ <= data_end_);
 	break;
       default:
 	// unsupported meta-events
 	INFO("Unimplemented meta events: %02x", static_cast<uint8_t>(data_cur_[1]));
 	data_cur_ += 2 + 1 + data_cur_[2];
+	assert(data_cur_ <= data_end_);
 	break;
       }
       break;
@@ -151,8 +162,8 @@ bool SMFTrack::setup(const data_type *data, const size_t size)
   }
   const uint8_t *d = reinterpret_cast<const uint8_t *>(data);
   size_t data_size = d[4] << 24 | d[5] << 16 | d[6] << 8 | d[7];
-  if (data_size > size - 8) {
-    ERROR("Too large data: %zu %zu %02x%02x%02x%02x", data_size, size - 8);
+  if (data_size != size - 8) {
+    ERROR("mismatch data size: %zu %zu %02x%02x%02x%02x", data_size, size - 8, d[4], d[5], d[6], d[7]);
     return false;
   }
   data_ = data + 8;
@@ -208,7 +219,7 @@ void SMFTrack::update_wait_time()
   wait_time_ += delta_time.value();
 }
 
-static const char *state_string[] = {
+static const char *state_string[SMFTrack::NUM_STATES] = {
   "NONE",
   "INITIALIZED",
   "PLAYING",
