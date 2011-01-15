@@ -59,7 +59,7 @@ private:
   boost::mt19937 rng_;
   boost::uniform_int<> dst_;
   boost::variate_generator<boost::mt19937 &, boost::uniform_int<> > rand_;
-  boost::array<size_t, N> winning_numbers_;
+  boost::array<size_t, M> winning_numbers_;
   size_t n_;
 };
 
