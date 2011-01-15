@@ -10,20 +10,25 @@
 #include <stdint.h>
 #endif
 #include "logger.hpp"
+#include "sine_wave_oscillator.hpp"
+
+OscillatorStream::OscillatorStream()
+  : osc_(new SineWaveOscillator)
+{
+}
 
 size_t OscillatorStream::read(void *buf, const size_t len, const float freq, const float volume)
 {
-  //INFO("%s: buf=%p, len=%zu, freq=%f", __PRETTY_FUNCTION__, buf, len, freq);
   int16_t *p = reinterpret_cast<int16_t *>(buf);
-  osc_.set_frequency(freq);
+  osc_->set_frequency(freq);
   float v = volume * 32767;
   for (size_t i = 0; i < (len / 2); ++i) {
-    p[i] = osc_.value() * v;
+    p[i] = osc_->value() * v;
   }
   return len;
 }
 
 void OscillatorStream::set_sample_rate(const float rate)
 {
-  osc_.set_sample_rate(rate);
+  osc_->set_sample_rate(rate);
 }

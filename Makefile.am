@@ -48,6 +48,7 @@ libsequencer_a_SOURCES = audio_stream.hpp \
 			 oscillator.cpp oscillator.hpp \
 			 oscillator_factory.cpp oscillator_factory.hpp \
 			 oscillator_stream.cpp oscillator_stream.hpp \
+			 sine_wave_oscillator.cpp sine_wave_oscillator.hpp \
 			 smf.cpp smf.hpp \
 			 smf_track.cpp smf_track.hpp \
 			 variable_length_value.cpp variable_length_value.hpp \
@@ -102,6 +103,7 @@ sequencer_test_SOURCES = channel_test.cpp \
 			 observer_test.cpp \
 			 oscillator_test.cpp \
 			 oscillator_factory_test.cpp \
+			 sine_wave_oscillator_test.cpp \
 			 smf_test.cpp \
 			 smf_track_test.cpp \
 			 variable_length_value_test.cpp \
