@@ -13,6 +13,7 @@ Voice::Voice(Channel *channel, int note, int velocity)
   , velocity_(velocity)
 {
   os_.set_sample_rate(48000);
+  os_.set_oscillator_type("sin");
 }
 
 Voice::~Voice()

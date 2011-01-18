@@ -2,13 +2,17 @@
 #define OSCILLATOR_FACTORY_HPP_INCLUDED 1
 
 #include <map>
+#ifdef HAVE_BOOST
+#include <boost/noncopyable.hpp>
+#endif
 #include "sp.hpp"
 
 class Oscillator;
 
-class OscillatorFactory
+class OscillatorFactory : public boost::noncopyable
 {
 public:
+  static OscillatorFactory &get_instance();
   OscillatorFactory();
   Oscillator *create(const SP &name);
 private:

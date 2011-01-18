@@ -79,13 +79,16 @@ void Instrument::destroy_voice(Voice *voice)
   voice_pool_.destroy(voice);
 }
 
-void Instrument::stop_voices(Channel *channel, int note)
+size_t Instrument::stop_voices(Channel *channel, int note)
 {
+  size_t n = 0;
   BOOST_FOREACH(Voice *v, active_voices_) {
     if (v->channel() == channel && v->note() == note) {
       v->stop();
+      ++n;
     }
   }
+  return n;
 }
 
 std::string Instrument::inspect() const

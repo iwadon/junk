@@ -25,6 +25,7 @@ void Channel::note_on(int note, int velocity)
     note_off(note, velocity);
     return;
   }
+  //DEBUG("%s note on  %3d %3d", name_.c_str(), note, velocity);
   Voice *voice = inst_.new_voice(this, note, velocity);
   if (voice == NULL) {
     ERROR("can't allocate the Voice object: note=%d, velocity=%d", note, velocity);
@@ -33,29 +34,38 @@ void Channel::note_on(int note, int velocity)
   voice->play();
 }
 
-void Channel::note_off(int note, int /*velocity*/)
+void Channel::note_off(int note, int velocity)
 {
-  inst_.stop_voices(this, note);
+  size_t n = inst_.stop_voices(this, note);
+  //DEBUG("%s note off %3d %3d %u", name_.c_str(), note, velocity, n);
+  if (n == 0) {
+    WARN("n == 0");
+  }
 }
 
 void Channel::polyphonic_pressure(int /*note*/, int /*velocity*/)
 {
+  INFO("Polyphonic Pressure event is not implemented yet.");
 }
 
-void Channel::control_change(int /*no*/, int /*value*/)
+void Channel::control_change(int no, int value)
 {
+  INFO("Control Change event is not implemented yet: CC%03d %3d", no, value);
 }
 
 void Channel::program_change(int /*no*/)
 {
+  INFO("Program Change event is not implemented yet.");
 }
 
 void Channel::channel_pressure(int /*no*/)
 {
+  INFO("Channel Pressure event is not implemented yet.");
 }
 
 void Channel::pitch_bend_change(int /*value*/)
 {
+  INFO("Pitch Bend Change event is not implemented yet.");
 }
 
 std::string Channel::inspect() const

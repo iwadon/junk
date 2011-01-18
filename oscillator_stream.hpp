@@ -9,6 +9,7 @@
 #endif
 #include "audio_stream.hpp"
 #include "oscillator.hpp"
+#include "sp.hpp"
 
 class OscillatorStream : public AudioStream
 {
@@ -18,8 +19,10 @@ public:
   virtual size_t read(void *buf, const size_t len, const float freq);
   virtual void set_sample_rate(const float rate);
   virtual void set_volume(const float volume);
+  virtual void set_oscillator_type(const SP &type);
 private:
-  boost::shared_ptr<Oscillator> osc_;
+  typedef boost::shared_ptr<Oscillator> oscillator_ptr_type;
+  oscillator_ptr_type osc_;
   float volume_;
 };
 

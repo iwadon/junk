@@ -9,11 +9,10 @@
 #elif defined(HAVE_STDINT_H)
 #include <stdint.h>
 #endif
-#include "logger.hpp"
-#include "sine_wave_oscillator.hpp"
+#include "oscillator_factory.hpp"
 
 OscillatorStream::OscillatorStream()
-  : osc_(new SineWaveOscillator)
+  : osc_(OscillatorFactory::get_instance().create("sin"))
   , volume_(1.0f)
 {
 }
@@ -37,4 +36,12 @@ void OscillatorStream::set_sample_rate(const float rate)
 void OscillatorStream::set_volume(const float volume)
 {
   volume_ = volume;
+}
+
+void OscillatorStream::set_oscillator_type(const SP &type)
+{
+  oscillator_ptr_type prev_osc = osc_;
+  osc_ = boost::shared_ptr<Oscillator>(OscillatorFactory::get_instance().create(type.c_str()));
+  osc_->set_sample_rate(prev_osc->sample_rate());
+  osc_->set_frequency(prev_osc->frequency());
 }

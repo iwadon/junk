@@ -31,7 +31,7 @@ public:
   bool mix_audio(uint8_t *buf, size_t len);
   Voice *new_voice(Channel *channel, int note, int velocity);
   void destroy_voice(Voice *voice);
-  void stop_voices(Channel *channel, int note);
+  size_t stop_voices(Channel *channel, int note);
   std::string inspect() const;
 private:
   boost::array<Channel *, NUM_CHANNELS> channels_;
