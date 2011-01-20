@@ -18,13 +18,13 @@ void OscillatorStreamTest::test_read()
 {
   int16_t buf[10];
   OscillatorStream os1;
-  size_t read_size = os1.read(buf, sizeof buf, 1.0f, 1.0f);
+  size_t read_size = os1.read(buf, sizeof buf, 1.0f);
   CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(sizeof buf), read_size);
   static const int16_t result1[] = {0, 32767, 0, -32767, 0, 32767, 0, -32767, 0, 32767};
   CPPUNIT_ASSERT_EQUAL(0, memcmp(buf, result1, 10));
 
   OscillatorStream os2;
-  read_size = os2.read(buf, sizeof buf, 1.5f, 1.0f);
+  read_size = os2.read(buf, sizeof buf, 1.5f);
   CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(sizeof buf), read_size);
   static const int16_t result2[] = {0, 23169, -32767, 23169, 0, -23169, 32767, -23169, 0, 23169};
   //static const int16_t result2[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -33,7 +33,7 @@ void OscillatorStreamTest::test_read()
   }
 
   OscillatorStream os3;
-  read_size = os3.read(buf, sizeof buf, 0.5f, 1.0f);
+  read_size = os3.read(buf, sizeof buf, 0.5f);
   CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(sizeof buf), read_size);
   static const int16_t result3[] = {0, 23169, 32767, 23169, 0, -23169, -32767, -23169, 0, 23169};
   for (int i = 0; i < 10; ++i) {

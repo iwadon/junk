@@ -14,14 +14,15 @@
 
 OscillatorStream::OscillatorStream()
   : osc_(new SineWaveOscillator)
+  , volume_(1.0f)
 {
 }
 
-size_t OscillatorStream::read(void *buf, const size_t len, const float freq, const float volume)
+size_t OscillatorStream::read(void *buf, const size_t len, const float freq)
 {
   int16_t *p = reinterpret_cast<int16_t *>(buf);
   osc_->set_frequency(freq);
-  float v = volume * 32767;
+  float v = volume_ * 32767;
   for (size_t i = 0; i < (len / 2); ++i) {
     p[i] = osc_->value() * v;
   }
@@ -31,4 +32,9 @@ size_t OscillatorStream::read(void *buf, const size_t len, const float freq, con
 void OscillatorStream::set_sample_rate(const float rate)
 {
   osc_->set_sample_rate(rate);
+}
+
+void OscillatorStream::set_volume(const float volume)
+{
+  volume_ = volume;
 }

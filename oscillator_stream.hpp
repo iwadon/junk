@@ -10,15 +10,17 @@
 #include "audio_stream.hpp"
 #include "oscillator.hpp"
 
-class OscillatorStream
+class OscillatorStream : public AudioStream
 {
 public:
   OscillatorStream();
   virtual ~OscillatorStream() {}
-  virtual size_t read(void *buf, const size_t len, const float freq, const float volume);
+  virtual size_t read(void *buf, const size_t len, const float freq);
   virtual void set_sample_rate(const float rate);
+  virtual void set_volume(const float volume);
 private:
   boost::shared_ptr<Oscillator> osc_;
+  float volume_;
 };
 
 #endif // !defined(OSCILLATOR_STREAM_HPP_INCLUDED)
