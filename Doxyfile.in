@@ -99,6 +99,7 @@ INPUT                  = "@srcdir@/audio_stream.hpp" \
 			 "@srcdir@/observer.hpp" \
 			 "@srcdir@/oscillator.cpp" "@srcdir@/oscillator.hpp" \
 			 "@srcdir@/oscillator_factory.cpp" "@srcdir@/oscillator_factory.hpp" \
+			 "@srcdir@/oscillator_stream.cpp" "@srcdir@/oscillator_stream.hpp" \
 			 "@srcdir@/peg.cpp" "@srcdir@/peg.hpp" \
 			 "@srcdir@/point.hpp" \
 		         "@srcdir@/sdl_app.cpp" "@srcdir@/sdl_app.hpp" \
