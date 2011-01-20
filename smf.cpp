@@ -11,6 +11,7 @@
 #include "instrument.hpp"
 #include "logger.hpp"
 
+/// コンストラクタ
 SMF::SMF()
   : data_(NULL)
   , time_base_(48)
@@ -21,6 +22,7 @@ SMF::SMF()
   set_ticks_add_();
 }
 
+/// デストラクタ
 SMF::~SMF()
 {
   BOOST_FOREACH(track_ptr_type t, tracks_) {
@@ -29,6 +31,20 @@ SMF::~SMF()
   SDL_free(data_);
 }
 
+/**
+ * @brief 再生中かどうかを返す
+ *
+ * @retval true  再生中です。
+ * @retval false 再生していません。
+ *
+ * @code
+ * if (smf.is_playing()) {
+ *   // 再生中
+ * } else {
+ *   // 再生していない
+ * }
+ * @endcode
+ */
 bool SMF::is_playing() const
 {
   bool result = false;
@@ -41,6 +57,21 @@ bool SMF::is_playing() const
   return result;
 }
 
+/**
+ * @brief ファイルからSMFデータを読み込む
+ *
+ * @param [in] filename ファイル名。
+ *
+ * @retval true  正常に読み込めました。
+ * @retval false 処理中にエラーが起きました。
+ *
+ * @code
+ * bool result = smf.load_file("sample.mid");
+ * if (!result) {
+ *   puts("sample.midを読み込めませんでした");
+ * }
+ * @endcode
+ */
 bool SMF::load_file(const SP &filename)
 {
   SDL_RWops *ctx = SDL_RWFromFile(filename.data(), "rb");
@@ -68,6 +99,18 @@ bool SMF::load_file(const SP &filename)
   return parse_data();
 }
 
+/**
+ * @brief 再生を開始する
+ *
+ * @note 実際に再生したかどうかを確認するには SMF::is_playing() を使います。
+ *
+ * @sa SMF::is_playing
+ * @sa SMF::stop
+ *
+ * @code
+ * smf.play();
+ * @endcode
+ */
 void SMF::play()
 {
   for (std::vector<track_ptr_type>::iterator i = tracks_.begin(); i != tracks_.end(); ++i) {
@@ -76,6 +119,20 @@ void SMF::play()
   }
 }
 
+/**
+ * @brief SMFデータの再生状態を更新する
+ *
+ * SMFデータの再生処理を随時更新するために、この関数を定期的に呼びます。
+ *
+ * @note SMF::play()を呼び出しただけではSMFデータの再生は始まりません。
+ *       必ずこの関数を呼び出してください。
+ *
+ * @bug 現在の実装では秒間60回呼ばれることを想定しています。
+ *
+ * @code
+ * smf.update();
+ * @endcode
+ */
 void SMF::update()
 {
   ticks_ += ticks_add_;
@@ -129,6 +186,15 @@ bool SMF::parse_data()
 #undef VALUE16
 #undef VALUE32
 
+/**
+ * @brief テンポを設定する
+ * @param [in] data テンポを示すデータ。SMFのテンポ設定(Set Tempo)イベントで得られる「四分音符の長さをマイクロ秒で表した値」を想定しています。
+ *
+ * @code
+ * static const uint8_t tempo[3] = {0x07, 0xa1, 0x20}; // BPM = 120
+ * smf.set_tempo(tempo);
+ * @endcode
+ */
 void SMF::set_tempo(const uint8_t *data)
 {
   tempo_ = (data[0] << 16) | (data[1] << 8) | data[2];
@@ -140,6 +206,28 @@ void SMF::set_ticks_add_()
   ticks_add_ = (1000000.0f * time_base_) / (tempo_ * 60);
 }
 
+/**
+ * @brief 再生結果を波形データとして出力する
+ *
+ * @param [out] buf 波形データの出力先。
+ * @param [in]  len 波形データの出力先の長さ。バイト単位で指定します。
+ *
+ * @retval true  波形データを出力しました。
+ * @retval false Instrumentオブジェクトが未指定のため、波形データを出力しませんでした。
+ *
+ * @sa SMFTrack::mix_audio
+ * @sa Instrument::mix_audio
+ *
+ * @code
+ * char buf[2048];
+ * size_t len = sizeof buf;
+ * if (smf.mix_audio(buf, len)) {
+ *   // bufに波形データがlenバイト出力された
+ * } else {
+ *   // 波形データは出力されなかった。
+ * }
+ * @endcode
+ */
 bool SMF::mix_audio(uint8_t *buf, const size_t len)
 {
   if (inst_ != NULL) {
@@ -149,6 +237,15 @@ bool SMF::mix_audio(uint8_t *buf, const size_t len)
   }
 }
 
+/**
+ * @brief オブジェクトの内容を示す文字列を返す
+ *
+ * @return オブジェクトの内容を示す文字列。
+ *
+ * @code
+ * smf.inspect();
+ * @endcode
+ */
 std::string SMF::inspect() const
 {
   if (inst_ != NULL) {

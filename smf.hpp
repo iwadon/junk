@@ -9,6 +9,28 @@
 
 class Instrument;
 
+/**
+ * @brief 標準MIDIファイル形式のデータを扱うためのクラス
+ *
+ * このクラスは次の機能を提供します:
+ * - ファイルからSMF形式のデータを読み込む。
+ * - ファイルから読み込んだSMFデータを再生する。
+ * - Instrumentクラスと組み合わせることで、SMFデータの再生結果を波形データとして出力する。
+ *
+ * @sa Instrument
+ * @sa SMFTrack
+ *
+ * @code
+ * // ファイルからSMFデータを読み込み、データの終わりまで再生する例
+ * SMF smf;
+ * smf.load_file("sample.mid");
+ * smf.play();
+ * while (smf.is_playing()) {
+ *   smf.update();
+ *   // 1/60秒経過するまで待つ処理をここに入れる
+ * }
+ * @endcode
+ */
 class SMF
 {
 public:
