@@ -87,15 +87,23 @@ WARN_LOGFILE           = "@builddir@/dox-warning.txt"
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = "@srcdir@/font.cpp" "@srcdir@/font.hpp" \
+INPUT                  = "@srcdir@/audio_stream.hpp" \
+		         "@srcdir@/channel.cpp" "@srcdir@/channel.hpp" \
+		         "@srcdir@/font.cpp" "@srcdir@/font.hpp" \
 		         "@srcdir@/fps.cpp" "@srcdir@/fps.hpp" \
+			 "@srcdir@/frame_wait_timer.cpp" "@srcdir@/frame_wait_timer.hpp" \
 			 "@srcdir@/function.hpp" \
+		         "@srcdir@/instrument.cpp" "@srcdir@/instrument.hpp" \
 		         "@srcdir@/logger.cpp" "@srcdir@/logger.hpp" \
 			 "@srcdir@/lot_box.hpp" \
+			 "@srcdir@/observer.hpp" \
 			 "@srcdir@/oscillator.cpp" "@srcdir@/oscillator.hpp" \
+			 "@srcdir@/oscillator_factory.cpp" "@srcdir@/oscillator_factory.hpp" \
 			 "@srcdir@/peg.cpp" "@srcdir@/peg.hpp" \
 			 "@srcdir@/point.hpp" \
 		         "@srcdir@/sdl_app.cpp" "@srcdir@/sdl_app.hpp" \
+			 "@srcdir@/sine_wave_oscillator.cpp" "@srcdir@/sine_wave_oscillator.hpp" \
+			 "@srcdir@/smf.cpp" "@srcdir@/smf.hpp" \
 		         "@srcdir@/smf_track.cpp" "@srcdir@/smf_track.hpp" \
 			 "@srcdir@/sp.hpp" \
 		         "@srcdir@/sprite.cpp" "@srcdir@/sprite.hpp" \
