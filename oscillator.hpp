@@ -1,6 +1,14 @@
 #ifndef OSCILLATOR_HPP_INCLUDED
 #define OSCILLATOR_HPP_INCLUDED 1
 
+/**
+ * @brief 波形データ生成クラスの基底クラス
+ *
+ * @sa SineWaveOscillator
+ * @sa TriangleWaveOscillator
+ * @sa SawWaveOscillator
+ * @sa SquareWaveOscillator
+ */
 class Oscillator
 {
 public:
