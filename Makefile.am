@@ -48,6 +48,7 @@ libsequencer_a_SOURCES = audio_stream.hpp \
 			 oscillator.cpp oscillator.hpp \
 			 oscillator_factory.cpp oscillator_factory.hpp \
 			 oscillator_stream.cpp oscillator_stream.hpp \
+			 pseudo_triangle_wave_oscillator.cpp pseudo_triangle_wave_oscillator.hpp \
 			 sine_wave_oscillator.cpp sine_wave_oscillator.hpp \
 			 triangle_wave_oscillator.cpp triangle_wave_oscillator.hpp \
 			 smf.cpp smf.hpp \
