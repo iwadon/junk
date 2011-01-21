@@ -4,7 +4,7 @@
 #include "oscillator_factory.hpp"
 #include "sine_wave_oscillator.hpp"
 #include "triangle_wave_oscillator.hpp"
-#include "logger.hpp"
+#include "pseudo_triangle_wave_oscillator.hpp"
 
 OscillatorFactory &OscillatorFactory::get_instance()
 {
@@ -22,10 +22,16 @@ static Oscillator *create_tri()
   return new TriangleWaveOscillator;
 }
 
+static Oscillator *create_ptri()
+{
+  return new PseudoTriangleWaveOscillator;
+}
+
 OscillatorFactory::OscillatorFactory()
 {
   factories_["sin"] = create_sin;
   factories_["tri"] = create_tri;
+  factories_["ptri"] = create_ptri;
 }
 
 Oscillator *OscillatorFactory::create(const SP &name)
