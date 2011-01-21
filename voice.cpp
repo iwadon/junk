@@ -54,21 +54,22 @@ float Voice::note_to_ratio(const int note)
   assert(note >= 0);
   assert(note <= 127);
   static const float note_ratios[12] = {
-    1.000000f, 1.059463f, 1.122462f, 1.189207f, 1.259921f, 1.334840f,
-    1.414214f, 1.498307f, 1.587401f, 1.681793f, 1.781797f, 1.887749f
+    0.594604f, 0.629961f, 0.667420f, 0.707107f, 0.749154f, 0.793701f,
+    0.840896f, 0.890899f, 0.943874f, 1.000000f, 1.059463f, 1.122462f
   };
   static const float octave_ratios[11] = {
-    0.3125f, 0.0625f, 0.125f, 0.25f, 0.5f, 1.0f, 2.0f, 4.0f, 8.0f, 16.0f, 32.0f
+    1.0f / 32, 1.0f / 16, 1.0f / 8, 1.0f / 4, 1.0f / 2, 1.0f, 1.0f * 2, 1.0f * 4, 1.0f * 8, 1.0f * 16, 1.0f * 32
   };
-  int n = note - 9;
-  int o = n / 12;
-  if (n < 0) {
-    n += 12;
+  int o = note / 12;
+  if (note < 0) {
     --o;
   }
+  int n = note % 12;
+  assert(n >= 0);
+  assert(n <= 11);
   assert(o >= 0);
   assert(o <= 10);
-  return note_ratios[n % 12] * octave_ratios[o];
+  return note_ratios[n] * octave_ratios[o];
 }
 
 #ifdef VOICE_DEBUG
