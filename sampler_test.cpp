@@ -32,6 +32,10 @@ void SamplerTest::test_value()
       CPPUNIT_ASSERT_DOUBLES_EQUAL(data[j], s.value(), 0.000001);
     }
   }
+  s.set_data(NULL, 0);
+  for (int i = 0; i < 100; ++i) {
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0f, s.value(), 0.000001);
+  }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SamplerTest);
