@@ -19,6 +19,9 @@ private:
   size_t samples_;
   float phase_;
   float delta_;
+  float (Sampler::*value_impl_)();
+  float value_sample();
+  float value_silent();
 };
 
 #endif // !defined(SAMPLER_HPP_INCLUDED)
