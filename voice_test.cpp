@@ -12,7 +12,9 @@
 class VoiceTest : public CppUnit::TestCase
 {
   CPPUNIT_TEST_SUITE(VoiceTest);
+#ifdef VOICE_DEBUG
   CPPUNIT_TEST(test_inspect);
+#endif
   CPPUNIT_TEST_SUITE_END();
 public:
   void test_update();
