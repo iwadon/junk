@@ -109,6 +109,7 @@ sequencer_test_SOURCES = audio_stream_test.cpp \
 			 observer_test.cpp \
 			 oscillator_test.cpp \
 			 oscillator_factory_test.cpp \
+			 patch_test.cpp \
 			 pseudo_triangle_wave_oscillator_test.cpp \
 			 sampler_test.cpp \
 			 sine_wave_oscillator_test.cpp \
