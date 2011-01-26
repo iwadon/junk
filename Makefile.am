@@ -48,6 +48,7 @@ libsequencer_a_SOURCES = audio_stream.hpp \
 			 oscillator.cpp oscillator.hpp \
 			 oscillator_factory.cpp oscillator_factory.hpp \
 			 oscillator_stream.cpp oscillator_stream.hpp \
+			 patch.cpp patch.hpp \
 			 pseudo_triangle_wave_oscillator.cpp pseudo_triangle_wave_oscillator.hpp \
 			 sampler.cpp sampler.hpp \
 			 sine_wave_oscillator.cpp sine_wave_oscillator.hpp \
@@ -104,6 +105,7 @@ sdlapp_test_LDADD = libsdlapp.a $(TEST_LIBS)
 sequencer_test_SOURCES = audio_stream_test.cpp \
 			 channel_test.cpp \
 			 function_test.cpp \
+			 instrument_test.cpp \
 			 observer_test.cpp \
 			 oscillator_test.cpp \
 			 oscillator_factory_test.cpp \

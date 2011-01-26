@@ -10,6 +10,7 @@
 #endif
 #include "channel.hpp"
 #include "logger.hpp"
+#include "patch.hpp"
 #include "voice.hpp"
 
 Instrument::Instrument()
@@ -89,6 +90,15 @@ size_t Instrument::stop_voices(Channel *channel, int note)
     }
   }
   return n;
+}
+
+bool Instrument::set_patch(const int no, Patch *patch)
+{
+  if (patches_.count(no) > 0) {
+    return false;
+  }
+  patches_[no] = patch;
+  return true;
 }
 
 std::string Instrument::inspect() const

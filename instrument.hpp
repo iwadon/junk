@@ -1,7 +1,11 @@
 #ifndef INSTRUMENT_HPP_INCLUDED
 #define INSTRUMENT_HPP_INCLUDED 1
 
+#ifdef STDCXX_98_HEADERS
 #include <cstddef>
+#include <list>
+#include <map>
+#endif
 #if defined(HAVE_TR1_CSTDINT)
 #include <tr1/cstdint>
 #elif defined(HAVE_BOOST_CSTDINT_HPP)
@@ -9,15 +13,14 @@
 #elif defined(HAVE_STDINT_H)
 #include <stdint.h>
 #endif
-#ifdef STDCXX_98_HEADERS
-#include <list>
-#endif
 #ifdef HAVE_BOOST
 #include <boost/array.hpp>
 #include <boost/pool/object_pool.hpp>
 #endif
 #include "channel.hpp"
 #include "voice.hpp"
+
+class Patch;
 
 class Instrument
 {
@@ -32,6 +35,7 @@ public:
   Voice *new_voice(Channel *channel, int note, int velocity);
   void destroy_voice(Voice *voice);
   size_t stop_voices(Channel *channel, int note);
+  bool set_patch(const int no, Patch *patch);
   std::string inspect() const;
 private:
   boost::array<Channel *, NUM_CHANNELS> channels_;
@@ -46,6 +50,7 @@ private:
     bool prepare(const size_t len);
   };
   MixBuffer mix_buf_;
+  std::map<int, Patch *> patches_;
 };
 
 #endif // !defined(INSTRUMENT_HPP_INCLUDED)
