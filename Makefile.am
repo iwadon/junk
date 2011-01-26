@@ -101,7 +101,8 @@ sdlapp_test_CPPFLAGS = $(SDL_CFLAGS) $(TEST_CPPFLAGS)
 sdlapp_test_LDFLAGS = -framework OpenGL
 sdlapp_test_LDADD = libsdlapp.a $(TEST_LIBS)
 
-sequencer_test_SOURCES = channel_test.cpp \
+sequencer_test_SOURCES = audio_stream_test.cpp \
+			 channel_test.cpp \
 			 function_test.cpp \
 			 observer_test.cpp \
 			 oscillator_test.cpp \
