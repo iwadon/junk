@@ -49,7 +49,7 @@ float PseudoTriangleWaveOscillator::value()
 void PseudoTriangleWaveOscillator::setup()
 {
   float prev_delta = delta_;
-  delta_ = frequency() / sample_rate() * VALUE_TABLE_SIZE / 2;
+  delta_ = frequency() / sample_rate() * VALUE_TABLE_SIZE;
   if (prev_delta < 0) {
     delta_ = -delta_;
   }
