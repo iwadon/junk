@@ -173,6 +173,9 @@ lcov:
 	$(LCOV) -z -d $(srcdir)
 	$(MAKE) check
 	$(LCOV) -c -d $(srcdir) -o $(builddir)/app.info
+	$(LCOV) -r $(builddir)/app.info "*/boost/*" -o $(builddir)/app.info
+	$(LCOV) -r $(builddir)/app.info "*/cppunit/*" -o $(builddir)/app.info
+	$(LCOV) -r $(builddir)/app.info "*/include/*" -o $(builddir)/app.info
 	$(GENHTML) --demangle-cpp --html-prolog $(srcdir)/lcov_prolog.html --html-epilog $(srcdir)/lcov_epilog.html -o $(lcovdir) $(builddir)/app.info -p $(abs_srcdir)
 
 all-local:
