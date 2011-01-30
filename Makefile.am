@@ -44,6 +44,7 @@ libsdlapp_a_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 
 libsequencer_a_SOURCES = audio_stream.hpp \
 			 channel.cpp channel.hpp \
+			 filter.cpp filter.hpp \
 			 instrument.cpp instrument.hpp \
 			 oscillator.cpp oscillator.hpp \
 			 oscillator_factory.cpp oscillator_factory.hpp \
@@ -104,6 +105,7 @@ sdlapp_test_LDADD = libsdlapp.a $(TEST_LIBS)
 
 sequencer_test_SOURCES = audio_stream_test.cpp \
 			 channel_test.cpp \
+			 filter_test.cpp \
 			 function_test.cpp \
 			 instrument_test.cpp \
 			 observer_test.cpp \
