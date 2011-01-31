@@ -60,7 +60,7 @@ libsequencer_a_SOURCES = audio_stream.hpp \
 			 variable_length_value.cpp variable_length_value.hpp \
 			 voice.cpp voice.hpp \
 			 volume.hpp
-libsequencer_a_CPPFLAGS = $(BOOST_CPPFLAGS)
+libsequencer_a_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 
 libtest_main_a_SOURCES = test_main.cpp
 libtest_main_a_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
@@ -68,8 +68,6 @@ libtest_main_a_LIBADD = liblogger.a
 
 check_PROGRAMS = all_tests
 TESTS = $(check_PROGRAMS) peg_test.sh
-TEST_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
-TEST_LIBS = libtest_main.a liblogger.a $(CPPUNIT_LIBS) $(BOOST_PROGRAM_OPTIONS_LIB)
 
 all_tests_SOURCES = \
 	audio_stream_test.cpp \
@@ -103,9 +101,9 @@ all_tests_SOURCES = \
 	vector_test.cpp \
 	voice_test.cpp \
 	volume_test.cpp
-all_tests_CPPFLAGS = $(TEST_CPPFLAGS)
+all_tests_CPPFLAGS = $(CPPUNIT_CFLAGS) $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 all_tests_LDFLAGS = -framework OpenGL
-all_tests_LDADD = libpeg.a libsdlapp.a libsequencer.a $(TEST_LIBS)
+all_tests_LDADD = libpeg.a libsdlapp.a libsequencer.a libtest_main.a liblogger.a $(CPPUNIT_LIBS) $(SDL_LIBS) $(BOOST_LIBS) $(BOOST_PROGRAM_OPTIONS_LIB)
 
 AM_CFLAGS = -Wall -Wextra $(COVERAGE_CFLAGS)
 AM_CXXFLAGS = -Wall -Wextra $(COVERAGE_CXXFLAGS)

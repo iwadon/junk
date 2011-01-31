@@ -7,7 +7,7 @@
 #endif
 #include <SDL.h>
 #include "instrument.hpp"
-#include "logger.hpp"
+#include "sdl_logger.hpp"
 
 /// コンストラクタ
 SMF::SMF()

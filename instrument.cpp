@@ -7,7 +7,7 @@
 #endif
 #include <SDL.h>
 #include "channel.hpp"
-#include "logger.hpp"
+#include "sdl_logger.hpp"
 #include "patch.hpp"
 #include "voice.hpp"
 

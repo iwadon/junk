@@ -10,7 +10,7 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include "font.hpp"
-#include "logger.hpp"
+#include "sdl_logger.hpp"
 
 #define SHOW_WINDOW_AFTER_INITIALIZED
 

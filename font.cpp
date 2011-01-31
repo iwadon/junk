@@ -12,7 +12,7 @@
 #include <cstdarg>
 #endif
 #include <SDL.h>
-#include "logger.hpp"
+#include "sdl_logger.hpp"
 #include "texture.hpp"
 #include "texture_pool.hpp"
 

@@ -4,7 +4,7 @@
 #include "texture.hpp"
 #include <SDL.h>
 #include <SDL_image.h>
-#include "logger.hpp"
+#include "sdl_logger.hpp"
 
 Texture::Texture()
   : texture(NULL)

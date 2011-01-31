@@ -5,9 +5,10 @@
 #include <cstddef>
 #include <iostream>
 #endif
+#include <SDL.h>
 #include "frame_wait_timer.hpp"
 #include "instrument.hpp"
-#include "logger.hpp"
+#include "sdl_logger.hpp"
 #include "smf.hpp"
 
 class App
