@@ -66,73 +66,46 @@ libtest_main_a_SOURCES = test_main.cpp
 libtest_main_a_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
 libtest_main_a_LIBADD = liblogger.a
 
-check_PROGRAMS = logger_test \
-		 lot_box_test \
-		 oscillator_stream_test \
-		 peg_test \
-		 point_test \
-		 sequencer_test \
-		 sdlapp_test \
-		 vector_test
+check_PROGRAMS = all_tests
 TESTS = $(check_PROGRAMS) peg_test.sh
 TEST_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
 TEST_LIBS = libtest_main.a liblogger.a $(CPPUNIT_LIBS) $(BOOST_PROGRAM_OPTIONS_LIB)
 
-oscillator_stream_test_SOURCES = oscillator_stream_test.cpp
-oscillator_stream_test_CPPFLAGS = $(TEST_CPPFLAGS)
-oscillator_stream_test_LDADD = libsequencer.a $(TEST_LIBS)
-
-logger_test_SOURCES = logger_test.cpp
-logger_test_CPPFLAGS = $(TEST_CPPFLAGS)
-logger_test_LDADD = $(TEST_LIBS)
-
-lot_box_test_SOURCES = lot_box_test.cpp
-lot_box_test_CPPFLAGS = $(TEST_CPPFLAGS)
-lot_box_test_LDADD = $(TEST_LIBS)
-
-peg_test_SOURCES = peg_test.cpp
-peg_test_CPPFLAGS = $(TEST_CPPFLAGS)
-peg_test_LDADD = libpeg.a $(TEST_LIBS)
-
-sdlapp_test_SOURCES = font_test.cpp \
-		      fps_test.cpp \
-		      object_test.cpp \
-		      sprite_test.cpp \
-		      texture_test.cpp \
-		      texture_pool_test.cpp
-sdlapp_test_CPPFLAGS = $(SDL_CFLAGS) $(TEST_CPPFLAGS)
-sdlapp_test_LDFLAGS = -framework OpenGL
-sdlapp_test_LDADD = libsdlapp.a $(TEST_LIBS)
-
-sequencer_test_SOURCES = audio_stream_test.cpp \
-			 channel_test.cpp \
-			 circular_buffer_test.cpp \
-			 filter_test.cpp \
-			 function_test.cpp \
-			 instrument_test.cpp \
-			 observer_test.cpp \
-			 oscillator_test.cpp \
-			 oscillator_factory_test.cpp \
-			 patch_test.cpp \
-			 pseudo_triangle_wave_oscillator_test.cpp \
-			 sampler_test.cpp \
-			 sine_wave_oscillator_test.cpp \
-			 smf_test.cpp \
-			 smf_track_test.cpp \
-			 triangle_wave_oscillator_test.cpp \
-			 variable_length_value_test.cpp \
-			 voice_test.cpp \
-			 volume_test.cpp
-sequencer_test_CPPFLAGS = $(TEST_CPPFLAGS)
-sequencer_test_LDADD = libsequencer.a $(TEST_LIBS)
-
-point_test_SOURCES = point_test.cpp
-point_test_CPPFLAGS = $(TEST_CPPFLAGS)
-point_test_LDADD = $(TEST_LIBS)
-
-vector_test_SOURCES = vector_test.cpp
-vector_test_CPPFLAGS = $(TEST_CPPFLAGS)
-vector_test_LDADD = $(TEST_LIBS)
+all_tests_SOURCES = \
+	audio_stream_test.cpp \
+	channel_test.cpp \
+	circular_buffer_test.cpp \
+	filter_test.cpp \
+	font_test.cpp \
+	fps_test.cpp \
+	function_test.cpp \
+	instrument_test.cpp \
+	logger_test.cpp \
+	lot_box_test.cpp \
+	object_test.cpp \
+	observer_test.cpp \
+	oscillator_factory_test.cpp \
+	oscillator_stream_test.cpp \
+	oscillator_test.cpp \
+	patch_test.cpp \
+	peg_test.cpp \
+	point_test.cpp \
+	pseudo_triangle_wave_oscillator_test.cpp \
+	sampler_test.cpp \
+	sine_wave_oscillator_test.cpp \
+	smf_test.cpp \
+	smf_track_test.cpp \
+	sprite_test.cpp \
+	texture_pool_test.cpp \
+	texture_test.cpp \
+	triangle_wave_oscillator_test.cpp \
+	variable_length_value_test.cpp \
+	vector_test.cpp \
+	voice_test.cpp \
+	volume_test.cpp
+all_tests_CPPFLAGS = $(TEST_CPPFLAGS)
+all_tests_LDFLAGS = -framework OpenGL
+all_tests_LDADD = libpeg.a libsdlapp.a libsequencer.a $(TEST_LIBS)
 
 AM_CFLAGS = -Wall -Wextra $(COVERAGE_CFLAGS)
 AM_CXXFLAGS = -Wall -Wextra $(COVERAGE_CXXFLAGS)
