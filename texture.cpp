@@ -2,12 +2,8 @@
 #include "config.h"
 #endif
 #include "texture.hpp"
-#ifdef HAVE_SDL_H
 #include <SDL.h>
-#endif
-#ifdef HAVE_SDL_IMAGE_H
 #include <SDL_image.h>
-#endif
 #include "logger.hpp"
 
 Texture::Texture()

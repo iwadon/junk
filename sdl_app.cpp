@@ -7,10 +7,8 @@
 #include <ctime>
 #include <iostream>
 #endif
-#ifdef HAVE_SDL_H
 #include <SDL.h>
 #include <SDL_opengl.h>
-#endif
 #include "font.hpp"
 #include "logger.hpp"
 

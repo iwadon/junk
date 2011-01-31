@@ -9,9 +9,7 @@
 #elif defined(HAVE_BOOST_CSTDINT_HPP)
 #include <boost/cstdint.hpp>
 #endif
-#ifdef HAVE_SDL_H
 #include <SDL.h>
-#endif
 
 class Controller
 {

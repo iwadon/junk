@@ -7,9 +7,7 @@
 #include "config.h"
 #endif
 #include "fps.hpp"
-#ifdef HAVE_SDL_H
 #include <SDL.h>
-#endif
 
 /// コンストラクタ
 FPS::FPS()

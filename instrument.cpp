@@ -5,9 +5,7 @@
 #ifdef HAVE_BOOST
 #include <boost/foreach.hpp>
 #endif
-#ifdef HAVE_SDL_H
 #include <SDL.h>
-#endif
 #include "channel.hpp"
 #include "logger.hpp"
 #include "patch.hpp"

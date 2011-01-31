@@ -1,9 +1,7 @@
 #ifndef SPRITE_HPP_INCLUDED
 #define SPRITE_HPP_INCLUDED 1
 
-#ifdef HAVE_SDL_H
 #include <SDL.h>
-#endif
 #include "point.hpp"
 #include "sp.hpp"
 

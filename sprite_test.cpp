@@ -4,9 +4,7 @@
 #include "sprite.hpp"
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
-#ifdef HAVE_SDL_H
 #include <SDL.h>
-#endif
 
 class SpriteTest : public CppUnit::TestCase
 {

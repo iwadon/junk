@@ -2,9 +2,7 @@
 #define SDL_APP_HPP_INCLUDED 1
 
 #include <string>
-#ifdef HAVE_SDL_H
 #include <SDL.h>
-#endif
 #include "controller.hpp"
 #include "fps.hpp"
 #include "frame_wait_timer.hpp"

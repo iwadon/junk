@@ -1,10 +1,8 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#ifdef HAVE_SDL_H
 #include <SDL.h>
 #include <SDL_opengl.h>
-#endif
 #include "sprite.hpp"
 #include "logger.hpp"
 #include "texture.hpp"

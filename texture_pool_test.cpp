@@ -4,9 +4,7 @@
 #include "texture_pool.hpp"
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
-#ifdef HAVE_SDL_H
 #include <SDL.h>
-#endif
 
 class TexturePoolTest : public CppUnit::TestCase
 {

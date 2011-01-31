@@ -9,10 +9,8 @@
 #include <boost/pool/object_pool.hpp>
 #include <boost/shared_ptr.hpp>
 #endif
-#ifdef HAVE_SDL_H
 #include <SDL.h>
 #include <SDL_opengl.h>
-#endif
 #include "logger.hpp"
 #include "point.hpp"
 #include "sdl_app.hpp"

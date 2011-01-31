@@ -2,9 +2,7 @@
 #include "config.h"
 #endif
 #include "frame_wait_timer.hpp"
-#ifdef HAVE_SDL_H
 #include <SDL.h>
-#endif
 
 FrameWaitTimer::FrameWaitTimer(const int fps, const int max_skip_frames)
   : fps_(fps)

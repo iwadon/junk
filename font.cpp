@@ -11,9 +11,7 @@
 #include <cassert>
 #include <cstdarg>
 #endif
-#ifdef HAVE_SDL_H
 #include <SDL.h>
-#endif
 #include "logger.hpp"
 #include "texture.hpp"
 #include "texture_pool.hpp"
