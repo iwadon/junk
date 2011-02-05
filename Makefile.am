@@ -92,6 +92,7 @@ all_tests_SOURCES = \
 	peg_test.cpp \
 	point_test.cpp \
 	pseudo_triangle_wave_oscillator_test.cpp \
+	rect_test.cpp \
 	sampler_test.cpp \
 	sine_wave_oscillator_test.cpp \
 	smf_test.cpp \
