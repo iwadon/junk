@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-bin_PROGRAMS = oscillator_sample c1 s1 s2 smf_play
+bin_PROGRAMS = oscillator_sample c1 s1 s2 smf_play vector_length_benchmark
 
 c1_SOURCES = c1.cpp
 
@@ -65,6 +65,9 @@ libsequencer_a_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 libtest_main_a_SOURCES = test_main.cpp
 libtest_main_a_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
 libtest_main_a_LIBADD = liblogger.a
+
+vector_length_benchmark_SOURCES = vector_length_benchmark.cpp
+vector_length_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
 
 check_PROGRAMS = all_tests
 TESTS = $(check_PROGRAMS) peg_test.sh
