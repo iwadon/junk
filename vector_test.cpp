@@ -9,11 +9,19 @@ class VectorTest : public CppUnit::TestCase
 {
   CPPUNIT_TEST_SUITE(VectorTest);
   CPPUNIT_TEST(test_CTOR);
+  CPPUNIT_TEST(test_length);
+  CPPUNIT_TEST(test_inner_product);
   CPPUNIT_TEST(test_ADDEQ);
+  CPPUNIT_TEST(test_MULEQ);
+  CPPUNIT_TEST(test_rotate);
   CPPUNIT_TEST_SUITE_END();
 public:
   void test_CTOR();
+  void test_length();
+  void test_inner_product();
   void test_ADDEQ();
+  void test_MULEQ();
+  void test_rotate();
 };
 
 void VectorTest::test_CTOR()
@@ -24,6 +32,36 @@ void VectorTest::test_CTOR()
   Vector v2(1, 2);
   CPPUNIT_ASSERT_EQUAL(1.0f, v2.x);
   CPPUNIT_ASSERT_EQUAL(2.0f, v2.y);
+  Vector v3 = Vector::angle_length(0.0f, 1.0f);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, v3.x, 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0f, v3.y, 0.0000001);
+  v3 = Vector::angle_length(M_PI * 0.25f, 1.41421356f);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, v3.x, 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, v3.y, 0.0000001);
+  v3 = Vector::angle_length(M_PI * 0.5f, 1.f);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0f, v3.x, 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, v3.y, 0.0000001);
+}
+
+void VectorTest::test_length()
+{
+  Vector v1(0, 0);
+  CPPUNIT_ASSERT_EQUAL(0.0f, v1.length());
+  Vector v2(1, 0);
+  CPPUNIT_ASSERT_EQUAL(1.0f, v2.length());
+  Vector v3(0, 1);
+  CPPUNIT_ASSERT_EQUAL(1.0f, v3.length());
+  Vector v4(-1, 0);
+  CPPUNIT_ASSERT_EQUAL(1.0f, v4.length());
+  Vector v5(1, 1);
+  CPPUNIT_ASSERT_EQUAL(1.41421356f, v5.length());
+}
+
+void VectorTest::test_inner_product()
+{
+  Vector v1(2, 1);
+  Vector v2(1, 2);
+  CPPUNIT_ASSERT_EQUAL(4.0f, v1.inner_product(v2));
 }
 
 void VectorTest::test_ADDEQ()
@@ -33,6 +71,22 @@ void VectorTest::test_ADDEQ()
   v1 += v2;
   CPPUNIT_ASSERT_EQUAL(4.0f, v1.x);
   CPPUNIT_ASSERT_EQUAL(6.0f, v1.y);
+}
+
+void VectorTest::test_MULEQ()
+{
+  Vector v1(1, 2);
+  v1 *= 2.5f;
+  CPPUNIT_ASSERT_EQUAL(2.5f, v1.x);
+  CPPUNIT_ASSERT_EQUAL(5.0f, v1.y);
+}
+
+void VectorTest::test_rotate()
+{
+  Vector v1(1, 0);
+  Vector v2 = v1.rotate(M_PI * 0.5f);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0f, v2.x, 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, v2.y, 0.0000001);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VectorTest);
