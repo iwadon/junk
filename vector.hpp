@@ -14,6 +14,7 @@ struct Vector
   float length() const;
   float inner_product(const Vector &o) const;
   Vector &operator+=(const Vector &rhs);
+  Vector operator+(const Vector &rhs) const;
   Vector &operator*=(const float mul);
   Vector rotate(const float rad) const;
 };
@@ -53,6 +54,13 @@ inline Vector &Vector::operator+=(const Vector &rhs)
   x += rhs.x;
   y += rhs.y;
   return *this;
+}
+
+inline Vector Vector::operator+(const Vector &rhs) const
+{
+  Vector v(*this);
+  v += rhs;
+  return v;
 }
 
 inline Vector &Vector::operator*=(const float mul)

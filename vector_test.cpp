@@ -12,6 +12,7 @@ class VectorTest : public CppUnit::TestCase
   CPPUNIT_TEST(test_length);
   CPPUNIT_TEST(test_inner_product);
   CPPUNIT_TEST(test_ADDEQ);
+  CPPUNIT_TEST(test_ADD);
   CPPUNIT_TEST(test_MULEQ);
   CPPUNIT_TEST(test_rotate);
   CPPUNIT_TEST_SUITE_END();
@@ -20,6 +21,7 @@ public:
   void test_length();
   void test_inner_product();
   void test_ADDEQ();
+  void test_ADD();
   void test_MULEQ();
   void test_rotate();
 };
@@ -71,6 +73,19 @@ void VectorTest::test_ADDEQ()
   v1 += v2;
   CPPUNIT_ASSERT_EQUAL(4.0f, v1.x);
   CPPUNIT_ASSERT_EQUAL(6.0f, v1.y);
+}
+
+void VectorTest::test_ADD()
+{
+  Vector v1(1, 2);
+  Vector v2(3, 4);
+  Vector v3 = v1 + v2;
+  CPPUNIT_ASSERT_EQUAL(1.0f, v1.x);
+  CPPUNIT_ASSERT_EQUAL(2.0f, v1.y);
+  CPPUNIT_ASSERT_EQUAL(3.0f, v2.x);
+  CPPUNIT_ASSERT_EQUAL(4.0f, v2.y);
+  CPPUNIT_ASSERT_EQUAL(4.0f, v3.x);
+  CPPUNIT_ASSERT_EQUAL(6.0f, v3.y);
 }
 
 void VectorTest::test_MULEQ()
