@@ -42,7 +42,7 @@ namespace game
     virtual void update();
     virtual void draw() {}
   protected:
-    Point pos_;
+    Point2D pos_;
     Vector2D spd_;
     Vector2D acc_;
     float rot_;

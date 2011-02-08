@@ -11,7 +11,7 @@ struct Sprite
 {
   Texture *texture;
   SDL_Rect rect;
-  Point pos;
+  Point2D pos;
   float rot;
   float scale;
   Sprite();
