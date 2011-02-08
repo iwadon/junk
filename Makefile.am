@@ -96,7 +96,7 @@ all_tests_SOURCES = \
 	oscillator_test.cpp \
 	patch_test.cpp \
 	peg_test.cpp \
-	point_test.cpp \
+	point_2d_test.cpp \
 	pseudo_triangle_wave_oscillator_test.cpp \
 	rect_test.cpp \
 	sampler_test.cpp \
@@ -108,7 +108,7 @@ all_tests_SOURCES = \
 	texture_test.cpp \
 	triangle_wave_oscillator_test.cpp \
 	variable_length_value_test.cpp \
-	vector_test.cpp \
+	vector_2d_test.cpp \
 	voice_test.cpp \
 	volume_test.cpp
 all_tests_CPPFLAGS = $(CPPUNIT_CFLAGS) $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
@@ -125,22 +125,22 @@ OBJECTS = $(c1_OBJECTS) \
 	  $(logger_test_OBJECTS) \
 	  $(oscillator_sample_OBJECTS) \
 	  $(peg_test_OBJECTS) \
-	  $(point_test_OBJECTS) \
+	  $(point_2d_test_OBJECTS) \
 	  $(s1_OBJECTS) \
 	  $(s2_OBJECTS) \
 	  $(sdlapp_test_OBJECTS) \
 	  $(sequencer_test_OBJECTS) \
-	  $(vector_test_OBJECTS)
+	  $(vector_2d_test_OBJECTS)
 
 TEST_OBJECTS = $(libpeg_a_OBJECTS) \
 	  $(libsdlapp_a_OBJECTS) \
 	  $(libsequencer_a_OBJECTS) \
 	  $(logger_test_OBJECTS) \
 	  $(peg_test_OBJECTS) \
-	  $(point_test_OBJECTS) \
+	  $(point_2d_test_OBJECTS) \
 	  $(sdlapp_test_OBJECTS) \
 	  $(sequencer_test_OBJECTS) \
-	  $(vector_test_OBJECTS)
+	  $(vector_2d_test_OBJECTS)
 
 CLEANFILES = $(OBJECTS:.o=.gcda) \
 	     dox-warning.txt
