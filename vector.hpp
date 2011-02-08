@@ -16,6 +16,9 @@ struct Vector
   Vector &operator+=(const Vector &rhs);
   Vector operator+(const Vector &rhs) const;
   Vector &operator*=(const float mul);
+  Vector &operator*=(const Vector &rhs);
+  Vector operator*(const float mul) const;
+  Vector operator*(const Vector &rhs) const;
   Vector rotate(const float rad) const;
 };
 
@@ -68,6 +71,27 @@ inline Vector &Vector::operator*=(const float mul)
   x *= mul;
   y *= mul;
   return *this;
+}
+
+inline Vector &Vector::operator*=(const Vector &rhs)
+{
+  x *= rhs.x;
+  y *= rhs.y;
+  return *this;
+}
+
+inline Vector Vector::operator*(const float mul) const
+{
+  Vector v(*this);
+  v *= mul;
+  return v;
+}
+
+inline Vector Vector::operator*(const Vector &rhs) const
+{
+  Vector v(*this);
+  v *= rhs;
+  return v;
 }
 
 inline Vector Vector::rotate(const float theta) const
