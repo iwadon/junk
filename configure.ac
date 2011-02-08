@@ -57,11 +57,9 @@ AX_BOOST_PROGRAM_OPTIONS
 AC_HEADER_STDC
 AC_CHECK_HEADERS([arpa/inet.h netinet/in.h sys/socket.h unistd.h])
 AC_CXX_HEADER_STDCXX_98
-AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
-AC_CHECK_HEADERS([tr1/cstdint])
-AC_CHECK_HEADERS([boost/cstdint.hpp])
-AC_LANG_RESTORE
+AC_LANG_PUSH(C++)
+AC_CHECK_HEADERS([tr1/cstdint tr1/unordered_map])
+AC_LANG_POP
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL

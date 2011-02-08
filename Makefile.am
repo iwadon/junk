@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-bin_PROGRAMS = benchmark_sample oscillator_sample c1 s1 s2 smf_play vector_length_benchmark
+bin_PROGRAMS = benchmark_sample oscillator_sample c1 map_benchmark s1 s2 smf_play vector_length_benchmark
 
 benchmark_sample_SOURCES = benchmark_sample.cpp
 benchmark_sample_CPPFLAGS = $(BOOST_CPPFLAGS)
@@ -10,22 +10,25 @@ c1_SOURCES = c1.cpp
 oscillator_sample_SOURCES = oscillator_sample.cpp
 oscillator_sample_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 oscillator_sample_LDFLAGS = -framework OpenGL
-oscillator_sample_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_LIBS)
+oscillator_sample_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS)
+
+map_benchmark_SOURCES = map_benchmark.cpp
+map_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
 
 s1_SOURCES = s1.cpp
 
 s2_SOURCES = s2.cpp
 s2_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 s2_LDFLAGS = -framework OpenGL
-s2_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_LIBS)
+s2_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS)
 
 #smf_dump_SOURCES = smf_dump.cpp
 #smf_dump_CPPFLAGS = $(BOOST_CPPFLAGS)
-#smf_dump_LDADD = libsequencer.a liblogger.a $(BOOST_LIBS)
+#smf_dump_LDADD = libsequencer.a liblogger.a
 
 smf_play_SOURCES = smf_play.cpp
 smf_play_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
-smf_play_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_LIBS)
+smf_play_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS)
 
 lib_LIBRARIES = liblogger.a libpeg.a libsdlapp.a libsequencer.a libtest_main.a
 
@@ -110,7 +113,7 @@ all_tests_SOURCES = \
 	volume_test.cpp
 all_tests_CPPFLAGS = $(CPPUNIT_CFLAGS) $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 all_tests_LDFLAGS = -framework OpenGL
-all_tests_LDADD = libpeg.a libsdlapp.a libsequencer.a libtest_main.a liblogger.a $(CPPUNIT_LIBS) $(SDL_LIBS) $(BOOST_LIBS) $(BOOST_PROGRAM_OPTIONS_LIB)
+all_tests_LDADD = libpeg.a libsdlapp.a libsequencer.a libtest_main.a liblogger.a $(CPPUNIT_LIBS) $(SDL_LIBS) $(BOOST_PROGRAM_OPTIONS_LIB)
 
 AM_CFLAGS = -Wall -Wextra $(COVERAGE_CFLAGS)
 AM_CXXFLAGS = -Wall -Wextra $(COVERAGE_CXXFLAGS)
