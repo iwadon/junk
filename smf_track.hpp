@@ -6,7 +6,7 @@
 #include <cstdlib>
 #if defined(HAVE_TR1_CSTDINT)
 #include <tr1/cstdint>
-#elif defined(HAVE_BOOST_CSTDINT_HPP)
+#elif defined(HAVE_BOOST)
 #include <boost/cstdint.hpp>
 #elif defined(HAVE_STDINT_H)
 #include <stdint.h>
