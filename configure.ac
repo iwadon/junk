@@ -58,7 +58,7 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS([arpa/inet.h netinet/in.h sys/socket.h unistd.h])
 AC_CXX_HEADER_STDCXX_98
 AC_LANG_PUSH(C++)
-AC_CHECK_HEADERS([tr1/cstdint tr1/unordered_map])
+AC_CHECK_HEADERS([tr1/cstdint tr1/unordered_map ext/hash_map])
 AC_LANG_POP
 
 # Checks for typedefs, structures, and compiler characteristics.
