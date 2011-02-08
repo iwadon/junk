@@ -2,7 +2,7 @@
 #define SPRITE_HPP_INCLUDED 1
 
 #include <SDL.h>
-#include "point.hpp"
+#include "point_2d.hpp"
 #include "sp.hpp"
 
 struct Texture;

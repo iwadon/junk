@@ -12,11 +12,11 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include "logger.hpp"
-#include "point.hpp"
+#include "point_2d.hpp"
 #include "sdl_app.hpp"
 #include "sprite.hpp"
 #include "texture.hpp"
-#include "vector.hpp"
+#include "vector_2d.hpp"
 
 //#define SHOW_WINDOW_AFTER_INITIALIZED
 

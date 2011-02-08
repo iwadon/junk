@@ -1,5 +1,5 @@
-#ifndef VECTOR_HPP_INCLUDED
-#define VECTOR_HPP_INCLUDED 1
+#ifndef VECTOR_2D_HPP_INCLUDED
+#define VECTOR_2D_HPP_INCLUDED 1
 
 #include <cmath>
 #include <ostream>

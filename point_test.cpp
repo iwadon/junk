@@ -1,10 +1,10 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include "point.hpp"
+#include "point_2d.hpp"
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
-#include "vector.hpp"
+#include "vector_2d.hpp"
 
 class Point2DTest : public CppUnit::TestCase
 {

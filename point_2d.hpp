@@ -1,7 +1,7 @@
-#ifndef POINT_HPP_INCLUDED
-#define POINT_HPP_INCLUDED 1
+#ifndef POINT_2D_HPP_INCLUDED
+#define POINT_2D_HPP_INCLUDED 1
 
-#include "vector.hpp"
+#include "vector_2d.hpp"
 
 struct Point2D
 {
@@ -32,4 +32,4 @@ inline Point2D &Point2D::operator+=(const Vector2D &rhs)
   return *this;
 }
 
-#endif // !defined(POINT_HPP_INCLUDED)
+#endif // !defined(POINT_2D_HPP_INCLUDED)
