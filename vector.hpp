@@ -2,6 +2,7 @@
 #define VECTOR_HPP_INCLUDED 1
 
 #include <cmath>
+#include <ostream>
 
 struct Vector
 {
@@ -19,7 +20,9 @@ struct Vector
   Vector &operator*=(const Vector &rhs);
   Vector operator*(const float mul) const;
   Vector operator*(const Vector &rhs) const;
-  Vector rotate(const float rad) const;
+  bool operator==(const Vector &rhs) const;
+  bool operator!=(const Vector &rhs) const;
+  Vector &rotate(const float rad);
 };
 
 inline Vector::Vector()
@@ -94,14 +97,31 @@ inline Vector Vector::operator*(const Vector &rhs) const
   return v;
 }
 
-inline Vector Vector::rotate(const float theta) const
+inline bool Vector::operator==(const Vector &rhs) const
 {
-  Vector v;
+  return x == rhs.x && y == rhs.y;
+}
+
+inline bool Vector::operator!=(const Vector &rhs) const
+{
+  return !(*this == rhs);
+}
+
+inline Vector &Vector::rotate(const float theta)
+{
   float s = sin(theta);
   float c = cos(theta);
-  v.x = x * c - y * s;
-  v.y = x * s + y * c;
-  return v;
+  float tx = x * c - y * s;
+  float ty = x * s + y * c;
+  x = tx;
+  y = ty;
+  return *this;
+}
+
+static inline std::ostream &operator<<(std::ostream &os, const Vector &v)
+{
+  os << "(" << v.x << ", " << v.y << ")";
+  return os;
 }
 
 #endif // !defined(VECTOR_HPP_INCLUDED)

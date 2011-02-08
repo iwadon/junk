@@ -15,6 +15,9 @@ class VectorTest : public CppUnit::TestCase
   CPPUNIT_TEST(test_ADD);
   CPPUNIT_TEST(test_MULEQ);
   CPPUNIT_TEST(test_MUL);
+  CPPUNIT_TEST(test_EQEQ);
+  CPPUNIT_TEST(test_NOTEQ);
+  CPPUNIT_TEST(test_LSHIFT);
   CPPUNIT_TEST(test_rotate);
   CPPUNIT_TEST_SUITE_END();
 public:
@@ -25,6 +28,9 @@ public:
   void test_ADD();
   void test_MULEQ();
   void test_MUL();
+  void test_EQEQ();
+  void test_NOTEQ();
+  void test_LSHIFT();
   void test_rotate();
 };
 
@@ -117,12 +123,35 @@ void VectorTest::test_MUL()
   CPPUNIT_ASSERT_EQUAL(2.0f, v5.y);
 }
 
+void VectorTest::test_EQEQ()
+{
+  Vector v1(1, 2);
+  Vector v2(1, 2);
+  CPPUNIT_ASSERT(v1 == v2);
+  CPPUNIT_ASSERT_EQUAL(v2, v1);
+}
+
+void VectorTest::test_NOTEQ()
+{
+  Vector v1(1, 2);
+  Vector v2(2, 3);
+  CPPUNIT_ASSERT(v1 != v2);
+}
+
+void VectorTest::test_LSHIFT()
+{
+  Vector v1(1, 2);
+  std::ostringstream oss;
+  oss << v1;
+  CPPUNIT_ASSERT_EQUAL(std::string("(1, 2)"), oss.str());
+}
+
 void VectorTest::test_rotate()
 {
   Vector v1(1, 0);
-  Vector v2 = v1.rotate(M_PI * 0.5f);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0f, v2.x, 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, v2.y, 0.0000001);
+  CPPUNIT_ASSERT_EQUAL(v1, v1.rotate(M_PI * 0.5f));
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0f, v1.x, 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, v1.y, 0.0000001);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VectorTest);
