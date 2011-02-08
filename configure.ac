@@ -54,9 +54,7 @@ AX_BOOST_BASE
 AX_BOOST_PROGRAM_OPTIONS
 
 # Checks for header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS([arpa/inet.h netinet/in.h sys/socket.h unistd.h])
-AC_CXX_HEADER_STDCXX_98
+AC_CHECK_HEADERS([arpa/inet.h netinet/in.h stdint.h sys/socket.h unistd.h])
 AC_LANG_PUSH(C++)
 AC_CHECK_HEADERS([tr1/cstdint tr1/unordered_map ext/hash_map])
 AC_LANG_POP
@@ -65,13 +63,19 @@ AC_LANG_POP
 AC_HEADER_STDBOOL
 AC_C_CONST
 AC_C_INLINE
-AC_TYPE_INT32_T
 AC_TYPE_SIZE_T
 AC_TYPE_SSIZE_T
-AC_TYPE_UINT32_T
+AC_TYPE_INT8_T
+AC_TYPE_INT16_T
+AC_TYPE_INT32_T
 AC_TYPE_UINT8_T
+AC_TYPE_UINT16_T
+AC_TYPE_UINT32_T
+AC_CHECK_TYPES([ptrdiff_t])
 
 # Checks for library functions.
+AC_HEADER_STDC
+AC_CXX_HEADER_STDCXX_98
 AC_FUNC_MEMCMP
 AC_CHECK_FUNCS([memset socket])
 
