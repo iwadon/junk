@@ -10,7 +10,7 @@ struct Point
 
   Point();
   Point(const float x, const float y);
-  Point &operator+=(const Vector &rhs);
+  Point &operator+=(const Vector2D &rhs);
 };
 
 inline Point::Point()
@@ -25,7 +25,7 @@ inline Point::Point(const float x_, const float y_)
 {
 }
 
-inline Point &Point::operator+=(const Vector &rhs)
+inline Point &Point::operator+=(const Vector2D &rhs)
 {
   x += rhs.x;
   y += rhs.y;

@@ -5,9 +5,9 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 
-class VectorTest : public CppUnit::TestCase
+class Vector2DTest : public CppUnit::TestCase
 {
-  CPPUNIT_TEST_SUITE(VectorTest);
+  CPPUNIT_TEST_SUITE(Vector2DTest);
   CPPUNIT_TEST(test_CTOR);
   CPPUNIT_TEST(test_length);
   CPPUNIT_TEST(test_inner_product);
@@ -34,60 +34,60 @@ public:
   void test_rotate();
 };
 
-void VectorTest::test_CTOR()
+void Vector2DTest::test_CTOR()
 {
-  Vector v1;
+  Vector2D v1;
   CPPUNIT_ASSERT_EQUAL(0.0f, v1.x);
   CPPUNIT_ASSERT_EQUAL(0.0f, v1.y);
-  Vector v2(1, 2);
+  Vector2D v2(1, 2);
   CPPUNIT_ASSERT_EQUAL(1.0f, v2.x);
   CPPUNIT_ASSERT_EQUAL(2.0f, v2.y);
-  Vector v3 = Vector::angle_length(0.0f, 1.0f);
+  Vector2D v3 = Vector2D::angle_length(0.0f, 1.0f);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, v3.x, 0.0000001);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0f, v3.y, 0.0000001);
-  v3 = Vector::angle_length(M_PI * 0.25f, 1.41421356f);
+  v3 = Vector2D::angle_length(M_PI * 0.25f, 1.41421356f);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, v3.x, 0.0000001);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, v3.y, 0.0000001);
-  v3 = Vector::angle_length(M_PI * 0.5f, 1.f);
+  v3 = Vector2D::angle_length(M_PI * 0.5f, 1.f);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0f, v3.x, 0.0000001);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, v3.y, 0.0000001);
 }
 
-void VectorTest::test_length()
+void Vector2DTest::test_length()
 {
-  Vector v1(0, 0);
+  Vector2D v1(0, 0);
   CPPUNIT_ASSERT_EQUAL(0.0f, v1.length());
-  Vector v2(1, 0);
+  Vector2D v2(1, 0);
   CPPUNIT_ASSERT_EQUAL(1.0f, v2.length());
-  Vector v3(0, 1);
+  Vector2D v3(0, 1);
   CPPUNIT_ASSERT_EQUAL(1.0f, v3.length());
-  Vector v4(-1, 0);
+  Vector2D v4(-1, 0);
   CPPUNIT_ASSERT_EQUAL(1.0f, v4.length());
-  Vector v5(1, 1);
+  Vector2D v5(1, 1);
   CPPUNIT_ASSERT_EQUAL(1.41421356f, v5.length());
 }
 
-void VectorTest::test_inner_product()
+void Vector2DTest::test_inner_product()
 {
-  Vector v1(2, 1);
-  Vector v2(1, 2);
+  Vector2D v1(2, 1);
+  Vector2D v2(1, 2);
   CPPUNIT_ASSERT_EQUAL(4.0f, v1.inner_product(v2));
 }
 
-void VectorTest::test_ADDEQ()
+void Vector2DTest::test_ADDEQ()
 {
-  Vector v1(1, 2);
-  Vector v2(3, 4);
+  Vector2D v1(1, 2);
+  Vector2D v2(3, 4);
   v1 += v2;
   CPPUNIT_ASSERT_EQUAL(4.0f, v1.x);
   CPPUNIT_ASSERT_EQUAL(6.0f, v1.y);
 }
 
-void VectorTest::test_ADD()
+void Vector2DTest::test_ADD()
 {
-  Vector v1(1, 2);
-  Vector v2(3, 4);
-  Vector v3 = v1 + v2;
+  Vector2D v1(1, 2);
+  Vector2D v2(3, 4);
+  Vector2D v3 = v1 + v2;
   CPPUNIT_ASSERT_EQUAL(1.0f, v1.x);
   CPPUNIT_ASSERT_EQUAL(2.0f, v1.y);
   CPPUNIT_ASSERT_EQUAL(3.0f, v2.x);
@@ -96,62 +96,62 @@ void VectorTest::test_ADD()
   CPPUNIT_ASSERT_EQUAL(6.0f, v3.y);
 }
 
-void VectorTest::test_MULEQ()
+void Vector2DTest::test_MULEQ()
 {
-  Vector v1(1, 2);
+  Vector2D v1(1, 2);
   v1 *= 2.5f;
   CPPUNIT_ASSERT_EQUAL(2.5f, v1.x);
   CPPUNIT_ASSERT_EQUAL(5.0f, v1.y);
-  Vector v2(2, 1);
+  Vector2D v2(2, 1);
   v1 *= v2;
   CPPUNIT_ASSERT_EQUAL(5.0f, v1.x);
   CPPUNIT_ASSERT_EQUAL(5.0f, v1.y);
 }
 
-void VectorTest::test_MUL()
+void Vector2DTest::test_MUL()
 {
-  Vector v1(1, 2);
-  Vector v2 = v1 * 2.5f;
+  Vector2D v1(1, 2);
+  Vector2D v2 = v1 * 2.5f;
   CPPUNIT_ASSERT_EQUAL(1.0f, v1.x);
   CPPUNIT_ASSERT_EQUAL(2.0f, v1.y);
   CPPUNIT_ASSERT_EQUAL(2.5f, v2.x);
   CPPUNIT_ASSERT_EQUAL(5.0f, v2.y);
-  Vector v3(2, 1);
-  Vector v4(1, 2);
-  Vector v5 = v3 * v4;
+  Vector2D v3(2, 1);
+  Vector2D v4(1, 2);
+  Vector2D v5 = v3 * v4;
   CPPUNIT_ASSERT_EQUAL(2.0f, v5.x);
   CPPUNIT_ASSERT_EQUAL(2.0f, v5.y);
 }
 
-void VectorTest::test_EQEQ()
+void Vector2DTest::test_EQEQ()
 {
-  Vector v1(1, 2);
-  Vector v2(1, 2);
+  Vector2D v1(1, 2);
+  Vector2D v2(1, 2);
   CPPUNIT_ASSERT(v1 == v2);
   CPPUNIT_ASSERT_EQUAL(v2, v1);
 }
 
-void VectorTest::test_NOTEQ()
+void Vector2DTest::test_NOTEQ()
 {
-  Vector v1(1, 2);
-  Vector v2(2, 3);
+  Vector2D v1(1, 2);
+  Vector2D v2(2, 3);
   CPPUNIT_ASSERT(v1 != v2);
 }
 
-void VectorTest::test_LSHIFT()
+void Vector2DTest::test_LSHIFT()
 {
-  Vector v1(1, 2);
+  Vector2D v1(1, 2);
   std::ostringstream oss;
   oss << v1;
   CPPUNIT_ASSERT_EQUAL(std::string("(1, 2)"), oss.str());
 }
 
-void VectorTest::test_rotate()
+void Vector2DTest::test_rotate()
 {
-  Vector v1(1, 0);
+  Vector2D v1(1, 0);
   CPPUNIT_ASSERT_EQUAL(v1, v1.rotate(M_PI * 0.5f));
   CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0f, v1.x, 0.0000001);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, v1.y, 0.0000001);
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(VectorTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(Vector2DTest);

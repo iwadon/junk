@@ -43,8 +43,8 @@ namespace game
     virtual void draw() {}
   protected:
     Point pos_;
-    Vector spd_;
-    Vector acc_;
+    Vector2D spd_;
+    Vector2D acc_;
     float rot_;
     float scale_;
   };

@@ -30,7 +30,7 @@ void PointTest::test_CTOR()
 void PointTest::test_ADDEQ()
 {
   Point p(1, 2);
-  Vector v(3, 4);
+  Vector2D v(3, 4);
   p += v;
   CPPUNIT_ASSERT_EQUAL(4.0f, p.x);
   CPPUNIT_ASSERT_EQUAL(6.0f, p.y);
