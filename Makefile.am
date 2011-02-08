@@ -1,6 +1,9 @@
 AUTOMAKE_OPTIONS = foreign
 
-bin_PROGRAMS = oscillator_sample c1 s1 s2 smf_play vector_length_benchmark
+bin_PROGRAMS = benchmark_sample oscillator_sample c1 s1 s2 smf_play vector_length_benchmark
+
+benchmark_sample_SOURCES = benchmark_sample.cpp
+benchmark_sample_CPPFLAGS = $(BOOST_CPPFLAGS)
 
 c1_SOURCES = c1.cpp
 
