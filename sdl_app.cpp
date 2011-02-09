@@ -187,11 +187,7 @@ void SDLApp::do_draw()
 {
   glClear(GL_COLOR_BUFFER_BIT);
   draw();
-  {
-    char buf[100];
-    snprintf(buf, sizeof buf, "%3dfps", fps_.latest_frames);
-    draw_str(8, 8, buf);
-  }
+  font_->draw_strf(8, 8, "%3dfps", fps_.latest_frames);
   SDL_GL_SwapWindow(window_);
 }
 
