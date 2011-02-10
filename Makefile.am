@@ -118,29 +118,27 @@ all_tests_LDADD = libpeg.a libsdlapp.a libsequencer.a libtest_main.a liblogger.a
 AM_CFLAGS = -Wall -Wextra $(COVERAGE_CFLAGS)
 AM_CXXFLAGS = -Wall -Wextra $(COVERAGE_CXXFLAGS)
 
-OBJECTS = $(c1_OBJECTS) \
+OBJECTS = $(all_tests_OBJECTS) \
+	  $(benchmark_sample_OBJECTS) \
+	  $(c1_OBJECTS) \
+	  $(liblogger_a_OBJECTS) \
 	  $(libpeg_a_OBJECTS) \
 	  $(libsdlapp_a_OBJECTS) \
 	  $(libsequencer_a_OBJECTS) \
-	  $(logger_test_OBJECTS) \
+	  $(libtest_main_a_OBJECTS) \
+	  $(map_benchmark_OBJECTS) \
 	  $(oscillator_sample_OBJECTS) \
-	  $(peg_test_OBJECTS) \
-	  $(point_2d_test_OBJECTS) \
 	  $(s1_OBJECTS) \
 	  $(s2_OBJECTS) \
-	  $(sdlapp_test_OBJECTS) \
-	  $(sequencer_test_OBJECTS) \
-	  $(vector_2d_test_OBJECTS)
+	  $(smf_play_OBJECTS) \
+	  $(vector_length_benchmark_OBJECTS)
 
-TEST_OBJECTS = $(libpeg_a_OBJECTS) \
+TEST_OBJECTS = $(all_tests_OBJECTS) \
+	  $(liblogger_a_OBJECTS) \
+	  $(libpeg_a_OBJECTS) \
 	  $(libsdlapp_a_OBJECTS) \
 	  $(libsequencer_a_OBJECTS) \
-	  $(logger_test_OBJECTS) \
-	  $(peg_test_OBJECTS) \
-	  $(point_2d_test_OBJECTS) \
-	  $(sdlapp_test_OBJECTS) \
-	  $(sequencer_test_OBJECTS) \
-	  $(vector_2d_test_OBJECTS)
+	  $(libtest_main_a_OBJECTS)
 
 CLEANFILES = $(OBJECTS:.o=.gcda) \
 	     dox-warning.txt
