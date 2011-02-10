@@ -23,22 +23,24 @@ public:
   void test_height();
 private:
   SDL_Window *window_;
+  SDL_Renderer *renderer_;
 };
 
 void TextureTest::setUp()
 {
   window_ = SDL_CreateWindow("texture_test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 10, 10, 0);
-  SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTFLIP3);
+  renderer_ = SDL_CreateRenderer(window_, -1, 0);
 }
 
 void TextureTest::tearDown()
 {
+  SDL_DestroyRenderer(renderer_);
   SDL_DestroyWindow(window_);
 }
 
 void TextureTest::test_filename()
 {
-  Texture tex;
+  Texture tex(renderer_);
   CPPUNIT_ASSERT_EQUAL(std::string(""), tex.filename);
   tex.load_file("data/font5x5.png");
   CPPUNIT_ASSERT_EQUAL(std::string("data/font5x5.png"), tex.filename);
@@ -48,14 +50,14 @@ void TextureTest::test_filename()
 
 void TextureTest::test_load_file()
 {
-  Texture tex;
+  Texture tex(renderer_);
   CPPUNIT_ASSERT_EQUAL(true, tex.load_file("data/font5x5.png"));
   CPPUNIT_ASSERT_EQUAL(false, tex.load_file("UNKNOWN FILE"));
 }
 
 void TextureTest::test_width()
 {
-  Texture tex;
+  Texture tex(renderer_);
   tex.load_file("data/font5x5.png");
   CPPUNIT_ASSERT_EQUAL(256U, tex.width);
   tex.load_file("data/blue_box.png");
@@ -64,7 +66,7 @@ void TextureTest::test_width()
 
 void TextureTest::test_height()
 {
-  Texture tex;
+  Texture tex(renderer_);
   tex.load_file("data/font5x5.png");
   CPPUNIT_ASSERT_EQUAL(256U, tex.height);
   tex.load_file("data/blue_box.png");

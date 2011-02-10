@@ -22,7 +22,6 @@ static const int WINDOW_HEIGHT = 600;
 
 SDLApp::SDLApp(const SP &app_name)
   : app_name_(app_name.c_str())
-  , font_(new Font)
   , frame_wait_timer_(FPS, MAX_SKIP_FRAMES)
   , prev_mod_(KMOD_NONE)
 {
@@ -32,7 +31,6 @@ SDLApp::SDLApp(const SP &app_name)
 SDLApp::~SDLApp()
 {
   do_finalize();
-  delete font_;
 }
 
 int SDLApp::run(int argc, char *argv[])
@@ -79,10 +77,13 @@ bool SDLApp::do_initialize(int argc, char *argv[])
     SDL_ERROR("SDL_CreateWindow");
     return false;
   }
-  if (SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTFLIP3 | SDL_RENDERER_PRESENTVSYNC) < 0) {
+  renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTVSYNC);
+  if (renderer_ == NULL) {
     SDL_ERROR("SDL_CreateRenderer");
     return false;
   }
+
+  font_ = new Font(renderer_);
 
   glcontext_ = SDL_GL_CreateContext(window_);
   if (glcontext_ == NULL) {
@@ -144,11 +145,15 @@ void SDLApp::do_finalize()
   finalize();
   SDL_CloseAudio();
 
+  delete font_;
+  font_ = NULL;
+
   SDL_GL_DeleteContext(glcontext_);
   glcontext_ = NULL;
   INFO("Deleted an OpenGL context.");
-  SDL_DestroyRenderer(window_);
+  SDL_DestroyRenderer(renderer_);
   INFO("Destroy the rendering context.");
+  renderer_ = NULL;
   SDL_DestroyWindow(window_);
   window_ = NULL;
   INFO("Destroy a window.");

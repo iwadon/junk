@@ -17,17 +17,19 @@ public:
   void test_update();
 private:
   SDL_Window *window_;
+  SDL_Renderer *renderer_;
 };
 
 void FpsTest::setUp()
 {
   SDL_Init(SDL_INIT_TIMER);
   window_ = SDL_CreateWindow("fps_test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 10, 10, 0);
-  SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTFLIP3);
+  renderer_ = SDL_CreateRenderer(window_, -1, 0);
 }
 
 void FpsTest::tearDown()
 {
+  SDL_DestroyRenderer(renderer_);
   SDL_DestroyWindow(window_);
   SDL_Quit();
 }

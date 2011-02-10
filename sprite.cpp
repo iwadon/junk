@@ -8,8 +8,9 @@
 #include "texture.hpp"
 #include "texture_pool.hpp"
 
-Sprite::Sprite()
-  : texture(NULL)
+Sprite::Sprite(SDL_Renderer *renderer_)
+  : renderer(renderer_)
+  , texture(NULL)
 {
 }
 
@@ -20,7 +21,7 @@ bool Sprite::set_texture(const SP &filename)
 
 bool Sprite::set_texture(const SP &filename, const SDL_Rect *rect_)
 {
-  Texture *tex = TexturePool::get_instance().load_file(filename);
+  Texture *tex = TexturePool::get_instance().load_file(renderer, filename);
   if (tex == NULL) {
     return false;
   }
@@ -54,7 +55,7 @@ void Sprite::draw()
   glRotatef(rot, 0.0f, 0.0f, 1.0f);
   glTranslatef(-(texture->width * scale / 2.0f), -(texture->height * scale / 2.0f), 0.0f);
   glScalef(scale, scale, 1.0f);
-  if (SDL_RenderCopy(texture->texture, &rect, &dst) == -1) {
+  if (SDL_RenderCopy(renderer, texture->texture, &rect, &dst) == -1) {
     SDL_ERROR("SDL_RenderCopy");
   }
   glPopMatrix();

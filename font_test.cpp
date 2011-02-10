@@ -21,37 +21,41 @@ public:
   void test_load_file();
 private:
   SDL_Window *window_;
+  SDL_Renderer *renderer_;
 };
 
 void FontTest::setUp()
 {
   window_ = SDL_CreateWindow("texture_test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 10, 10, 0);
-  SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTFLIP3);
+  CPPUNIT_ASSERT(window_ != NULL);
+  renderer_ = SDL_CreateRenderer(window_, -1, 0);
+  CPPUNIT_ASSERT(renderer_ != NULL);
 }
 
 void FontTest::tearDown()
 {
-  SDL_DestroyRenderer(window_);
+  SDL_DestroyRenderer(renderer_);
   SDL_DestroyWindow(window_);
 }
 
 void FontTest::test_draw_str()
 {
-  Font font;
-  font.load_file("data/font5x5.png");
+  Font font(renderer_);
+  CPPUNIT_ASSERT(font.renderer() != NULL);
+  CPPUNIT_ASSERT_EQUAL(true, font.load_file("data/font5x5.png"));
   font.draw_str(0, 0, "Hello.");
 }
 
 void FontTest::test_draw_strf()
 {
-  Font font;
-  font.load_file("data/font5x5.png");
+  Font font(renderer_);
+  CPPUNIT_ASSERT_EQUAL(true, font.load_file("data/font5x5.png"));
   font.draw_strf(0, 0, "%s %d %f", "Hello.", 12345, 67.89f);
 }
 
 void FontTest::test_load_file()
 {
-  Font font;
+  Font font(renderer_);
   CPPUNIT_ASSERT_EQUAL(true, font.load_file("data/font5x5.png"));
   CPPUNIT_ASSERT_EQUAL(false, font.load_file("UNKNOWN FILE"));
 }

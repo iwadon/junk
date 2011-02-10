@@ -40,7 +40,7 @@ namespace game
     virtual void input(SDLApp &/*app*/) {}
     virtual void move() {}
     virtual void update();
-    virtual void draw() {}
+    virtual void draw(SDLApp &app) {}
   protected:
     Point pos_;
     Vector spd_;
@@ -52,10 +52,10 @@ namespace game
   class DemoBox : public Object
   {
   public:
-    DemoBox();
+    DemoBox(SDL_Renderer *renderer);
     void initialize();
     void move();
-    void draw();
+    void draw(SDLApp &app);
   private:
     boost::shared_ptr<Sprite> sprite_;
   };
@@ -66,7 +66,7 @@ namespace game
     void initialize();
     void input(SDLApp &app);
     void move();
-    void draw();
+    void draw(SDLApp &app);
   };
 
   class App : public SDLApp
@@ -91,8 +91,8 @@ namespace game
     pos_ += spd_;
   }
 
-  DemoBox::DemoBox()
-    : sprite_(new Sprite)
+  DemoBox::DemoBox(SDL_Renderer *renderer)
+    : sprite_(new Sprite(renderer))
   {
   }
 
@@ -137,7 +137,7 @@ namespace game
 #endif
   }
 
-  void DemoBox::draw()
+  void DemoBox::draw(SDLApp &app)
   {
     glPushMatrix();
     sprite_->pos = pos_;
@@ -182,26 +182,18 @@ namespace game
   {
   }
 
-  void MyShip::draw()
+  void MyShip::draw(SDLApp &app)
   {
     glPushMatrix();
     glTranslatef(pos_.x, pos_.y, 0.0f);
     glRotatef(rot_, 0.0f, 0.0f, 1.0f);
     glScalef(scale_, scale_, 1.0f);
-    glBegin(GL_POLYGON);
-    glColor3f(1.0f, 1.0f, 1.0f);
-    glVertex2f(-(MYSHIP_W / 2), -(MYSHIP_H / 2));
-    glVertex2f(-(MYSHIP_W / 2),  (MYSHIP_H / 2));
-    glVertex2f( (MYSHIP_W / 2),  (MYSHIP_H / 2));
-    glVertex2f( (MYSHIP_W / 2), -(MYSHIP_H / 2));
-    glEnd();
-    glBegin(GL_LINE_LOOP);
-    glColor3f(0.0f, 0.0f, 0.0f);
-    glVertex2f(-(MYSHIP_W / 2), -(MYSHIP_H / 2));
-    glVertex2f(-(MYSHIP_W / 2),  (MYSHIP_H / 2));
-    glVertex2f( (MYSHIP_W / 2),  (MYSHIP_H / 2));
-    glVertex2f( (MYSHIP_W / 2), -(MYSHIP_H / 2));
-    glEnd();
+    SDL_Rect rect_o = {-MYSHIP_W / 2, -MYSHIP_H / 2, MYSHIP_W, MYSHIP_H};
+    SDL_Rect rect_i = {-MYSHIP_W / 2 + 1, -MYSHIP_H / 2 + 1, MYSHIP_W - 2, MYSHIP_H - 2};
+    SDL_SetRenderDrawColor(app.renderer(), 0, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderFillRect(app.renderer(), &rect_o);
+    SDL_SetRenderDrawColor(app.renderer(), 255, 255, 255, SDL_ALPHA_OPAQUE);
+    SDL_RenderFillRect(app.renderer(), &rect_i);
     glPopMatrix();
   }
 
@@ -217,7 +209,7 @@ namespace game
     }
 
     for (size_t i = 0; i < OBJ_NUM; ++i) {
-      Object *obj = new DemoBox;
+      Object *obj = new DemoBox(renderer());
       obj->initialize();
       active_objects.push_back(obj);
     }
@@ -253,7 +245,7 @@ namespace game
   void App::draw()
   {
     BOOST_FOREACH(Object *obj, active_objects) {
-      obj->draw();
+      obj->draw(*this);
     }
   }
 } // namespace game

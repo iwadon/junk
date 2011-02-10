@@ -14,13 +14,14 @@
 #include <map>
 #endif
 
+struct SDL_Renderer;
 struct Texture;
 
 class TexturePool : public boost::noncopyable
 {
 public:
   static TexturePool &get_instance();
-  Texture *load_file(const SP &filename);
+  Texture *load_file(SDL_Renderer *renderer, const SP &filename);
   void destroy(Texture *tex);
 private:
   typedef boost::object_pool<Texture> texture_pool_type;

@@ -17,25 +17,27 @@ public:
   void test_load_file();
 private:
   SDL_Window *window_;
+  SDL_Renderer *renderer_;
 };
 
 void TexturePoolTest::setUp()
 {
   window_ = SDL_CreateWindow("texture_test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 10, 10, 0);
-  SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTFLIP3);
+  renderer_ = SDL_CreateRenderer(window_, -1, 0);
 }
 
 void TexturePoolTest::tearDown()
 {
+  SDL_DestroyRenderer(renderer_);
   SDL_DestroyWindow(window_);
 }
 
 void TexturePoolTest::test_load_file()
 {
   Texture *tex;
-  tex = TexturePool::get_instance().load_file("data/font5x5.png");
+  tex = TexturePool::get_instance().load_file(renderer_, "data/font5x5.png");
   CPPUNIT_ASSERT(tex != NULL);
-  tex = TexturePool::get_instance().load_file("UNKNOWN FILE");
+  tex = TexturePool::get_instance().load_file(renderer_, "UNKNOWN FILE");
   CPPUNIT_ASSERT(tex == NULL);
 }
 
