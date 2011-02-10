@@ -2,12 +2,14 @@
 #include "config.h"
 #endif
 #include "texture.hpp"
+#include <cassert>
 #include <SDL.h>
 #include <SDL_image.h>
 #include "sdl_logger.hpp"
 
-Texture::Texture()
-  : texture(NULL)
+Texture::Texture(SDL_Renderer *renderer_)
+  : renderer(renderer_)
+  , texture(NULL)
   , filename("")
 {
 }
@@ -23,12 +25,13 @@ Texture::~Texture()
 
 bool Texture::load_file(const SP &filename_)
 {
+  assert(renderer != NULL);
   SDL_Surface *surface = IMG_Load(filename_.c_str());
   if (surface == NULL) {
     ERROR("IMG_Load() failed: %s", IMG_GetError());
     return false;
   }
-  SDL_Texture *tex = SDL_CreateTextureFromSurface(0, surface);
+  SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, surface);
   if (tex == NULL) {
     SDL_ERROR("SDL_CreateTextureFromSurface");
     SDL_FreeSurface(surface);

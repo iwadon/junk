@@ -17,6 +17,14 @@
 #include "texture_pool.hpp"
 
 /// コンストラクタ
+Font::Font(SDL_Renderer *renderer)
+  : renderer_(renderer)
+  , tex_(NULL)
+{
+  assert(renderer_ != NULL);
+}
+
+/// デストラクタ
 Font::~Font()
 {
   if (tex_ != NULL) {
@@ -33,7 +41,11 @@ Font::~Font()
 bool Font::load_file(const SP &filename)
 {
   assert(filename.data() != NULL);
-  tex_ = TexturePool::get_instance().load_file(filename);
+  assert(renderer_ != NULL);
+  if (tex_ != NULL) {
+    TexturePool::get_instance().destroy(tex_);
+  }
+  tex_ = TexturePool::get_instance().load_file(renderer_, filename);
   return tex_ != NULL;
 }
 
@@ -46,6 +58,7 @@ bool Font::load_file(const SP &filename)
 void Font::draw_chr(const int x, const int y, const int chr)
 {
   assert(tex_ != NULL);
+  assert(renderer_ != NULL);
   SDL_Rect srcrect;
   unsigned char c = chr;
   srcrect.x = 8 * (c & 0xf);
@@ -58,7 +71,7 @@ void Font::draw_chr(const int x, const int y, const int chr)
   dstrect.w = 8;
   dstrect.h = 8;
   int result;
-  result = SDL_RenderCopy(tex_->texture, &srcrect, &dstrect);
+  result = SDL_RenderCopy(renderer_, tex_->texture, &srcrect, &dstrect);
   if (result != 0) {
     SDL_ERROR("SDL_RenderCopy");
   }

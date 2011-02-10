@@ -13,14 +13,14 @@ TexturePool &TexturePool::get_instance()
   return instance;
 }
 
-Texture *TexturePool::load_file(const SP &filename)
+Texture *TexturePool::load_file(SDL_Renderer *renderer, const SP &filename)
 {
   Texture *tex;
   texture_map_type::iterator i = texture_map_.find(filename.c_str());
   if (i != texture_map_.end()) {
     tex = (*i).second;
   } else {
-    tex = texture_pool_.construct();
+    tex = texture_pool_.construct(renderer);
     if (!tex->load_file(filename)) {
       return NULL;
     }

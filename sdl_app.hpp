@@ -18,6 +18,7 @@ public:
   virtual ~SDLApp();
   int run(int argc, char *argv[]);
   Controller controller() const { return controller_; }
+  SDL_Renderer *renderer() { return renderer_; }
 protected:
   virtual bool initialize(int /*argc*/, char */*argv*/[]) { return true; }
   virtual void finalize() {}
@@ -34,6 +35,7 @@ protected:
 private:
   std::string app_name_;
   SDL_Window *window_;
+  SDL_Renderer *renderer_;
   bool done_;
   uint8_t bg_color_[4];
   float prev_ticks_;
