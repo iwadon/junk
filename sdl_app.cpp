@@ -95,37 +95,18 @@ bool SDLApp::do_initialize(int argc, char *argv[])
     return false;
   }
 
-  window_ = SDL_CreateWindow(app_name_.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT,
-			     SDL_WINDOW_OPENGL
-#ifndef SHOW_WINDOW_AFTER_INITIALIZED
-			     | SDL_WINDOW_SHOWN
-#endif
-			     );
+  window_ = SDL_CreateWindow(app_name_.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
   if (window_ == NULL) {
     SDL_ERROR("SDL_CreateWindow");
     return false;
   }
-  renderer_ = SDL_CreateRenderer(window_, -1, 0/*SDL_RENDERER_PRESENTVSYNC*/);
+  renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
   if (renderer_ == NULL) {
     SDL_ERROR("SDL_CreateRenderer");
     return false;
   }
 
   font_ = new Font(renderer_);
-
-  glcontext_ = SDL_GL_CreateContext(window_);
-  if (glcontext_ == NULL) {
-    SDL_ERROR("SDL_GL_CreateContext");
-    return false;
-  }
-  SDL_GL_SetSwapInterval(0);
-
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glOrtho(0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, 1);
-  glDisable(GL_DEPTH_TEST);
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
 
   SDL_AudioSpec spec;
   memset(&spec, 0, sizeof spec);
