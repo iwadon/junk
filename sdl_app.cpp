@@ -204,14 +204,12 @@ void SDLApp::do_update()
 
 void SDLApp::do_draw()
 {
-  glClear(GL_COLOR_BUFFER_BIT);
-  //SDL_SetRenderDrawColor(renderer_, bg_color_[0], bg_color_[1], bg_color_[2], bg_color_[3]);
-  //SDL_RenderClear(renderer_);
+  SDL_SetRenderDrawColor(renderer_, bg_color_[0], bg_color_[1], bg_color_[2], bg_color_[3]);
+  SDL_RenderClear(renderer_);
   draw();
   font_->draw_strf(8, 8, "%3dfps", fps_.latest_frames);
   load_time_.draw(font_, 0, 80);
-  SDL_GL_SwapWindow(window_);
-  //SDL_RenderPresent(renderer_);
+  SDL_RenderPresent(renderer_);
 }
 
 void SDLApp::set_bg_color(const uint32_t rgba)
