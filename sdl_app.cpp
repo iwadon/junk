@@ -20,12 +20,21 @@ static const int MAX_SKIP_FRAMES = 10;
 static const int WINDOW_WIDTH = 800;
 static const int WINDOW_HEIGHT = 600;
 
+enum {
+  LOAD_TIME_LOGIC = 0,
+  LOAD_TIME_DRAW = 1,
+};
+
 SDLApp::SDLApp(const SP &app_name)
   : app_name_(app_name.c_str())
   , frame_wait_timer_(FPS, MAX_SKIP_FRAMES)
   , prev_mod_(KMOD_NONE)
 {
   set_bg_color(0x00a000ff);
+  load_time_.set_color(LOAD_TIME_LOGIC, 0xff, 0x00, 0x00, 0xc0);
+  load_time_.set_name(LOAD_TIME_LOGIC, "Logic");
+  load_time_.set_color(LOAD_TIME_DRAW, 0x00, 0xff, 0x00, 0xc0);
+  load_time_.set_name(LOAD_TIME_DRAW, "Draw");
 }
 
 SDLApp::~SDLApp()
@@ -47,13 +56,18 @@ int SDLApp::run(int argc, char *argv[])
   done_ = false;
   while (!done_) {
     frames_ = frame_wait_timer_.wait();
+    load_time_.start(LOAD_TIME_LOGIC);
     for (int i = 0; i < frames_; ++i) {
       do_input();
       do_move();
       do_update();
       fps_.update();
     }
+    load_time_.stop(LOAD_TIME_LOGIC);
+    load_time_.start(LOAD_TIME_DRAW);
     do_draw();
+    load_time_.stop(LOAD_TIME_DRAW);
+    load_time_.flip();
   }
   return 0;
 }
@@ -191,9 +205,13 @@ void SDLApp::do_update()
 void SDLApp::do_draw()
 {
   glClear(GL_COLOR_BUFFER_BIT);
+  //SDL_SetRenderDrawColor(renderer_, bg_color_[0], bg_color_[1], bg_color_[2], bg_color_[3]);
+  //SDL_RenderClear(renderer_);
   draw();
   font_->draw_strf(8, 8, "%3dfps", fps_.latest_frames);
+  load_time_.draw(font_, 0, 80);
   SDL_GL_SwapWindow(window_);
+  //SDL_RenderPresent(renderer_);
 }
 
 void SDLApp::set_bg_color(const uint32_t rgba)

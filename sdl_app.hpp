@@ -6,6 +6,7 @@
 #include "controller.hpp"
 #include "fps.hpp"
 #include "frame_wait_timer.hpp"
+#include "load_time.hpp"
 #include "sp.hpp"
 
 struct SDL_Window;
@@ -47,6 +48,7 @@ private:
   SDL_AudioSpec audio_spec_;
   FrameWaitTimer frame_wait_timer_;
   SDLMod prev_mod_;
+  LoadTime load_time_;
   bool do_initialize(int argc, char *argv[]);
   void do_finalize();
   void do_input();

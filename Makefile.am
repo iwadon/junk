@@ -42,6 +42,7 @@ libsdlapp_a_SOURCES = controller.cpp controller.hpp \
 		      frame_wait_timer.cpp frame_wait_timer.hpp \
 		      font.cpp font.hpp \
 		      fps.cpp fps.hpp \
+		      load_time.cpp load_time.hpp \
 		      sdl_app.cpp sdl_app.hpp \
 		      sprite.cpp sprite.hpp \
 		      texture.cpp texture.hpp \

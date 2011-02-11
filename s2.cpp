@@ -30,7 +30,7 @@ namespace game
   static const float DEMOBOX_H = 10;
   static const float MYSHIP_W = 30;
   static const float MYSHIP_H = 50;
-  static const size_t OBJ_NUM = 500;
+  static const size_t OBJ_NUM = 100;
 
   class Object
   {
