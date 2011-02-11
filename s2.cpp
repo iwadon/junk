@@ -139,12 +139,10 @@ namespace game
 
   void DemoBox::draw(SDLApp &app)
   {
-    glPushMatrix();
     sprite_->pos = pos_;
     sprite_->rot = rot_;
     sprite_->scale = scale_;
     sprite_->draw();
-    glPopMatrix();
   }
 
   void MyShip::initialize()
