@@ -91,7 +91,7 @@ bool SDLApp::do_initialize(int argc, char *argv[])
     SDL_ERROR("SDL_CreateWindow");
     return false;
   }
-  renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTVSYNC);
+  renderer_ = SDL_CreateRenderer(window_, -1, 0/*SDL_RENDERER_PRESENTVSYNC*/);
   if (renderer_ == NULL) {
     SDL_ERROR("SDL_CreateRenderer");
     return false;
