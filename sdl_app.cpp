@@ -21,8 +21,10 @@ static const int WINDOW_WIDTH = 800;
 static const int WINDOW_HEIGHT = 600;
 
 enum {
-  LOAD_TIME_LOGIC = 0,
-  LOAD_TIME_DRAW = 1,
+  LOAD_TIME_INPUT,
+  LOAD_TIME_MOVE,
+  LOAD_TIME_UPDATE,
+  LOAD_TIME_DRAW,
 };
 
 SDLApp::SDLApp(const SP &app_name)
@@ -31,10 +33,18 @@ SDLApp::SDLApp(const SP &app_name)
   , prev_mod_(KMOD_NONE)
 {
   set_bg_color(0x00a000ff);
-  load_time_.set_color(LOAD_TIME_LOGIC, 0xff, 0x00, 0x00, 0xc0);
-  load_time_.set_name(LOAD_TIME_LOGIC, "Logic");
+  load_time_.set_color(LOAD_TIME_INPUT, 0xff, 0x00, 0x00, 0xc0);
+  load_time_.set_name(LOAD_TIME_INPUT, "Input");
+  load_time_.activate(LOAD_TIME_INPUT);
+  load_time_.set_color(LOAD_TIME_MOVE, 0xff, 0xff, 0x00, 0xc0);
+  load_time_.set_name(LOAD_TIME_MOVE, "Move");
+  load_time_.activate(LOAD_TIME_MOVE);
+  load_time_.set_color(LOAD_TIME_UPDATE, 0xff, 0x00, 0xff, 0xc0);
+  load_time_.set_name(LOAD_TIME_UPDATE, "Update");
+  load_time_.activate(LOAD_TIME_UPDATE);
   load_time_.set_color(LOAD_TIME_DRAW, 0x00, 0xff, 0x00, 0xc0);
   load_time_.set_name(LOAD_TIME_DRAW, "Draw");
+  load_time_.activate(LOAD_TIME_DRAW);
 }
 
 SDLApp::~SDLApp()
@@ -56,14 +66,18 @@ int SDLApp::run(int argc, char *argv[])
   done_ = false;
   while (!done_) {
     frames_ = frame_wait_timer_.wait();
-    load_time_.start(LOAD_TIME_LOGIC);
     for (int i = 0; i < frames_; ++i) {
+      load_time_.start(LOAD_TIME_INPUT);
       do_input();
+      load_time_.stop(LOAD_TIME_INPUT);
+      load_time_.start(LOAD_TIME_MOVE);
       do_move();
+      load_time_.stop(LOAD_TIME_MOVE);
+      load_time_.start(LOAD_TIME_UPDATE);
       do_update();
+      load_time_.stop(LOAD_TIME_UPDATE);
       fps_.update();
     }
-    load_time_.stop(LOAD_TIME_LOGIC);
     load_time_.start(LOAD_TIME_DRAW);
     do_draw();
     load_time_.stop(LOAD_TIME_DRAW);
@@ -81,7 +95,7 @@ bool SDLApp::do_initialize(int argc, char *argv[])
     return false;
   }
 
-  window_ = SDL_CreateWindow(app_name_.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT,
+  window_ = SDL_CreateWindow(app_name_.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT,
 			     SDL_WINDOW_OPENGL
 #ifndef SHOW_WINDOW_AFTER_INITIALIZED
 			     | SDL_WINDOW_SHOWN
