@@ -1,7 +1,6 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-//#undef HAVE_MACH_MACH_TIME_H
 #include "load_time.hpp"
 #include <cassert>
 #include <SDL.h>
@@ -60,37 +59,44 @@ void LoadTime::start(const size_t no)
 {
   assert(no < NUM_ITEMS);
   Item *item = &items_[no];
-  item->start = get_time();
-  active_items_.push_back(item);
+  if (item->flags & Item::FLAG_ACTIVE) {
+    item->flags |= Item::FLAG_DIRTY;
+    item->start = get_time();
+  }
 }
 
 void LoadTime::stop(const size_t no)
 {
   assert(no < NUM_ITEMS);
   Item *item = &items_[no];
-  if (item->is_running()) {
+  if (item->flags & Item::FLAG_ACTIVE) {
     item->end = get_time();
+    item->elapsed += get_elapsed_time(item->end, item->start);
   }
 }
 
 void LoadTime::flip()
 {
-  for (std::list<Item *>::iterator i = active_items_.begin(); i != active_items_.end(); ++i) {
-    Item *item = *i;
-    item->elapsed = get_elapsed_time(item->end, item->start);
-    item->start = item->end = 0;
+  for (size_t i = 0; i < NUM_ITEMS; ++i) {
+    Item *item = &items_[i];
+    if (item->flags & Item::FLAG_DIRTY) {
+      item->last_elapsed = item->elapsed;
+      item->start = item->end = item->elapsed = 0;
+      item->flags &= ~Item::FLAG_DIRTY;
+    }
   }
-  active_items_.clear();
 }
 
 LoadTime::time_type LoadTime::elapsed_time(const size_t no) const
 {
+  assert(no < NUM_ITEMS);
   const Item *item = &items_[no];
-  return item->elapsed;
+  return item->last_elapsed;
 }
 
 void LoadTime::set_color(const size_t no, const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a)
 {
+  assert(no < NUM_ITEMS);
   Item *item = &items_[no];
   item->color[0] = r;
   item->color[1] = g;
@@ -100,6 +106,7 @@ void LoadTime::set_color(const size_t no, const uint8_t r, const uint8_t g, cons
 
 void LoadTime::set_name(const size_t no, const char *name)
 {
+  assert(no < NUM_ITEMS);
   Item *item = &items_[no];
   free(item->name);
   item->name = strdup(name);
@@ -117,7 +124,7 @@ void LoadTime::draw(Font *font, const int x, const int y) const
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
   // bar bg
-  int xx = x + 12 + 8 * 24 + 4 * 2;
+  int xx = x + 12 + 8 * 27 + 4 * 2;
   int w = BAR_WIDTH;
   SDL_Rect bar_bg_rect = {xx, y, w * 2, 12};
   SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x60);
@@ -131,12 +138,13 @@ void LoadTime::draw(Font *font, const int x, const int y) const
 
   // items bg
   SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x80);
-  SDL_Rect items_bg_rect = {x, y, 8 * 24 + 4 * 2, active_items_.size() * 8 + 2 * 2};
+  SDL_Rect items_bg_rect = {x, y, 8 * 27 + 4 * 2, (active_items_.size() + 1) * 8 + 2 * 2};
   SDL_RenderFillRect(renderer, &items_bg_rect);
 
   // items
   int yy = y + 2;
   int tyy = yy;
+  time_type total = 0;
   for (std::list<Item *>::const_iterator i = active_items_.begin(); i != active_items_.end(); ++i) {
     const Item *item = *i;
 
@@ -149,8 +157,8 @@ void LoadTime::draw(Font *font, const int x, const int y) const
     SDL_RenderFillRect(renderer, &text_color_rect);
 
     // text
-    float percent = item->elapsed * 100.0f / (TIME_BASE_SEC / 60.0f);
-    font->draw_strf(x + 12, tyy + 0, "%-5s %7.3fms %6.2f%%", item->name, item->elapsed * 1.0f / TIME_BASE_MILLISEC, percent);
+    float percent = item->last_elapsed * 100.0f / (TIME_BASE_SEC / 60.0f);
+    font->draw_strf(x + 12, tyy + 0, "%-8s %7.3fms %6.2f%%", item->name, item->last_elapsed * 1.0f / TIME_BASE_MILLISEC, percent);
     tyy += 8;
     
     // bar
@@ -159,8 +167,24 @@ void LoadTime::draw(Font *font, const int x, const int y) const
     SDL_SetRenderDrawColor(renderer, item->color[0], item->color[1], item->color[2], item->color[3]);
     SDL_RenderFillRect(renderer, &bar_rect);
     xx += n;
+
+    total += item->last_elapsed;
   }
+
+  float percent = total * 100.0f / (TIME_BASE_SEC / 60.0f);
+  font->draw_strf(x + 12, tyy, "Total    %7.3fms %6.2f%%", total * 1.0f / TIME_BASE_MILLISEC, percent);
 
   // blend mode
   SDL_SetRenderDrawBlendMode(renderer, prev_blend_mode);
+}
+
+void LoadTime::activate(const size_t no)
+{
+  assert(no < NUM_ITEMS);
+  Item *item = &items_[no];
+  std::list<Item *>::iterator i = std::find(active_items_.begin(), active_items_.end(), item);
+  if (i == active_items_.end()) {
+    active_items_.push_back(item);
+    item->flags |= Item::FLAG_ACTIVE;
+  }
 }

@@ -28,13 +28,19 @@ public:
   void set_color(const size_t no, const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a);
   void set_name(const size_t no, const char *name);
   void draw(Font *font, const int x, const int y) const;
+  void activate(const size_t no);
 private:
   struct Item
   {
+    typedef uint32_t FLAG;
+    static const FLAG FLAG_DIRTY  = 1 << 0;
+    static const FLAG FLAG_ACTIVE = 1 << 1;
     time_type start;
     time_type end;
     time_type elapsed;
+    time_type last_elapsed;
     uint8_t color[4];
+    FLAG flags;
     char *name;
     bool is_running() const { return start != 0; }
   };
