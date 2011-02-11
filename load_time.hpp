@@ -9,7 +9,15 @@ class Font;
 class LoadTime
 {
 public:
+#ifdef HAVE_MACH_MACH_TIME_H
+  typedef uint64_t time_type;
+  static const time_type TIME_BASE_SEC = 1000 * 1000 * 1000;
+  static const time_type TIME_BASE_MILLISEC = 1000 * 1000;
+#else
   typedef uint32_t time_type;
+  static const time_type TIME_BASE_SEC = 1000;
+  static const time_type TIME_BASE_MILLISEC = 1;
+#endif
   static const size_t NUM_ITEMS = 10;
   LoadTime();
   ~LoadTime();

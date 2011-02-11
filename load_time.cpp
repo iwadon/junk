@@ -1,10 +1,39 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+//#undef HAVE_MACH_MACH_TIME_H
 #include "load_time.hpp"
 #include <cassert>
 #include <SDL.h>
+#ifdef HAVE_MACH_MACH_TIME_H
+#include <mach/mach_time.h>
+#endif
 #include "font.hpp"
+
+static const int BAR_WIDTH = 100;
+
+static LoadTime::time_type get_time()
+{
+#ifdef HAVE_MACH_MACH_TIME_H
+  return mach_absolute_time();
+#else
+  return SDL_GetTicks();
+#endif
+}
+
+static LoadTime::time_type get_elapsed_time(LoadTime::time_type end, LoadTime::time_type start)
+{
+#ifdef HAVE_MACH_MACH_TIME_H
+  uint64_t elapsed = end - start;
+  static mach_timebase_info_data_t info = {0, 0};
+  if (info.denom == 0) {
+    mach_timebase_info(&info);
+  }
+  return elapsed * info.numer / info.denom;
+#else
+  return end - start;
+#endif
+}
 
 LoadTime::LoadTime()
 {
@@ -31,7 +60,7 @@ void LoadTime::start(const size_t no)
 {
   assert(no < NUM_ITEMS);
   Item *item = &items_[no];
-  item->start = SDL_GetTicks();
+  item->start = get_time();
   active_items_.push_back(item);
 }
 
@@ -40,7 +69,7 @@ void LoadTime::stop(const size_t no)
   assert(no < NUM_ITEMS);
   Item *item = &items_[no];
   if (item->is_running()) {
-    item->end = SDL_GetTicks();
+    item->end = get_time();
   }
 }
 
@@ -48,7 +77,7 @@ void LoadTime::flip()
 {
   for (std::list<Item *>::iterator i = active_items_.begin(); i != active_items_.end(); ++i) {
     Item *item = *i;
-    item->elapsed = item->end - item->start;
+    item->elapsed = get_elapsed_time(item->end, item->start);
     item->start = item->end = 0;
   }
   active_items_.clear();
@@ -87,18 +116,22 @@ void LoadTime::draw(Font *font, const int x, const int y) const
   SDL_GetRenderDrawBlendMode(renderer, &prev_blend_mode);
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
+  // bar bg
+  int xx = x + 12 + 8 * 24 + 4 * 2;
+  int w = BAR_WIDTH;
+  SDL_Rect bar_bg_rect = {xx, y, w * 2, 12};
+  SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x60);
+  SDL_RenderFillRect(renderer, &bar_bg_rect);
+
   // measure
-  int xx = x + 160;
   SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0x80);
   SDL_RenderDrawLine(renderer, xx, y, xx, y + 12);
-  int w = 16 * 100 * 1000 / (1000 * 1000 / 60);
   SDL_RenderDrawLine(renderer, xx + w, y, xx + w, y + 12);
-  w *= 2;
-  SDL_RenderDrawLine(renderer, xx + w, y, xx + w, y + 12);
+  SDL_RenderDrawLine(renderer, xx + w * 2, y, xx + w * 2, y + 12);
 
   // items bg
   SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x80);
-  SDL_Rect items_bg_rect = {x, y, 8 * 18 + 4 * 2, active_items_.size() * 8 + 2 * 2};
+  SDL_Rect items_bg_rect = {x, y, 8 * 24 + 4 * 2, active_items_.size() * 8 + 2 * 2};
   SDL_RenderFillRect(renderer, &items_bg_rect);
 
   // items
@@ -116,14 +149,15 @@ void LoadTime::draw(Font *font, const int x, const int y) const
     SDL_RenderFillRect(renderer, &text_color_rect);
 
     // text
-    font->draw_strf(x + 12, tyy + 0, "%-8s %3d %3d%%", item->name, item->elapsed, item->elapsed * 100 * 1000 / (1000 * 1000 / 60));
+    float percent = item->elapsed * 100.0f / (TIME_BASE_SEC / 60.0f);
+    font->draw_strf(x + 12, tyy + 0, "%-5s %7.3fms %6.2f%%", item->name, item->elapsed * 1.0f / TIME_BASE_MILLISEC, percent);
     tyy += 8;
     
     // bar
-    int n = item->elapsed * 100 * 1000 / (1000 * 1000 / 60);
-    SDL_Rect rect = {xx, yy, n, 8};
+    int n = percent * 100.0f / BAR_WIDTH;
+    SDL_Rect bar_rect = {xx, yy, n, 8};
     SDL_SetRenderDrawColor(renderer, item->color[0], item->color[1], item->color[2], item->color[3]);
-    SDL_RenderFillRect(renderer, &rect);
+    SDL_RenderFillRect(renderer, &bar_rect);
     xx += n;
   }
 

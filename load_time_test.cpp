@@ -21,7 +21,7 @@ void LoadTimeTest::test_elapsed_time()
   sleep(1);
   lt.stop(0);
   lt.flip();
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(1000, lt.elapsed_time(0), 1);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(1000 * LoadTime::TIME_BASE_MILLISEC, lt.elapsed_time(0), LoadTime::TIME_BASE_MILLISEC);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LoadTimeTest);
