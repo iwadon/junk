@@ -1,19 +1,29 @@
 AUTOMAKE_OPTIONS = foreign
 
-bin_PROGRAMS = benchmark_sample oscillator_sample c1 map_benchmark s1 s2 smf_play vector_length_benchmark
+bin_PROGRAMS = benchmark_sample \
+	       c1 \
+	       map_benchmark \
+	       oscillator_sample \
+	       pcap_sample \
+	       s1 \
+	       s2 \
+	       smf_play \
+	       vector_length_benchmark
 
 benchmark_sample_SOURCES = benchmark_sample.cpp
 benchmark_sample_CPPFLAGS = $(BOOST_CPPFLAGS)
 
 c1_SOURCES = c1.cpp
 
+map_benchmark_SOURCES = map_benchmark.cpp
+map_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
+
 oscillator_sample_SOURCES = oscillator_sample.cpp
 oscillator_sample_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 oscillator_sample_LDFLAGS = -framework OpenGL
 oscillator_sample_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS)
 
-map_benchmark_SOURCES = map_benchmark.cpp
-map_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
+pcap_sample_SOURCES = pcap_sample.cpp
 
 s1_SOURCES = s1.cpp
 
