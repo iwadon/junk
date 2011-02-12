@@ -52,9 +52,10 @@ SDL_LIBS="$SDL_LIBS -lSDL_image"
 AM_PATH_CPPUNIT
 AX_BOOST_BASE
 AX_BOOST_PROGRAM_OPTIONS
+AC_CHECK_LIB([pcap], [pcap_lookupdev])
 
 # Checks for header files.
-AC_CHECK_HEADERS([arpa/inet.h mach/mach_time.h netinet/in.h stdint.h sys/socket.h unistd.h])
+AC_CHECK_HEADERS([arpa/inet.h mach/mach_time.h netinet/in.h pcap/pcap.h stdint.h sys/socket.h unistd.h])
 AC_LANG_PUSH(C++)
 AC_CHECK_HEADERS([tr1/cstdint tr1/unordered_map ext/hash_map])
 AC_LANG_POP
