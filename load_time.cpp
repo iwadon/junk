@@ -158,22 +158,22 @@ void LoadTime::draw(Font *font, const int x, const int y) const
     SDL_RenderFillRect(renderer, &text_color_rect);
 
     // text
-    float percent = item->last_elapsed * 100.0f / (TIME_BASE_SEC / 60.0f);
-    font->draw_strf(x + 12, items_y + 0, "%-8s %7.3fms %6.2f%%", item->name, item->last_elapsed * 1.0f / TIME_BASE_MILLISEC, percent);
+    float ratio = item->last_elapsed / (TIME_BASE_SEC / 60.0f);
+    font->draw_strf(x + 12, items_y + 0, "%-8s %7.3fms %6.2f%%", item->name, static_cast<float>(item->last_elapsed) / TIME_BASE_MILLISEC, ratio * 100.0f);
     items_y += 8;
-    
+
     // bar
-    int n = percent * 100.0f / BAR_WIDTH;
-    SDL_Rect bar_rect = {bar_x, bar_y + 2, n, 8};
+    int bar_w = BAR_WIDTH * ratio;
+    SDL_Rect bar_rect = {bar_x, bar_y + 2, bar_w, 8};
     SDL_SetRenderDrawColor(renderer, item->color[0], item->color[1], item->color[2], item->color[3]);
     SDL_RenderFillRect(renderer, &bar_rect);
-    bar_x += n;
+    bar_x += bar_w;
 
     total += item->last_elapsed;
   }
 
-  float percent = total * 100.0f / (TIME_BASE_SEC / 60.0f);
-  font->draw_strf(x + 12, items_y, "Total    %7.3fms %6.2f%%", total * 1.0f / TIME_BASE_MILLISEC, percent);
+  float ratio = total / (TIME_BASE_SEC / 60.0f);
+  font->draw_strf(x + 12, items_y, "Total    %7.3fms %6.2f%%", static_cast<float>(total) / TIME_BASE_MILLISEC, ratio * 100.0f);
 
   // blend mode
   SDL_SetRenderDrawBlendMode(renderer, prev_blend_mode);
