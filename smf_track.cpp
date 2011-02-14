@@ -50,7 +50,7 @@ void SMFTrack::update()
     data_type data = *data_cur_;
     Channel &ch = smf_.instrument().channel(data & 0x0f);
   retry:
-    switch (data) {
+    switch (static_cast<unsigned char>(data)) {
     case 0x00 ... 0x7f:
       // Running Status
       data = prev_status_byte;

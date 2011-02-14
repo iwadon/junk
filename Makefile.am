@@ -7,6 +7,8 @@ noinst_PROGRAMS = benchmark_sample \
 	       pcap_sample \
 	       s1 \
 	       s2 \
+	       sdl_event_sample \
+	       sdl_event_sample2 \
 	       smf_play \
 	       vector_length_benchmark
 
@@ -31,6 +33,16 @@ s2_SOURCES = s2.cpp
 s2_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 s2_LDFLAGS = -framework OpenGL
 s2_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS)
+
+sdl_event_sample_SOURCES = sdl_event_sample.c
+sdl_event_sample_CPPFLAGS = $(SDL_CFLAGS)
+sdl_event_sample_LDADD = $(SDL_LIBS)
+
+sdl_event_sample2_SOURCES = sdl_event_sample2.m
+#sdl_event_sample2_OBJCFLAGS = -framework Cocoa
+sdl_event_sample2_CPPFLAGS = $(SDL_CFLAGS)
+sdl_event_sample2_LDFLAGS = -framework Cocoa
+sdl_event_sample2_LDADD = $(SDL_LIBS)
 
 #smf_dump_SOURCES = smf_dump.cpp
 #smf_dump_CPPFLAGS = $(BOOST_CPPFLAGS)
@@ -129,6 +141,7 @@ all_tests_LDADD = libpeg.a libsdlapp.a libsequencer.a libtest_main.a liblogger.a
 
 AM_CFLAGS = -Wall -Wextra $(COVERAGE_CFLAGS)
 AM_CXXFLAGS = -Wall -Wextra $(COVERAGE_CXXFLAGS)
+AM_OBJCFLAGS = -Wall -Wextra $(COVERAGE_OBJCFLAGS)
 
 OBJECTS = $(all_tests_OBJECTS) \
 	  $(benchmark_sample_OBJECTS) \

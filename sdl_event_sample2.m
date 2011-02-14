@@ -1,3 +1,4 @@
+#import <Cocoa/Cocoa.h>
 #include <stdio.h>
 #include <SDL.h>
 
@@ -9,14 +10,25 @@ int main(int argc, char *argv[])
   SDL_Surface *screen;
   int done = 0;
   SDL_Event event;
+
+  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
+  [NSEvent addLocalMonitorForEventsMatchingMask:NSKeyDownMask
+					handler:(^(NSEvent* event) {
+					    NSLog(@"LocalMonitor: %@", event);
+					    return event;
+					  })];
+
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     SDL_ERROR(SDL_Init);
+    [pool release];
     return 1;
   }
   screen = SDL_SetVideoMode(200, 200, 0, 0);
   if (screen == NULL) {
     SDL_ERROR(SDL_SetVideoMode);
     SDL_Quit();
+    [pool release];
     return 1;
   }
   while (!done) {
@@ -30,5 +42,6 @@ int main(int argc, char *argv[])
   }
   SDL_Delay(500);
   SDL_Quit();
+  [pool release];
   return 0;
 }

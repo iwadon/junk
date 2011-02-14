@@ -2,6 +2,7 @@
 #define CIRCULAR_BUFFER_HPP_INCLUDED 1
 
 #include <cstddef>
+#include <cstring>
 
 /// 循環バッファ
 template <size_t N>
