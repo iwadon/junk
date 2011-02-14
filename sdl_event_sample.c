@@ -5,6 +5,7 @@
 
 int main(int argc, char *argv[])
 {
+#pragma unused(argc, argv)
   SDL_Surface *screen;
   int done = 0;
   SDL_Event event;
@@ -21,7 +22,7 @@ int main(int argc, char *argv[])
   while (!done) {
     while (SDL_PollEvent(&event)) {
       if (event.type == SDL_QUIT ||
-	  event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_q && (event.key.keysym.mod == KMOD_LMETA || event.key.keysym.mod == KMOD_RMETA)) {
+	  (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_q && (event.key.keysym.mod == KMOD_LMETA || event.key.keysym.mod == KMOD_RMETA))) {
 	done = !0;
       }
     }
