@@ -3,12 +3,12 @@
 #endif
 #include "controller.hpp"
 
-const Controller::Data Controller::empty_data_ = {0, 0, 0};
+const Controller::Data Controller::empty_data_ = {{0, 0, 0}};
 
 void Controller::update(const SDL_Event &event)
 {
   Data prev;
-  Data now = {0, 0, 0};
+  Data now = {{0, 0, 0}};
 
   prev = latest_data();
   now.key.status = prev.key.status;
