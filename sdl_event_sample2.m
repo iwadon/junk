@@ -6,6 +6,7 @@
 
 int main(int argc, char *argv[])
 {
+#pragma unused(argc, argv)
   SDL_Surface *screen;
   int done = 0;
   SDL_Event event;
