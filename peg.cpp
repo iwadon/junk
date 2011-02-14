@@ -128,7 +128,7 @@ namespace peg
 
   Result Any::parse(ErrorInfo &err, const char *src)
   {
-    Result result = { true };
+    Result result = { true, NULL };
     if (*src != '\0') {
       result.rest = src + 1;
     } else {
