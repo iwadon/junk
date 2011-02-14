@@ -141,6 +141,7 @@ all_tests_LDADD = libpeg.a libsdlapp.a libsequencer.a libtest_main.a liblogger.a
 
 AM_CFLAGS = -Wall -Wextra $(COVERAGE_CFLAGS)
 AM_CXXFLAGS = -Wall -Wextra $(COVERAGE_CXXFLAGS)
+AM_OBJCFLAGS = -Wall -Wextra $(COVERAGE_OBJCFLAGS)
 
 OBJECTS = $(all_tests_OBJECTS) \
 	  $(benchmark_sample_OBJECTS) \
