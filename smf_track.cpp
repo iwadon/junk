@@ -2,9 +2,6 @@
 #include "config.h"
 #endif
 #include "smf_track.hpp"
-#ifdef STDCXX_98_HEADERS
-#include <cstring>
-#endif
 #include "channel.hpp"
 #include "instrument.hpp"
 #include "logger.hpp"
@@ -13,6 +10,7 @@
 #include "variable_length_value.hpp"
 
 #ifdef SMF_TRACK_DEBUG
+#include <cstring>
 #define SET_STATE(s) set_state(s)
 #else
 #define SET_STATE(s) state_ = (s)
