@@ -83,6 +83,7 @@ libsequencer_a_SOURCES = audio_stream.hpp \
 			 pseudo_triangle_wave_oscillator.cpp pseudo_triangle_wave_oscillator.hpp \
 			 sampler.cpp sampler.hpp \
 			 sine_wave_oscillator.cpp sine_wave_oscillator.hpp \
+			 song.cpp song.hpp \
 			 triangle_wave_oscillator.cpp triangle_wave_oscillator.hpp \
 			 smf.cpp smf.hpp \
 			 smf_track.cpp smf_track.hpp \
@@ -127,6 +128,7 @@ all_tests_SOURCES = \
 	sine_wave_oscillator_test.cpp \
 	smf_test.cpp \
 	smf_track_test.cpp \
+	song_test.cpp \
 	sprite_test.cpp \
 	texture_pool_test.cpp \
 	texture_test.cpp \

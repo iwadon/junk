@@ -1,6 +1,8 @@
 #ifndef SMF_HPP_INCLUDED
 #define SMF_HPP_INCLUDED 1
 
+#define SMF_DEBUG 1
+
 #include <vector>
 #if defined(HAVE_TR1_CSTDINT)
 #include <tr1/cstdint>
@@ -13,54 +15,50 @@
 
 class Instrument;
 class SMFTrack;
+class Song;
 
 /**
- * @brief 標準MIDIファイル形式のデータを扱うためのクラス
+ * @brief 標準MIDIファイル形式のシーケンスデータを扱うためのクラス
  *
- * このクラスは次の機能を提供します:
- * - ファイルからSMF形式のデータを読み込む。
- * - ファイルから読み込んだSMFデータを再生する。
- * - Instrumentクラスと組み合わせることで、SMFデータの再生結果を波形データとして出力する。
+ * @note 通常このクラスを直接使う必要はありません。
+ *       実際のシーケンスデータの再生にはSongクラスを使います。
+ *
+ * @bug SMF::update()を1/60秒毎に呼び出さない場合、シーケンスデータが想定するテンポで再生されません。
  *
  * @sa Instrument
  * @sa SMFTrack
- *
- * @code
- * // ファイルからSMFデータを読み込み、データの終わりまで再生する例
- * SMF smf;
- * smf.load_file("sample.mid");
- * smf.play();
- * while (smf.is_playing()) {
- *   smf.update();
- *   // 1/60秒経過するまで待つ処理をここに入れる
- * }
- * @endcode
+ * @sa Song
  */
 class SMF
 {
 public:
   typedef uint8_t data_type;
   typedef SMFTrack *track_ptr_type;
-  SMF();
+  SMF(Song &);
   ~SMF();
-  bool load_file(const SP &filename);
+  bool set_data(void *data);
   void play();
   void update();
   bool is_playing() const;
-  Instrument &instrument() { return *inst_; }
-  void set_instrument(Instrument *inst) { inst_ = inst; }
+  Instrument *instrument();
   uint32_t time_base() const { return time_base_; }
   void set_tempo(const uint8_t *data);
   bool mix_audio(uint8_t *buf, const size_t len);
+#ifdef SMF_DEBUG
   std::string inspect() const;
+#endif
 private:
+  Song &song_;
   data_type *data_;
   uint32_t time_base_;
   float ticks_add_;
   float ticks_;
   std::vector<track_ptr_type> tracks_;
-  Instrument *inst_;
   uint32_t tempo_;
+#ifdef SMF_DEBUG
+  int format_;
+  size_t num_tracks_;
+#endif
   bool parse_data();
   void set_ticks_add_();
 };

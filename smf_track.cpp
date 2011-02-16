@@ -30,6 +30,10 @@ SMFTrack::SMFTrack(SMF &smf)
 
 void SMFTrack::update()
 {
+  Instrument *inst = smf_.instrument();
+  if (inst == NULL) {
+    return;
+  }
   if (!is_playing() || is_paused()) {
     return;
   }
@@ -44,7 +48,7 @@ void SMFTrack::update()
   }
   do {
     data_type data = *data_cur_++;
-    Channel &ch = smf_.instrument().channel(data & 0x0f);
+    Channel &ch = inst->channel(data & 0x0f);
 #ifdef ENABLE_RUNNING_STATUS
   retry:
 #endif

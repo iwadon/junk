@@ -16,6 +16,7 @@
 #include <cppunit/TestAssert.h>
 #include "instrument.hpp"
 #include "smf.hpp"
+#include "song.hpp"
 
 class SMFTrackTest : public CppUnit::TestCase
 {
@@ -32,6 +33,10 @@ class SMFTrackTest : public CppUnit::TestCase
   CPPUNIT_TEST(test_update);
   CPPUNIT_TEST_SUITE_END();
 public:
+  Song song_;
+  Instrument inst_;
+  void setUp();
+  void tearDown();
   void test_is_playing();
 #ifdef SMF_TRACK_DEBUG
   void test_inspect();
@@ -59,11 +64,18 @@ static const SMFTrack::data_type MTRK_01[] =
   "\x01\x80\x3e\x40"		// note off
   "\x01\xff\x2f\x00";		// end of track
 
+void SMFTrackTest::setUp()
+{
+  song_.set_instrument(&inst_);
+}
+
+void SMFTrackTest::tearDown()
+{
+}
+
 void SMFTrackTest::test_is_playing()
 {
-  SMF smf;
-  Instrument inst;
-  smf.set_instrument(&inst);
+  SMF smf(song_);
   SMFTrack t(smf);
   CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
   t.setup(MTRK_00, sizeof MTRK_00 - 1);
@@ -77,9 +89,7 @@ void SMFTrackTest::test_is_playing()
 #ifdef SMF_TRACK_DEBUG
 void SMFTrackTest::test_inspect()
 {
-  SMF smf;
-  Instrument inst;
-  smf.set_instrument(&inst);
+  SMF smf(song_);
   SMFTrack t(smf);
   CPPUNIT_ASSERT_EQUAL(std::string("#<SMFTrack NONE>"), t.inspect());
   t.setup(MTRK_01, sizeof MTRK_01 - 1);
@@ -103,9 +113,7 @@ void SMFTrackTest::test_inspect()
 
 void SMFTrackTest::test_pause()
 {
-  SMF smf;
-  Instrument inst;
-  smf.set_instrument(&inst);
+  SMF smf(song_);
   SMFTrack t(smf);
   t.setup(MTRK_00, sizeof MTRK_00 - 1);
   CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
@@ -132,9 +140,7 @@ void SMFTrackTest::test_pause()
 
 void SMFTrackTest::test_play()
 {
-  SMF smf;
-  Instrument inst;
-  smf.set_instrument(&inst);
+  SMF smf(song_);
   SMFTrack t(smf);
   t.setup(MTRK_01, sizeof MTRK_01 - 1);
   CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
@@ -150,9 +156,7 @@ void SMFTrackTest::test_play()
 
 void SMFTrackTest::test_resume()
 {
-  SMF smf;
-  Instrument inst;
-  smf.set_instrument(&inst);
+  SMF smf(song_);
   SMFTrack t(smf);
   t.setup(MTRK_00, sizeof MTRK_00 - 1);
   t.pause();
@@ -170,9 +174,7 @@ void SMFTrackTest::test_resume()
 
 void SMFTrackTest::test_setup()
 {
-  SMF smf;
-  Instrument inst;
-  smf.set_instrument(&inst);
+  SMF smf(song_);
   SMFTrack t(smf);
   CPPUNIT_ASSERT_EQUAL(true, t.setup(MTRK_00, sizeof MTRK_00 - 1));
   CPPUNIT_ASSERT_EQUAL(false, t.setup("ABCDEFG", 7));
@@ -182,9 +184,7 @@ void SMFTrackTest::test_setup()
 
 void SMFTrackTest::test_stop()
 {
-  SMF smf;
-  Instrument inst;
-  smf.set_instrument(&inst);
+  SMF smf(song_);
   SMFTrack t(smf);
   t.setup(MTRK_01, sizeof MTRK_01 - 1);
   CPPUNIT_ASSERT_EQUAL(false, t.is_playing());

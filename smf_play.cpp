@@ -9,7 +9,7 @@
 #include "frame_wait_timer.hpp"
 #include "instrument.hpp"
 #include "sdl_logger.hpp"
-#include "smf.hpp"
+#include "song.hpp"
 
 class App
 {
@@ -21,7 +21,7 @@ public:
   void update();
   void mix_audio(uint8_t *buf, size_t len);
 private:
-  SMF smf_;
+  Song song_;
   Instrument inst_;
   FrameWaitTimer fwt_;
   SDL_AudioSpec audio_spec_;
@@ -65,16 +65,16 @@ int App::run(int argc, char *argv[])
   }
   SDL_PauseAudio(0);
 
-  smf_.set_instrument(&inst_);
-  smf_.load_file(argv[1]);
-  smf_.play();
+  song_.set_instrument(&inst_);
+  song_.load_file(argv[1]);
+  song_.play();
   fwt_.reset();
   bool done = false;
   while (!done) {
     int frames = fwt_.wait();
     for (int i = 0; i < frames; ++i) {
-      smf_.update();
-      if (!smf_.is_playing()) {
+      song_.update();
+      if (!song_.is_playing()) {
 	done = true;
 	break;
       }
@@ -86,7 +86,7 @@ int App::run(int argc, char *argv[])
 void App::sdl_audio_callback(void *userdata, Uint8 *stream, int len)
 {
   App *app = reinterpret_cast<App *>(userdata);
-  app->smf_.mix_audio(stream, len);
+  app->song_.mix_audio(stream, len);
 }
 
 int main(int argc, char *argv[])
