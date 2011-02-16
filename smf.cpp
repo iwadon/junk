@@ -5,6 +5,7 @@
 #include <SDL.h>
 #include "instrument.hpp"
 #include "sdl_logger.hpp"
+#include "smf_track.hpp"
 
 /// コンストラクタ
 SMF::SMF()

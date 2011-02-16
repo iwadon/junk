@@ -1,13 +1,18 @@
 #ifndef SMF_HPP_INCLUDED
 #define SMF_HPP_INCLUDED 1
 
-#ifdef STDCXX_98_HEADERS
 #include <vector>
+#if defined(HAVE_TR1_CSTDINT)
+#include <tr1/cstdint>
+#elif defined(HAVE_BOOST)
+#include <boost/cstdint.hpp>
+#elif defined(HAVE_STDINT_H)
+#include <stdint.h>
 #endif
-#include "smf_track.hpp"
 #include "sp.hpp"
 
 class Instrument;
+class SMFTrack;
 
 /**
  * @brief 標準MIDIファイル形式のデータを扱うためのクラス
