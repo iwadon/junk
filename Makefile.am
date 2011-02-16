@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-bin_PROGRAMS = benchmark_sample \
+noinst_PROGRAMS = benchmark_sample \
 	       c1 \
 	       map_benchmark \
 	       oscillator_sample \
@@ -52,7 +52,7 @@ smf_play_SOURCES = smf_play.cpp
 smf_play_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 smf_play_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS)
 
-lib_LIBRARIES = liblogger.a libpeg.a libsdlapp.a libsequencer.a libtest_main.a
+noinst_LIBRARIES = liblogger.a libpeg.a libsdlapp.a libsequencer.a libtest_main.a
 
 liblogger_a_SOURCES = logger.cpp logger.hpp
 liblogger_a_CPPFLAGS = $(BOOST_CPPFLAGS)
