@@ -2,9 +2,6 @@
 #include "config.h"
 #endif
 #include "smf.hpp"
-#ifdef HAVE_BOOST
-#include <boost/foreach.hpp>
-#endif
 #include <SDL.h>
 #include "instrument.hpp"
 #include "sdl_logger.hpp"
@@ -23,7 +20,8 @@ SMF::SMF()
 /// デストラクタ
 SMF::~SMF()
 {
-  BOOST_FOREACH(track_ptr_type t, tracks_) {
+  for (std::vector<track_ptr_type>::iterator i = tracks_.begin(); i != tracks_.end(); ++i) {
+    track_ptr_type t = *i;
     delete t;
   }
   SDL_free(data_);
