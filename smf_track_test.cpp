@@ -21,7 +21,9 @@ class SMFTrackTest : public CppUnit::TestCase
 {
   CPPUNIT_TEST_SUITE(SMFTrackTest);
   CPPUNIT_TEST(test_is_playing);
+#ifdef SMF_TRACK_DEBUG
   CPPUNIT_TEST(test_inspect);
+#endif
   CPPUNIT_TEST(test_pause);
   CPPUNIT_TEST(test_play);
   CPPUNIT_TEST(test_resume);
@@ -31,7 +33,9 @@ class SMFTrackTest : public CppUnit::TestCase
   CPPUNIT_TEST_SUITE_END();
 public:
   void test_is_playing();
+#ifdef SMF_TRACK_DEBUG
   void test_inspect();
+#endif
   void test_pause();
   void test_play();
   void test_resume();
@@ -70,6 +74,7 @@ void SMFTrackTest::test_is_playing()
   CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
 }
 
+#ifdef SMF_TRACK_DEBUG
 void SMFTrackTest::test_inspect()
 {
   SMF smf;
@@ -94,6 +99,7 @@ void SMFTrackTest::test_inspect()
   t.update();
   CPPUNIT_ASSERT_EQUAL(std::string("#<SMFTrack STOPPED>"), t.inspect());
 }
+#endif
 
 void SMFTrackTest::test_pause()
 {
