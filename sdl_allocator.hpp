@@ -10,6 +10,7 @@ class SDLAllocator;
 template <>
 class SDLAllocator<void>
 {
+public:
   typedef size_t size_type;
   typedef ptrdiff_t difference_type;
   typedef void *pointer;
