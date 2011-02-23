@@ -2,6 +2,7 @@
 #include "config.h"
 #endif
 #include "load_time.hpp"
+#include <algorithm>
 #include <cassert>
 #include <SDL.h>
 #ifdef HAVE_MACH_MACH_TIME_H
