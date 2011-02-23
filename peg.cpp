@@ -4,6 +4,7 @@
 #include "peg.hpp"
 #ifdef STDCXX_98_HEADERS
 #include <cctype>
+#include <cstring>
 #include <iostream>
 #endif
 #ifdef HAVE_BOOST
