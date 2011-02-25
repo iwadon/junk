@@ -1,6 +1,7 @@
 AUTOMAKE_OPTIONS = foreign
 
 noinst_PROGRAMS = benchmark_sample \
+		  boost_program_options_sample \
 	       c1 \
 	       map_benchmark \
 	       oscillator_sample \
@@ -14,6 +15,11 @@ noinst_PROGRAMS = benchmark_sample \
 
 benchmark_sample_SOURCES = benchmark_sample.cpp
 benchmark_sample_CPPFLAGS = $(BOOST_CPPFLAGS)
+
+boost_program_options_sample_SOURCES = boost_program_options_sample.cpp
+boost_program_options_sample_CPPFLAGS = $(BOOST_CPPFLAGS)
+boost_program_options_sample_LDFLAGS = $(BOOST_LDFLAGS)
+boost_program_options_sample_LDADD = $(BOOST_PROGRAM_OPTIONS_LIB)
 
 c1_SOURCES = c1.cpp
 
