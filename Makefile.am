@@ -117,6 +117,7 @@ all_tests_SOURCES = \
 	fps_test.cpp \
 	function_test.cpp \
 	instrument_test.cpp \
+	line_segment_2d_test.cpp \
 	load_time_test.cpp \
 	logger_test.cpp \
 	lot_box_test.cpp \

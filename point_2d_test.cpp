@@ -11,10 +11,12 @@ class Point2DTest : public CppUnit::TestCase
   CPPUNIT_TEST_SUITE(Point2DTest);
   CPPUNIT_TEST(test_CTOR);
   CPPUNIT_TEST(test_ADDEQ);
+  CPPUNIT_TEST(test_inspect);
   CPPUNIT_TEST_SUITE_END();
 public:
   void test_CTOR();
   void test_ADDEQ();
+  void test_inspect();
 };
 
 void Point2DTest::test_CTOR()
@@ -34,6 +36,12 @@ void Point2DTest::test_ADDEQ()
   p += v;
   CPPUNIT_ASSERT_EQUAL(4.0f, p.x);
   CPPUNIT_ASSERT_EQUAL(6.0f, p.y);
+}
+
+void Point2DTest::test_inspect()
+{
+  Point2D p(1.23f, 0.456f);
+  CPPUNIT_ASSERT_EQUAL(std::string("(1.23, 0.46)"), p.inspect());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Point2DTest);
