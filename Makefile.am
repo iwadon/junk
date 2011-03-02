@@ -111,6 +111,7 @@ TESTS = $(check_PROGRAMS) peg_test.sh
 all_tests_SOURCES = \
 	audio_stream_test.cpp \
 	channel_test.cpp \
+	circle_2d_test.cpp \
 	circular_buffer_test.cpp \
 	filter_test.cpp \
 	font_test.cpp \
