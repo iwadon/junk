@@ -51,7 +51,6 @@ build $builddir/map_benchmark.o: cxx $srcdir/map_benchmark.cpp
 build $builddir/map_benchmark: link $builddir/map_benchmark.o
 
 build $builddir/oscillator_sample.o: cxx $srcdir/oscillator_sample.cpp
-  libs = -lSDL -lSDL_image
 build $builddir/oscillator_sample: link $builddir/oscillator_sample.o \
     $builddir/libsequencer.a $builddir/libsdlapp.a $builddir/liblogger.a
   libs = -lSDL -lSDL_image
@@ -140,8 +139,8 @@ build $builddir/libsequencer.a: ar $builddir/channel.o \
     $builddir/variable_length_value.o \
     $builddir/voice.o
 
-build $builddir/libtest_main.o: cxx $srcdir/test_main.cpp
-build $builddir/libtest_main.a: ar $builddir/libtest_main.o
+build $builddir/test_main.o: cxx $srcdir/test_main.cpp
+build $builddir/libtest_main.a: ar $builddir/test_main.o
 
 build $builddir/vector_length_benchmark.o: cxx $srcdir/vector_length_benchmark.cpp
 build $builddir/vector_length_benchmark: link $builddir/vector_length_benchmark.o
