@@ -37,6 +37,10 @@ rule run
   command = $in
   description = RUN $in
 
+rule clean
+  command = rm -rf $builddir
+  description = CLEAN $builddir
+
 build $builddir/benchmark_sample.o: cxx $srcdir/benchmark_sample.cpp
 build $builddir/benchmark_sample: link $builddir/benchmark_sample.o
 
@@ -229,3 +233,5 @@ build $builddir/all_tests: link \
   libs = $libs -lcppunit -lSDL -lSDL_image -lboost_program_options-mt
 
 build check: run $builddir/all_tests
+
+build clean: clean
