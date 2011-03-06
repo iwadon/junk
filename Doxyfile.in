@@ -88,30 +88,52 @@ WARN_LOGFILE           = "@builddir@/dox-warning.txt"
 # configuration options related to the input files
 #---------------------------------------------------------------------------
 INPUT                  = "@srcdir@/audio_stream.hpp" \
+			 "@srcdir@/benchmark.hpp" \
+			 "@srcdir@/benchmark_sample.cpp" \
+			 "@srcdir@/boost_program_options_sample.cpp" \
+			 "@srcdir@/c1.cpp" \
 		         "@srcdir@/channel.cpp" "@srcdir@/channel.hpp" \
+			 "@srcdir@/circle_2d.hpp" \
+			 "@srcdir@/circular_buffer.hpp" \
+			 "@srcdir@/controller.cpp" "@srcdir@/controller.hpp" \
 		         "@srcdir@/font.cpp" "@srcdir@/font.hpp" \
 		         "@srcdir@/fps.cpp" "@srcdir@/fps.hpp" \
 			 "@srcdir@/frame_wait_timer.cpp" "@srcdir@/frame_wait_timer.hpp" \
 			 "@srcdir@/function.hpp" \
 		         "@srcdir@/instrument.cpp" "@srcdir@/instrument.hpp" \
+			 "@srcdir@/line_segment_2d.hpp" \
+			 "@srcdir@/load_time.cpp" "@srcdir@/load_time.hpp" \
 		         "@srcdir@/logger.cpp" "@srcdir@/logger.hpp" \
 			 "@srcdir@/lot_box.hpp" \
+			 "@srcdir@/map_benchmark.cpp" \
 			 "@srcdir@/observer.hpp" \
 			 "@srcdir@/oscillator.cpp" "@srcdir@/oscillator.hpp" \
 			 "@srcdir@/oscillator_factory.cpp" "@srcdir@/oscillator_factory.hpp" \
 			 "@srcdir@/oscillator_stream.cpp" "@srcdir@/oscillator_stream.hpp" \
 			 "@srcdir@/peg.cpp" "@srcdir@/peg.hpp" \
-			 "@srcdir@/point.hpp" \
+			 "@srcdir@/point_2d.hpp" \
+			 "@srcdir@/pseudo_triangle_wave_oscillator.cpp" "@srcdir@/pseudo_triangle_wave_oscillator.hpp" \
+			 "@srcdir@/pulse_wave_oscillator.cpp" "@srcdir@/pulse_wave_oscillator.hpp" \
+			 "@srcdir@/rect.hpp" \
+		         "@srcdir@/sdl_allocator.hpp" \
 		         "@srcdir@/sdl_app.cpp" "@srcdir@/sdl_app.hpp" \
+		         "@srcdir@/sdl_event_sample.c" \
+		         "@srcdir@/sdl_event_sample2.m" \
+		         "@srcdir@/sdl_logger.hpp" \
 			 "@srcdir@/sine_wave_oscillator.cpp" "@srcdir@/sine_wave_oscillator.hpp" \
 			 "@srcdir@/smf.cpp" "@srcdir@/smf.hpp" \
+			 "@srcdir@/smf_play.cpp" \
 		         "@srcdir@/smf_track.cpp" "@srcdir@/smf_track.hpp" \
+			 "@srcdir@/song.cpp" "@srcdir@/song.hpp" \
 			 "@srcdir@/sp.hpp" \
+			 "@srcdir@/spec.hpp" \
 		         "@srcdir@/sprite.cpp" "@srcdir@/sprite.hpp" \
 		         "@srcdir@/texture.cpp" "@srcdir@/texture.hpp" \
 		         "@srcdir@/texture_pool.cpp" "@srcdir@/texture_pool.hpp" \
+			 "@srcdir@/triangle_wave_oscillator.cpp" "@srcdir@/triangle_wave_oscillator.hpp" \
 			 "@srcdir@/variable_length_value.hpp" \
-			 "@srcdir@/vector.hpp" \
+			 "@srcdir@/vector_2d.hpp" \
+			 "@srcdir@/voice.hpp" \
 			 "@srcdir@/volume.hpp"
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          =
