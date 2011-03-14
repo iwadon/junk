@@ -248,6 +248,11 @@ inline Vector2D &Vector2D::rotate(const float theta)
   return *this;
 }
 
+static inline Vector2D operator*(const float f, const Vector2D &v)
+{
+  return v * f;
+}
+
 static inline std::ostream &operator<<(std::ostream &os, const Vector2D &v)
 {
   os << v.inspect();

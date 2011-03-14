@@ -11,6 +11,7 @@ class LineSegment2DTest : public CppUnit::TestCase
   CPPUNIT_TEST(test_CTOR);
   CPPUNIT_TEST(test_cross_point);
   CPPUNIT_TEST(test_inspect);
+  CPPUNIT_TEST(test_intersection_point);
   CPPUNIT_TEST(test_is_crossed);
   CPPUNIT_TEST(test_length);
   CPPUNIT_TEST(test_side);
@@ -20,6 +21,7 @@ public:
   void test_CTOR();
   void test_cross_point();
   void test_inspect();
+  void test_intersection_point();
   void test_is_crossed();
   void test_length();
   void test_side();
@@ -60,6 +62,26 @@ void LineSegment2DTest::test_inspect()
 {
   LineSegment2D l1(1.23f, 0.456f, 7.8f, 9.012f);
   CPPUNIT_ASSERT_EQUAL(std::string("(1.23, 0.46)-(7.80, 9.01)"), l1.inspect());
+}
+
+void LineSegment2DTest::test_intersection_point()
+{
+  LineSegment2D l1(1.0f, 0.0f, 0.0f, 1.0f);
+  LineSegment2D l2(0.0f, 0.0f, 1.0f, 1.0f);
+  Point2D p;
+  CPPUNIT_ASSERT_EQUAL(true, l1.intersection_point_with(p, l2));
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5f, p.x, 0.01f);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5f, p.y, 0.01f);
+
+  LineSegment2D l3(0.0f, 1.0f, 1.0f, 0.0f);
+  CPPUNIT_ASSERT_EQUAL(true, l3.intersection_point_with(p, l2));
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5f, p.x, 0.01f);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5f, p.y, 0.01f);
+
+  LineSegment2D l4(1.0f, 1.0f, 0.0f, 0.0f);
+  CPPUNIT_ASSERT_EQUAL(true, l3.intersection_point_with(p, l4));
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5f, p.x, 0.01f);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5f, p.y, 0.01f);
 }
 
 void LineSegment2DTest::test_is_crossed()

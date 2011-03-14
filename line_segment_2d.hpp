@@ -120,6 +120,25 @@ struct LineSegment2D
   }
 
   /**
+   * @brief 他の線分との交点を返す
+   *
+   * @param [out] p 交点。
+   * @param [in]  o 他の線分。
+   *
+   * @retval true  正常に交点を求められました。
+   * @retval false 交点はありませんでした。
+   */
+  bool intersection_point_with(Point2D &p, const LineSegment2D &o)
+  {
+    if (!is_crossed(o)) {
+      return false;
+    }
+    float r = ((o.p2.y - o.p1.y) * (o.p1.x - p1.x) - (o.p2.x - o.p1.x) * (o.p1.y - p1.y)) / ((p2.x - p1.x) * (o.p2.y - o.p1.y) - (p2.y - p1.y) * (o.p2.x - o.p1.x));
+    p = p1 + r * (p2 - p1);
+    return true;
+  }
+
+  /**
    * @brief 線分の長さを返す
    *
    * @return 線分の長さ。
