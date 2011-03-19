@@ -8,6 +8,7 @@
 class LineSegment2DTest : public CppUnit::TestCase
 {
   CPPUNIT_TEST_SUITE(LineSegment2DTest);
+  CPPUNIT_TEST(test_CTOR);
   CPPUNIT_TEST(test_cross_point);
   CPPUNIT_TEST(test_inspect);
   CPPUNIT_TEST(test_is_crossed);
@@ -16,6 +17,7 @@ class LineSegment2DTest : public CppUnit::TestCase
   CPPUNIT_TEST(test_vector);
   CPPUNIT_TEST_SUITE_END();
 public:
+  void test_CTOR();
   void test_cross_point();
   void test_inspect();
   void test_is_crossed();
@@ -23,6 +25,23 @@ public:
   void test_side();
   void test_vector();
 };
+
+void LineSegment2DTest::test_CTOR()
+{
+  LineSegment2D l1(1.0f, 2.0f, 3.0f, 4.0f);
+  CPPUNIT_ASSERT_EQUAL(1.0f, l1.p1.x);
+  CPPUNIT_ASSERT_EQUAL(2.0f, l1.p1.y);
+  CPPUNIT_ASSERT_EQUAL(3.0f, l1.p2.x);
+  CPPUNIT_ASSERT_EQUAL(4.0f, l1.p2.y);
+
+  Point2D p1(1.0f, 2.0f);
+  Point2D p2(3.0f, 4.0f);
+  LineSegment2D l2(p1, p2);
+  CPPUNIT_ASSERT_EQUAL(1.0f, l2.p1.x);
+  CPPUNIT_ASSERT_EQUAL(2.0f, l2.p1.y);
+  CPPUNIT_ASSERT_EQUAL(3.0f, l2.p2.x);
+  CPPUNIT_ASSERT_EQUAL(4.0f, l2.p2.y);
+}
 
 void LineSegment2DTest::test_cross_point()
 {

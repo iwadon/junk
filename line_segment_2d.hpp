@@ -24,6 +24,18 @@ struct LineSegment2D
   }
 
   /**
+   * @brief コンストラクタ
+   *
+   * @param [in] p1 始点。
+   * @param [in] p2 終点。
+   */
+  LineSegment2D(const Point2D &p1_, const Point2D &p2_)
+    : p1(p1_)
+    , p2(p2_)
+  {
+  }
+
+  /**
    * @brief 二つの線分の交点を返す
    *
    * @param [in]  o  もう一方の線分。
