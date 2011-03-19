@@ -23,13 +23,17 @@ struct Vector2D
   operator float *();
   operator const float *() const;
 
+  Vector2D &operator+=(const Vector2D &rhs);
+  Vector2D &operator-=(const Vector2D &rhs);
+  Vector2D &operator*=(const float mul);
+  Vector2D &operator*=(const Vector2D &rhs);
+  Vector2D &operator/=(const float mul);
+  Vector2D &operator/=(const Vector2D &rhs);
+
   static Vector2D angle_length(const float theta, const float len);
   float length() const;
   float inner_product(const Vector2D &o) const;
-  Vector2D &operator+=(const Vector2D &rhs);
   Vector2D operator+(const Vector2D &rhs) const;
-  Vector2D &operator*=(const float mul);
-  Vector2D &operator*=(const Vector2D &rhs);
   Vector2D operator*(const float mul) const;
   Vector2D operator*(const Vector2D &rhs) const;
   bool operator==(const Vector2D &rhs) const;
@@ -62,6 +66,48 @@ inline Vector2D::operator const float *() const
   return values;
 }
 
+inline Vector2D &Vector2D::operator+=(const Vector2D &rhs)
+{
+  x += rhs.x;
+  y += rhs.y;
+  return *this;
+}
+
+inline Vector2D &Vector2D::operator-=(const Vector2D &rhs)
+{
+  x -= rhs.x;
+  y -= rhs.y;
+  return *this;
+}
+
+inline Vector2D &Vector2D::operator*=(const float mul)
+{
+  x *= mul;
+  y *= mul;
+  return *this;
+}
+
+inline Vector2D &Vector2D::operator*=(const Vector2D &rhs)
+{
+  x *= rhs.x;
+  y *= rhs.y;
+  return *this;
+}
+
+inline Vector2D &Vector2D::operator/=(const float mul)
+{
+  x /= mul;
+  y /= mul;
+  return *this;
+}
+
+inline Vector2D &Vector2D::operator/=(const Vector2D &rhs)
+{
+  x /= rhs.x;
+  y /= rhs.y;
+  return *this;
+}
+
 inline Vector2D Vector2D::angle_length(const float theta, const float len)
 {
   Vector2D v;
@@ -80,32 +126,11 @@ inline float Vector2D::inner_product(const Vector2D &o) const
   return x * o.x + y * o.y;
 }
 
-inline Vector2D &Vector2D::operator+=(const Vector2D &rhs)
-{
-  x += rhs.x;
-  y += rhs.y;
-  return *this;
-}
-
 inline Vector2D Vector2D::operator+(const Vector2D &rhs) const
 {
   Vector2D v(*this);
   v += rhs;
   return v;
-}
-
-inline Vector2D &Vector2D::operator*=(const float mul)
-{
-  x *= mul;
-  y *= mul;
-  return *this;
-}
-
-inline Vector2D &Vector2D::operator*=(const Vector2D &rhs)
-{
-  x *= rhs.x;
-  y *= rhs.y;
-  return *this;
 }
 
 inline Vector2D Vector2D::operator*(const float mul) const

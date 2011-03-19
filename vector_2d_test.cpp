@@ -11,12 +11,14 @@ class Vector2DTest : public CppUnit::TestCase
   CPPUNIT_TEST_SUITE(Vector2DTest);
   CPPUNIT_TEST(test_CTOR);
   CPPUNIT_TEST(test_float);
+  CPPUNIT_TEST(test_ADDEQ);
+  CPPUNIT_TEST(test_SUBEQ);
+  CPPUNIT_TEST(test_MULEQ);
+  CPPUNIT_TEST(test_DIVEQ);
   CPPUNIT_TEST(test_const_float);
   CPPUNIT_TEST(test_length);
   CPPUNIT_TEST(test_inner_product);
-  CPPUNIT_TEST(test_ADDEQ);
   CPPUNIT_TEST(test_ADD);
-  CPPUNIT_TEST(test_MULEQ);
   CPPUNIT_TEST(test_MUL);
   CPPUNIT_TEST(test_EQEQ);
   CPPUNIT_TEST(test_NOTEQ);
@@ -30,11 +32,13 @@ public:
   void test_CTOR();
   void test_float();
   void test_const_float();
+  void test_ADDEQ();
+  void test_SUBEQ();
+  void test_MULEQ();
+  void test_DIVEQ();
   void test_length();
   void test_inner_product();
-  void test_ADDEQ();
   void test_ADD();
-  void test_MULEQ();
   void test_MUL();
   void test_EQEQ();
   void test_NOTEQ();
@@ -85,6 +89,48 @@ void Vector2DTest::test_const_float()
   CPPUNIT_ASSERT_EQUAL(4.56f, f1[1]);
 }
 
+void Vector2DTest::test_ADDEQ()
+{
+  Vector2D v1(1, 2);
+  Vector2D v2(3, 4);
+  v1 += v2;
+  CPPUNIT_ASSERT_EQUAL(4.0f, v1.x);
+  CPPUNIT_ASSERT_EQUAL(6.0f, v1.y);
+}
+
+void Vector2DTest::test_SUBEQ()
+{
+  Vector2D v1(1, 2);
+  Vector2D v2(3, 4);
+  v1 -= v2;
+  CPPUNIT_ASSERT_EQUAL(-2.0f, v1.x);
+  CPPUNIT_ASSERT_EQUAL(-2.0f, v1.y);
+}
+
+void Vector2DTest::test_MULEQ()
+{
+  Vector2D v1(1, 2);
+  v1 *= 2.5f;
+  CPPUNIT_ASSERT_EQUAL(2.5f, v1.x);
+  CPPUNIT_ASSERT_EQUAL(5.0f, v1.y);
+  Vector2D v2(2, 1);
+  v1 *= v2;
+  CPPUNIT_ASSERT_EQUAL(5.0f, v1.x);
+  CPPUNIT_ASSERT_EQUAL(5.0f, v1.y);
+}
+
+void Vector2DTest::test_DIVEQ()
+{
+  Vector2D v1(1, 2);
+  v1 /= 2.5f;
+  CPPUNIT_ASSERT_EQUAL(0.4f, v1.x);
+  CPPUNIT_ASSERT_EQUAL(0.8f, v1.y);
+  Vector2D v2(2, 1);
+  v1 /= v2;
+  CPPUNIT_ASSERT_EQUAL(0.2f, v1.x);
+  CPPUNIT_ASSERT_EQUAL(0.8f, v1.y);
+}
+
 void Vector2DTest::test_length()
 {
   Vector2D v1(0, 0);
@@ -106,15 +152,6 @@ void Vector2DTest::test_inner_product()
   CPPUNIT_ASSERT_EQUAL(4.0f, v1.inner_product(v2));
 }
 
-void Vector2DTest::test_ADDEQ()
-{
-  Vector2D v1(1, 2);
-  Vector2D v2(3, 4);
-  v1 += v2;
-  CPPUNIT_ASSERT_EQUAL(4.0f, v1.x);
-  CPPUNIT_ASSERT_EQUAL(6.0f, v1.y);
-}
-
 void Vector2DTest::test_ADD()
 {
   Vector2D v1(1, 2);
@@ -126,18 +163,6 @@ void Vector2DTest::test_ADD()
   CPPUNIT_ASSERT_EQUAL(4.0f, v2.y);
   CPPUNIT_ASSERT_EQUAL(4.0f, v3.x);
   CPPUNIT_ASSERT_EQUAL(6.0f, v3.y);
-}
-
-void Vector2DTest::test_MULEQ()
-{
-  Vector2D v1(1, 2);
-  v1 *= 2.5f;
-  CPPUNIT_ASSERT_EQUAL(2.5f, v1.x);
-  CPPUNIT_ASSERT_EQUAL(5.0f, v1.y);
-  Vector2D v2(2, 1);
-  v1 *= v2;
-  CPPUNIT_ASSERT_EQUAL(5.0f, v1.x);
-  CPPUNIT_ASSERT_EQUAL(5.0f, v1.y);
 }
 
 void Vector2DTest::test_MUL()
