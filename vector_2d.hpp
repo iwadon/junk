@@ -46,6 +46,7 @@ struct Vector2D
   static Vector2D angle_length(const float theta, const float len);
   float cross(const Vector2D &rhs) const;
   float dot(const Vector2D &rhs) const;
+  std::string inspect() const;
   float length() const;
   Vector2D &normalize();
   Vector2D &rotate(const float rad);
@@ -210,6 +211,14 @@ inline float Vector2D::dot(const Vector2D &rhs) const
   return x * rhs.x + y * rhs.y;
 }
 
+inline std::string Vector2D::inspect() const
+{
+  char buf[128];
+  snprintf(buf, sizeof buf, "(%.2f, %.2f)", x, y);
+  std::string str(buf);
+  return str;
+}
+
 inline float Vector2D::length() const
 {
   return sqrtf(x * x + y * y);
@@ -241,7 +250,7 @@ inline Vector2D &Vector2D::rotate(const float theta)
 
 static inline std::ostream &operator<<(std::ostream &os, const Vector2D &v)
 {
-  os << "(" << v.x << ", " << v.y << ")";
+  os << v.inspect();
   return os;
 }
 

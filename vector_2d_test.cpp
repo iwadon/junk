@@ -25,6 +25,7 @@ class Vector2DTest : public CppUnit::TestCase
   CPPUNIT_TEST(test_angle_length);
   CPPUNIT_TEST(test_cross);
   CPPUNIT_TEST(test_dot);
+  CPPUNIT_TEST(test_inspect);
   CPPUNIT_TEST(test_length);
   CPPUNIT_TEST(test_normalize);
   CPPUNIT_TEST(test_rotate);
@@ -50,6 +51,7 @@ public:
   void test_angle_length();
   void test_cross();
   void test_dot();
+  void test_inspect();
   void test_length();
   void test_normalize();
   void test_rotate();
@@ -227,6 +229,12 @@ void Vector2DTest::test_dot()
   CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0f, v1.dot(v2), 0.0000001);
 }
 
+void Vector2DTest::test_inspect()
+{
+  Vector2D v1(1.23f,  -4.56f);
+  CPPUNIT_ASSERT_EQUAL(std::string("(1.23, -4.56)"), v1.inspect());
+}
+
 void Vector2DTest::test_length()
 {
   Vector2D v1(0, 0);
@@ -262,7 +270,7 @@ void Vector2DTest::test_LSHIFT()
   Vector2D v1(1, 2);
   std::ostringstream oss;
   oss << v1;
-  CPPUNIT_ASSERT_EQUAL(std::string("(1, 2)"), oss.str());
+  CPPUNIT_ASSERT_EQUAL(std::string("(1.00, 2.00)"), oss.str());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Vector2DTest);
