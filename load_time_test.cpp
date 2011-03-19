@@ -19,7 +19,7 @@ public:
 #define ASSERT_TIME(a, b) {						\
     static const double base = LoadTime::TIME_BASE_SEC;			\
     static const double base_ms = LoadTime::TIME_BASE_MILLISEC;		\
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(a, b / base, 1.0 / (base / base_ms)); \
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(a, b / base, 1.0 / (base / base_ms) * 5); \
   }
 
 void LoadTimeTest::test_elapsed_time()

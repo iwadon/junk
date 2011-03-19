@@ -4,6 +4,8 @@
 #include <cmath>
 #include <ostream>
 
+struct Point2D;
+
 struct Vector2D
 {
   float x;
@@ -11,6 +13,7 @@ struct Vector2D
 
   Vector2D();
   Vector2D(const float x, const float y);
+  Vector2D(const Point2D &p1, const Point2D &p2);
   static Vector2D angle_length(const float theta, const float len);
   float length() const;
   float inner_product(const Vector2D &o) const;
@@ -23,6 +26,8 @@ struct Vector2D
   bool operator==(const Vector2D &rhs) const;
   bool operator!=(const Vector2D &rhs) const;
   Vector2D &rotate(const float rad);
+  float dot(const Vector2D &rhs) const;
+  float cross(const Vector2D &rhs) const;
 };
 
 inline Vector2D::Vector2D()
@@ -116,6 +121,30 @@ inline Vector2D &Vector2D::rotate(const float theta)
   x = tx;
   y = ty;
   return *this;
+}
+
+/**
+ * @brief 二つのベクトルの内積を求める
+ *
+ * @param [in] rhs もう一方のベクトル。
+ *
+ * @return 二つのベクトルの内積。
+ */
+inline float Vector2D::dot(const Vector2D &rhs) const
+{
+  return x * rhs.x + y * rhs.y;
+}
+
+/**
+ * @brief 二つのベクトルの外積を求める
+ *
+ * @param [in] rhs もう一方のベクトル。
+ *
+ * @return 二つのベクトルの外積。
+ */
+inline float Vector2D::cross(const Vector2D &rhs) const
+{
+  return x * rhs.y - y * rhs.x;
 }
 
 static inline std::ostream &operator<<(std::ostream &os, const Vector2D &v)

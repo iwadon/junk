@@ -1,17 +1,18 @@
 AUTOMAKE_OPTIONS = foreign
 
 noinst_PROGRAMS = benchmark_sample \
-		  boost_program_options_sample \
-	       c1 \
-	       map_benchmark \
-	       oscillator_sample \
-	       pcap_sample \
-	       s1 \
-	       s2 \
-	       sdl_event_sample \
-	       sdl_event_sample2 \
-	       smf_play \
-	       vector_length_benchmark
+	boost_program_options_sample \
+	c1 \
+	line_segment_2d_benchmark \
+	map_benchmark \
+	oscillator_sample \
+	pcap_sample \
+	s1 \
+	s2 \
+	sdl_event_sample \
+	sdl_event_sample2 \
+	smf_play \
+	vector_length_benchmark
 
 benchmark_sample_SOURCES = benchmark_sample.cpp
 benchmark_sample_CPPFLAGS = $(BOOST_CPPFLAGS)
@@ -22,6 +23,11 @@ boost_program_options_sample_LDFLAGS = $(BOOST_LDFLAGS)
 boost_program_options_sample_LDADD = $(BOOST_PROGRAM_OPTIONS_LIB)
 
 c1_SOURCES = c1.cpp
+
+line_segment_2d_benchmark_SOURCES = line_segment_2d_benchmark.cpp
+line_segment_2d_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
+line_segment_2d_benchmark_LDADD = libsdlapp.a
+
 
 map_benchmark_SOURCES = map_benchmark.cpp
 map_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
@@ -71,10 +77,12 @@ libsdlapp_a_SOURCES = controller.cpp controller.hpp \
 		      font.cpp font.hpp \
 		      fps.cpp fps.hpp \
 		      load_time.cpp load_time.hpp \
+		      point_2d.cpp point_2d.hpp \
 		      sdl_app.cpp sdl_app.hpp \
 		      sprite.cpp sprite.hpp \
 		      texture.cpp texture.hpp \
-		      texture_pool.cpp texture_pool.hpp
+		      texture_pool.cpp texture_pool.hpp \
+		      vector_2d.cpp vector_2d.hpp
 libsdlapp_a_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 
 libsequencer_a_SOURCES = audio_stream.hpp \

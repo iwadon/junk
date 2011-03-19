@@ -8,18 +8,34 @@
 class LineSegment2DTest : public CppUnit::TestCase
 {
   CPPUNIT_TEST_SUITE(LineSegment2DTest);
+  CPPUNIT_TEST(test_cross_point);
   CPPUNIT_TEST(test_inspect);
   CPPUNIT_TEST(test_is_crossed);
   CPPUNIT_TEST(test_length);
   CPPUNIT_TEST(test_side);
+  CPPUNIT_TEST(test_vector);
   CPPUNIT_TEST_SUITE_END();
 public:
+  void test_cross_point();
   void test_inspect();
   void test_is_crossed();
   void test_length();
   void test_side();
   void test_vector();
 };
+
+void LineSegment2DTest::test_cross_point()
+{
+  LineSegment2D l1(0.0f, 0.0f, 1.0f, 1.0f);
+  LineSegment2D l2(1.0f, 0.0f, 0.0f, 1.0f);
+  Point2D cp1;
+  Point2D cp2(0.5f, 0.5f);
+  float t1, t2;
+  CPPUNIT_ASSERT_EQUAL(true, l1.cross_point(l2, &cp1, &t1, &t2));
+  CPPUNIT_ASSERT_EQUAL(cp2, cp1);
+  CPPUNIT_ASSERT_EQUAL(0.5f, t1);
+  CPPUNIT_ASSERT_EQUAL(0.5f, t2);
+}
 
 void LineSegment2DTest::test_inspect()
 {
@@ -29,12 +45,17 @@ void LineSegment2DTest::test_inspect()
 
 void LineSegment2DTest::test_is_crossed()
 {
-  LineSegment2D l1(0, 0, 1, 1);
-  LineSegment2D l2(0, 1, 1, 0);
-  CPPUNIT_ASSERT_EQUAL(true, l1.is_crossed(l2));
-  LineSegment2D l3(0.0f, 0.0f, 1.0f, 1.0f);
-  LineSegment2D l4(0.5f, 0.5f, 1.0f, 0.0f);
-  CPPUNIT_ASSERT_EQUAL(true, l3.is_crossed(l4));
+  LineSegment2D l1(0.0f, 0.0f, 1.0f, 1.0f);
+  LineSegment2D l2(1.0f, 0.0f, 0.0f, 1.0f);
+  LineSegment2D l3(0.5f, 0.5f, 1.0f, 0.0f);
+  LineSegment2D l4(2.0f, 3.0f, 4.0f, 5.0f);
+  LineSegment2D l5(1.0f, 0.0f, 0.6f, 0.4f);
+  LineSegment2D l6(2.0f, 1.0f, 1.0f, 2.0f);
+  CPPUNIT_ASSERT_EQUAL(true,  l1.is_crossed(l2));
+  CPPUNIT_ASSERT_EQUAL(true,  l1.is_crossed(l3));
+  CPPUNIT_ASSERT_EQUAL(false, l1.is_crossed(l4));
+  CPPUNIT_ASSERT_EQUAL(false, l1.is_crossed(l5));
+  CPPUNIT_ASSERT_EQUAL(false, l1.is_crossed(l6));
 }
 
 void LineSegment2DTest::test_length()

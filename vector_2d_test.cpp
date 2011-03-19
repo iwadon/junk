@@ -4,6 +4,7 @@
 #include "vector_2d.hpp"
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
+#include "point_2d.hpp"
 
 class Vector2DTest : public CppUnit::TestCase
 {
@@ -19,6 +20,8 @@ class Vector2DTest : public CppUnit::TestCase
   CPPUNIT_TEST(test_NOTEQ);
   CPPUNIT_TEST(test_LSHIFT);
   CPPUNIT_TEST(test_rotate);
+  CPPUNIT_TEST(test_dot);
+  CPPUNIT_TEST(test_cross);
   CPPUNIT_TEST_SUITE_END();
 public:
   void test_CTOR();
@@ -32,6 +35,8 @@ public:
   void test_NOTEQ();
   void test_LSHIFT();
   void test_rotate();
+  void test_dot();
+  void test_cross();
 };
 
 void Vector2DTest::test_CTOR()
@@ -51,6 +56,11 @@ void Vector2DTest::test_CTOR()
   v3 = Vector2D::angle_length(M_PI * 0.5f, 1.f);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0f, v3.x, 0.0000001);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, v3.y, 0.0000001);
+  Point2D p1(1, 2);
+  Point2D p2(3, 4);
+  Vector2D v4(p1, p2);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0f, v4.x, 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0f, v4.y, 0.0000001);
 }
 
 void Vector2DTest::test_length()
@@ -152,6 +162,20 @@ void Vector2DTest::test_rotate()
   CPPUNIT_ASSERT_EQUAL(v1, v1.rotate(M_PI * 0.5f));
   CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0f, v1.x, 0.0000001);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, v1.y, 0.0000001);
+}
+
+void Vector2DTest::test_dot()
+{
+  Vector2D v1(1.0f,  1.0f);
+  Vector2D v2(1.0f, -1.0f);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0f, v1.dot(v2), 0.0000001);
+}
+
+void Vector2DTest::test_cross()
+{
+  Vector2D v1(1.0f,  1.0f);
+  Vector2D v2(1.0f, -1.0f);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(-2.0f, v1.cross(v2), 0.0000001);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Vector2DTest);

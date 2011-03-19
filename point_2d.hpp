@@ -4,7 +4,8 @@
 #include <cstring>
 #include <ostream>
 #include <string>
-#include "vector_2d.hpp"
+
+struct Vector2D;
 
 struct Point2D
 {
@@ -14,6 +15,8 @@ struct Point2D
   Point2D();
   Point2D(const float x, const float y);
   Point2D &operator+=(const Vector2D &rhs);
+  Point2D operator+(const Vector2D &rhs) const;
+  Vector2D operator-(const Point2D &rhs) const;
   bool operator==(const Point2D &rhs) const;
   std::string inspect() const;
 };
@@ -28,13 +31,6 @@ inline Point2D::Point2D(const float x_, const float y_)
   : x(x_)
   , y(y_)
 {
-}
-
-inline Point2D &Point2D::operator+=(const Vector2D &rhs)
-{
-  x += rhs.x;
-  y += rhs.y;
-  return *this;
 }
 
 inline bool Point2D::operator==(const Point2D &rhs) const
