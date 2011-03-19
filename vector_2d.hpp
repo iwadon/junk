@@ -8,12 +8,21 @@ struct Point2D;
 
 struct Vector2D
 {
-  float x;
-  float y;
+  union {
+    struct {
+      float x;
+      float y;
+    };
+    float values[2];
+  };
 
   Vector2D();
   Vector2D(const float x, const float y);
   Vector2D(const Point2D &p1, const Point2D &p2);
+
+  operator float *();
+  operator const float *() const;
+
   static Vector2D angle_length(const float theta, const float len);
   float length() const;
   float inner_product(const Vector2D &o) const;
@@ -41,6 +50,16 @@ inline Vector2D::Vector2D(const float x_, const float y_)
   : x(x_)
   , y(y_)
 {
+}
+
+inline Vector2D::operator float *()
+{
+  return values;
+}
+
+inline Vector2D::operator const float *() const
+{
+  return values;
 }
 
 inline Vector2D Vector2D::angle_length(const float theta, const float len)

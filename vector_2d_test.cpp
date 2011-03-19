@@ -10,6 +10,8 @@ class Vector2DTest : public CppUnit::TestCase
 {
   CPPUNIT_TEST_SUITE(Vector2DTest);
   CPPUNIT_TEST(test_CTOR);
+  CPPUNIT_TEST(test_float);
+  CPPUNIT_TEST(test_const_float);
   CPPUNIT_TEST(test_length);
   CPPUNIT_TEST(test_inner_product);
   CPPUNIT_TEST(test_ADDEQ);
@@ -26,6 +28,8 @@ class Vector2DTest : public CppUnit::TestCase
   CPPUNIT_TEST_SUITE_END();
 public:
   void test_CTOR();
+  void test_float();
+  void test_const_float();
   void test_length();
   void test_inner_product();
   void test_ADDEQ();
@@ -63,6 +67,22 @@ void Vector2DTest::test_CTOR()
   Vector2D v4(p1, p2);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0f, v4.x, 0.0000001);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0f, v4.y, 0.0000001);
+}
+
+void Vector2DTest::test_float()
+{
+  Vector2D v1(1.23f, 4.56f);
+  float *f1 = v1;
+  CPPUNIT_ASSERT_EQUAL(1.23f, f1[0]);
+  CPPUNIT_ASSERT_EQUAL(4.56f, f1[1]);
+}
+
+void Vector2DTest::test_const_float()
+{
+  Vector2D v1(1.23f, 4.56f);
+  const float *f1 = v1;
+  CPPUNIT_ASSERT_EQUAL(1.23f, f1[0]);
+  CPPUNIT_ASSERT_EQUAL(4.56f, f1[1]);
 }
 
 void Vector2DTest::test_length()
