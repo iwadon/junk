@@ -15,6 +15,8 @@ class Vector2DTest : public CppUnit::TestCase
   CPPUNIT_TEST(test_SUBEQ);
   CPPUNIT_TEST(test_MULEQ);
   CPPUNIT_TEST(test_DIVEQ);
+  CPPUNIT_TEST(test_PLUS);
+  CPPUNIT_TEST(test_MINUS);
   CPPUNIT_TEST(test_const_float);
   CPPUNIT_TEST(test_length);
   CPPUNIT_TEST(test_inner_product);
@@ -36,6 +38,8 @@ public:
   void test_SUBEQ();
   void test_MULEQ();
   void test_DIVEQ();
+  void test_PLUS();
+  void test_MINUS();
   void test_length();
   void test_inner_product();
   void test_ADD();
@@ -129,6 +133,19 @@ void Vector2DTest::test_DIVEQ()
   v1 /= v2;
   CPPUNIT_ASSERT_EQUAL(0.2f, v1.x);
   CPPUNIT_ASSERT_EQUAL(0.8f, v1.y);
+}
+
+void Vector2DTest::test_PLUS()
+{
+  Vector2D v1(1.0f, 2.0f);
+  CPPUNIT_ASSERT_EQUAL(v1, +v1);
+}
+
+void Vector2DTest::test_MINUS()
+{
+  Vector2D v1( 1.0f,  2.0f);
+  Vector2D v2(-1.0f, -2.0f);
+  CPPUNIT_ASSERT_EQUAL(v2, -v1);
 }
 
 void Vector2DTest::test_length()

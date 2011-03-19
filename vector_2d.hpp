@@ -30,6 +30,9 @@ struct Vector2D
   Vector2D &operator/=(const float mul);
   Vector2D &operator/=(const Vector2D &rhs);
 
+  Vector2D operator+() const;
+  Vector2D operator-() const;
+
   static Vector2D angle_length(const float theta, const float len);
   float length() const;
   float inner_product(const Vector2D &o) const;
@@ -106,6 +109,17 @@ inline Vector2D &Vector2D::operator/=(const Vector2D &rhs)
   x /= rhs.x;
   y /= rhs.y;
   return *this;
+}
+
+inline Vector2D Vector2D::operator+() const
+{
+  return *this;
+}
+
+inline Vector2D Vector2D::operator-() const
+{
+  Vector2D v(-x, -y);
+  return v;
 }
 
 inline Vector2D Vector2D::angle_length(const float theta, const float len)
