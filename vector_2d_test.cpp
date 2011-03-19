@@ -22,6 +22,7 @@ class Vector2DTest : public CppUnit::TestCase
   CPPUNIT_TEST(test_rotate);
   CPPUNIT_TEST(test_dot);
   CPPUNIT_TEST(test_cross);
+  CPPUNIT_TEST(test_normalize);
   CPPUNIT_TEST_SUITE_END();
 public:
   void test_CTOR();
@@ -37,6 +38,7 @@ public:
   void test_rotate();
   void test_dot();
   void test_cross();
+  void test_normalize();
 };
 
 void Vector2DTest::test_CTOR()
@@ -176,6 +178,14 @@ void Vector2DTest::test_cross()
   Vector2D v1(1.0f,  1.0f);
   Vector2D v2(1.0f, -1.0f);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(-2.0f, v1.cross(v2), 0.0000001);
+}
+
+void Vector2DTest::test_normalize()
+{
+  Vector2D v1(1.0f, 1.0f);
+  CPPUNIT_ASSERT_EQUAL(v1, v1.normalize());
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.7071067f, v1.x, 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.7071067f, v1.y, 0.0000001);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Vector2DTest);

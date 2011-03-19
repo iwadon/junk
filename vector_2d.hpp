@@ -28,6 +28,7 @@ struct Vector2D
   Vector2D &rotate(const float rad);
   float dot(const Vector2D &rhs) const;
   float cross(const Vector2D &rhs) const;
+  Vector2D &normalize();
 };
 
 inline Vector2D::Vector2D()
@@ -145,6 +146,19 @@ inline float Vector2D::dot(const Vector2D &rhs) const
 inline float Vector2D::cross(const Vector2D &rhs) const
 {
   return x * rhs.y - y * rhs.x;
+}
+
+/**
+ * @brief 単位ベクトル化する
+ *
+ * @return *this。
+ */
+inline Vector2D &Vector2D::normalize()
+{
+  float len = length();
+  x /= len;
+  y /= len;
+  return *this;
 }
 
 static inline std::ostream &operator<<(std::ostream &os, const Vector2D &v)
