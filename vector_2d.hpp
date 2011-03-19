@@ -33,12 +33,16 @@ struct Vector2D
   Vector2D operator+() const;
   Vector2D operator-() const;
 
+  Vector2D operator+(const Vector2D &rhs) const;
+  Vector2D operator-(const Vector2D &rhs) const;
+  Vector2D operator*(const float mul) const;
+  Vector2D operator*(const Vector2D &rhs) const;
+  Vector2D operator/(const float div) const;
+  Vector2D operator/(const Vector2D &rhs) const;
+
   static Vector2D angle_length(const float theta, const float len);
   float length() const;
   float inner_product(const Vector2D &o) const;
-  Vector2D operator+(const Vector2D &rhs) const;
-  Vector2D operator*(const float mul) const;
-  Vector2D operator*(const Vector2D &rhs) const;
   bool operator==(const Vector2D &rhs) const;
   bool operator!=(const Vector2D &rhs) const;
   Vector2D &rotate(const float rad);
@@ -122,6 +126,48 @@ inline Vector2D Vector2D::operator-() const
   return v;
 }
 
+inline Vector2D Vector2D::operator+(const Vector2D &rhs) const
+{
+  Vector2D v(*this);
+  v += rhs;
+  return v;
+}
+
+inline Vector2D Vector2D::operator-(const Vector2D &rhs) const
+{
+  Vector2D v(*this);
+  v -= rhs;
+  return v;
+}
+
+inline Vector2D Vector2D::operator*(const float mul) const
+{
+  Vector2D v(*this);
+  v *= mul;
+  return v;
+}
+
+inline Vector2D Vector2D::operator*(const Vector2D &rhs) const
+{
+  Vector2D v(*this);
+  v *= rhs;
+  return v;
+}
+
+inline Vector2D Vector2D::operator/(const float div) const
+{
+  Vector2D v(*this);
+  v /= div;
+  return v;
+}
+
+inline Vector2D Vector2D::operator/(const Vector2D &rhs) const
+{
+  Vector2D v(*this);
+  v /= rhs;
+  return v;
+}
+
 inline Vector2D Vector2D::angle_length(const float theta, const float len)
 {
   Vector2D v;
@@ -138,27 +184,6 @@ inline float Vector2D::length() const
 inline float Vector2D::inner_product(const Vector2D &o) const
 {
   return x * o.x + y * o.y;
-}
-
-inline Vector2D Vector2D::operator+(const Vector2D &rhs) const
-{
-  Vector2D v(*this);
-  v += rhs;
-  return v;
-}
-
-inline Vector2D Vector2D::operator*(const float mul) const
-{
-  Vector2D v(*this);
-  v *= mul;
-  return v;
-}
-
-inline Vector2D Vector2D::operator*(const Vector2D &rhs) const
-{
-  Vector2D v(*this);
-  v *= rhs;
-  return v;
 }
 
 inline bool Vector2D::operator==(const Vector2D &rhs) const

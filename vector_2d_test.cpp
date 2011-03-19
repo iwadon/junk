@@ -17,11 +17,11 @@ class Vector2DTest : public CppUnit::TestCase
   CPPUNIT_TEST(test_DIVEQ);
   CPPUNIT_TEST(test_PLUS);
   CPPUNIT_TEST(test_MINUS);
+  CPPUNIT_TEST(test_ADD);
+  CPPUNIT_TEST(test_MUL);
   CPPUNIT_TEST(test_const_float);
   CPPUNIT_TEST(test_length);
   CPPUNIT_TEST(test_inner_product);
-  CPPUNIT_TEST(test_ADD);
-  CPPUNIT_TEST(test_MUL);
   CPPUNIT_TEST(test_EQEQ);
   CPPUNIT_TEST(test_NOTEQ);
   CPPUNIT_TEST(test_LSHIFT);
@@ -40,10 +40,12 @@ public:
   void test_DIVEQ();
   void test_PLUS();
   void test_MINUS();
+  void test_ADD();
+  void test_SUB();
+  void test_MUL();
+  void test_DIV();
   void test_length();
   void test_inner_product();
-  void test_ADD();
-  void test_MUL();
   void test_EQEQ();
   void test_NOTEQ();
   void test_LSHIFT();
@@ -148,6 +150,50 @@ void Vector2DTest::test_MINUS()
   CPPUNIT_ASSERT_EQUAL(v2, -v1);
 }
 
+void Vector2DTest::test_ADD()
+{
+  Vector2D v1(1, 2);
+  Vector2D v2(3, 4);
+  Vector2D v3 = v1 + v2;
+  CPPUNIT_ASSERT_EQUAL(4.0f, v3.x);
+  CPPUNIT_ASSERT_EQUAL(6.0f, v3.y);
+}
+
+void Vector2DTest::test_SUB()
+{
+  Vector2D v1(1, 2);
+  Vector2D v2(3, 4);
+  Vector2D v3 = v1 - v2;
+  CPPUNIT_ASSERT_EQUAL(-2.0f, v3.x);
+  CPPUNIT_ASSERT_EQUAL(-2.0f, v3.y);
+}
+
+void Vector2DTest::test_MUL()
+{
+  Vector2D v1(1, 2);
+  Vector2D v2 = v1 * 2.5f;
+  CPPUNIT_ASSERT_EQUAL(2.5f, v2.x);
+  CPPUNIT_ASSERT_EQUAL(5.0f, v2.y);
+  Vector2D v3(2, 1);
+  Vector2D v4(1, 2);
+  Vector2D v5 = v3 * v4;
+  CPPUNIT_ASSERT_EQUAL(2.0f, v5.x);
+  CPPUNIT_ASSERT_EQUAL(2.0f, v5.y);
+}
+
+void Vector2DTest::test_DIV()
+{
+  Vector2D v1(1, 2);
+  Vector2D v2 = v1 / 2.5f;
+  CPPUNIT_ASSERT_EQUAL(0.4f, v2.x);
+  CPPUNIT_ASSERT_EQUAL(0.8f, v2.y);
+  Vector2D v3(2, 1);
+  Vector2D v4(1, 2);
+  Vector2D v5 = v3 / v4;
+  CPPUNIT_ASSERT_EQUAL(2.0f, v5.x);
+  CPPUNIT_ASSERT_EQUAL(0.5f, v5.y);
+}
+
 void Vector2DTest::test_length()
 {
   Vector2D v1(0, 0);
@@ -167,34 +213,6 @@ void Vector2DTest::test_inner_product()
   Vector2D v1(2, 1);
   Vector2D v2(1, 2);
   CPPUNIT_ASSERT_EQUAL(4.0f, v1.inner_product(v2));
-}
-
-void Vector2DTest::test_ADD()
-{
-  Vector2D v1(1, 2);
-  Vector2D v2(3, 4);
-  Vector2D v3 = v1 + v2;
-  CPPUNIT_ASSERT_EQUAL(1.0f, v1.x);
-  CPPUNIT_ASSERT_EQUAL(2.0f, v1.y);
-  CPPUNIT_ASSERT_EQUAL(3.0f, v2.x);
-  CPPUNIT_ASSERT_EQUAL(4.0f, v2.y);
-  CPPUNIT_ASSERT_EQUAL(4.0f, v3.x);
-  CPPUNIT_ASSERT_EQUAL(6.0f, v3.y);
-}
-
-void Vector2DTest::test_MUL()
-{
-  Vector2D v1(1, 2);
-  Vector2D v2 = v1 * 2.5f;
-  CPPUNIT_ASSERT_EQUAL(1.0f, v1.x);
-  CPPUNIT_ASSERT_EQUAL(2.0f, v1.y);
-  CPPUNIT_ASSERT_EQUAL(2.5f, v2.x);
-  CPPUNIT_ASSERT_EQUAL(5.0f, v2.y);
-  Vector2D v3(2, 1);
-  Vector2D v4(1, 2);
-  Vector2D v5 = v3 * v4;
-  CPPUNIT_ASSERT_EQUAL(2.0f, v5.x);
-  CPPUNIT_ASSERT_EQUAL(2.0f, v5.y);
 }
 
 void Vector2DTest::test_EQEQ()
