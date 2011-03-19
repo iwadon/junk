@@ -40,15 +40,15 @@ struct Vector2D
   Vector2D operator/(const float div) const;
   Vector2D operator/(const Vector2D &rhs) const;
 
-  static Vector2D angle_length(const float theta, const float len);
-  float length() const;
-  float inner_product(const Vector2D &o) const;
   bool operator==(const Vector2D &rhs) const;
   bool operator!=(const Vector2D &rhs) const;
-  Vector2D &rotate(const float rad);
-  float dot(const Vector2D &rhs) const;
+
+  static Vector2D angle_length(const float theta, const float len);
   float cross(const Vector2D &rhs) const;
+  float dot(const Vector2D &rhs) const;
+  float length() const;
   Vector2D &normalize();
+  Vector2D &rotate(const float rad);
 };
 
 inline Vector2D::Vector2D()
@@ -168,24 +168,6 @@ inline Vector2D Vector2D::operator/(const Vector2D &rhs) const
   return v;
 }
 
-inline Vector2D Vector2D::angle_length(const float theta, const float len)
-{
-  Vector2D v;
-  v.x = cos(theta) * len;
-  v.y = sin(theta) * len;
-  return v;
-}
-
-inline float Vector2D::length() const
-{
-  return sqrtf(x * x + y * y);
-}
-
-inline float Vector2D::inner_product(const Vector2D &o) const
-{
-  return x * o.x + y * o.y;
-}
-
 inline bool Vector2D::operator==(const Vector2D &rhs) const
 {
   return x == rhs.x && y == rhs.y;
@@ -196,27 +178,12 @@ inline bool Vector2D::operator!=(const Vector2D &rhs) const
   return !(*this == rhs);
 }
 
-inline Vector2D &Vector2D::rotate(const float theta)
+inline Vector2D Vector2D::angle_length(const float theta, const float len)
 {
-  float s = sin(theta);
-  float c = cos(theta);
-  float tx = x * c - y * s;
-  float ty = x * s + y * c;
-  x = tx;
-  y = ty;
-  return *this;
-}
-
-/**
- * @brief 二つのベクトルの内積を求める
- *
- * @param [in] rhs もう一方のベクトル。
- *
- * @return 二つのベクトルの内積。
- */
-inline float Vector2D::dot(const Vector2D &rhs) const
-{
-  return x * rhs.x + y * rhs.y;
+  Vector2D v;
+  v.x = cos(theta) * len;
+  v.y = sin(theta) * len;
+  return v;
 }
 
 /**
@@ -232,6 +199,23 @@ inline float Vector2D::cross(const Vector2D &rhs) const
 }
 
 /**
+ * @brief 二つのベクトルの内積を求める
+ *
+ * @param [in] rhs もう一方のベクトル。
+ *
+ * @return 二つのベクトルの内積。
+ */
+inline float Vector2D::dot(const Vector2D &rhs) const
+{
+  return x * rhs.x + y * rhs.y;
+}
+
+inline float Vector2D::length() const
+{
+  return sqrtf(x * x + y * y);
+}
+
+/**
  * @brief 単位ベクトル化する
  *
  * @return *this。
@@ -241,6 +225,17 @@ inline Vector2D &Vector2D::normalize()
   float len = length();
   x /= len;
   y /= len;
+  return *this;
+}
+
+inline Vector2D &Vector2D::rotate(const float theta)
+{
+  float s = sin(theta);
+  float c = cos(theta);
+  float tx = x * c - y * s;
+  float ty = x * s + y * c;
+  x = tx;
+  y = ty;
   return *this;
 }
 
