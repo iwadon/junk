@@ -66,6 +66,7 @@ void LineSegment2DTest::test_inspect()
 
 void LineSegment2DTest::test_intersection_point()
 {
+#if 0
   LineSegment2D l1(1.0f, 0.0f, 0.0f, 1.0f);
   LineSegment2D l2(0.0f, 0.0f, 1.0f, 1.0f);
   Point2D p;
@@ -82,6 +83,14 @@ void LineSegment2DTest::test_intersection_point()
   CPPUNIT_ASSERT_EQUAL(true, l3.intersection_point_with(p, l4));
   CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5f, p.x, 0.01f);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5f, p.y, 0.01f);
+#else
+  LineSegment2D l1(0.0f, 0.0f, 1.0f, 1.0f);
+  LineSegment2D l2(1.0f, 0.0f, 0.0f, 1.0f);
+  Point2D cp1;
+  Point2D cp2(0.5f, 0.5f);
+  CPPUNIT_ASSERT_EQUAL(true, l1.intersection_point_with(cp1, l2));
+  CPPUNIT_ASSERT_EQUAL(cp2, cp1);
+#endif
 }
 
 void LineSegment2DTest::test_is_crossed()
