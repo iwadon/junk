@@ -52,8 +52,14 @@ void LineSegment2DTest::test_bound()
   LineSegment2D l1(0.0f, 1.0f, 1.0f, 1.0f);
   LineSegment2D l2(0.0f, 0.0f, 0.8f, 1.5f);
   std::vector<Point2D> pa1;
-  CPPUNIT_ASSERT_EQUAL(true, l1.bound(pa1, l2));
+  CPPUNIT_ASSERT_EQUAL(true, l2.bound(pa1, l1));
   CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pa1.size());
+
+  LineSegment2D l3(1.0f, 0.0f, 1.0f, 1.0f);
+  LineSegment2D l4(0.0f, 0.0f, 1.5f, 0.8f);
+  std::vector<Point2D> pa2;
+  CPPUNIT_ASSERT_EQUAL(true, l4.bound(pa2, l3));
+  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pa2.size());
 }
 
 void LineSegment2DTest::test_cross_point()
