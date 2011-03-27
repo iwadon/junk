@@ -3,6 +3,7 @@ AUTOMAKE_OPTIONS = foreign
 noinst_PROGRAMS = benchmark_sample \
 	boost_program_options_sample \
 	c1 \
+	g1 \
 	line_segment_2d_benchmark \
 	map_benchmark \
 	oscillator_sample \
@@ -24,10 +25,13 @@ boost_program_options_sample_LDADD = $(BOOST_PROGRAM_OPTIONS_LIB)
 
 c1_SOURCES = c1.cpp
 
+g1_SOURCES = g1.cpp
+g1_CPPFLAGS = $(SDL_CFLAGS)
+g1_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS)
+
 line_segment_2d_benchmark_SOURCES = line_segment_2d_benchmark.cpp
 line_segment_2d_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
 line_segment_2d_benchmark_LDADD = libsdlapp.a
-
 
 map_benchmark_SOURCES = map_benchmark.cpp
 map_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
