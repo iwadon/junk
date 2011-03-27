@@ -1,6 +1,7 @@
 #ifndef LINE_SEGMENT_2D_HPP_INCLUDED
 #define LINE_SEGMENT_2D_HPP_INCLUDED 1
 
+#include <vector>
 #include "point_2d.hpp"
 #include "vector_2d.hpp"
 
@@ -33,6 +34,30 @@ struct LineSegment2D
     : p1(p1_)
     , p2(p2_)
   {
+  }
+
+  /**
+   * @brief 線分をもう一方の線分に弾ませた結果を返す
+   *
+   * @param [out] v     結果を格納するコンテナ。
+   *                    もし線分が弾んだならばvには三つのPoint2Dオブジェクトがpush_backされる。
+   *                    (1)弾ませた線分の始点(p1) (2)線分が弾んだ点(交点) (3)線分が弾んだ先を示す点
+   * @param [in]  other 線分を弾ませる相手の線分。
+   *
+   * @retval true  線分は弾んだ(交差した)。
+   * @retval false 線分は弾まない(交差しない)。
+   */
+  bool bound(std::vector<Point2D> &v, const LineSegment2D &other)
+  {
+    Point2D cp;
+    if (!intersection_point_with(cp, other)) {
+      return false;
+    }
+    v.push_back(p1);
+    v.push_back(cp);
+    Point2D p(p2.x, cp.y - (p2.y - cp.y));
+    v.push_back(p);
+    return true;
   }
 
   /**
