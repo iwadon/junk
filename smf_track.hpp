@@ -4,6 +4,7 @@
 //#define SMF_TRACK_DEBUG 1
 //#define ENABLE_RUNNING_STATUS 1
 
+#include <cstddef>
 #if defined(HAVE_TR1_CSTDINT)
 #include <tr1/cstdint>
 #elif defined(HAVE_BOOST)

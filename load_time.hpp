@@ -1,6 +1,7 @@
 #ifndef LOAD_TIME_HPP_INCLUDED
 #define LOAD_TIME_HPP_INCLUDED 1
 
+#include <cstddef>
 #include <list>
 #include <tr1/cstdint>
 

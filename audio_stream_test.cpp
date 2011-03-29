@@ -2,6 +2,14 @@
 #include "config.h"
 #endif
 #include "audio_stream.hpp"
+#include <cstring>
+#if defined(HAVE_TR1_CSTDINT)
+#include <tr1/cstdint>
+#elif defined(HAVE_BOOST)
+#include <boost/cstdint.hpp>
+#elif defined(HAVE_STDINT_H)
+#include <stdint.h>
+#endif
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 #include "logger.hpp"
