@@ -28,6 +28,7 @@ class Vector2DTest : public CppUnit::TestCase
   CPPUNIT_TEST(test_inspect);
   CPPUNIT_TEST(test_length);
   CPPUNIT_TEST(test_normalize);
+  CPPUNIT_TEST(test_reflect);
   CPPUNIT_TEST(test_rotate);
   CPPUNIT_TEST(test_LSHIFT);
   CPPUNIT_TEST_SUITE_END();
@@ -54,6 +55,7 @@ public:
   void test_inspect();
   void test_length();
   void test_normalize();
+  void test_reflect();
   void test_rotate();
 };
 
@@ -271,6 +273,22 @@ void Vector2DTest::test_LSHIFT()
   std::ostringstream oss;
   oss << v1;
   CPPUNIT_ASSERT_EQUAL(std::string("(1.00, 2.00)"), oss.str());
+}
+
+void Vector2DTest::test_reflect()
+{
+  {
+    Vector2D v1(1, 0);
+    Vector2D v2(-1, 1);
+    Vector2D v3(0, 1);
+    CPPUNIT_ASSERT_EQUAL(v3, v1.reflect(v2));
+  }
+  {
+    Vector2D v1(1, 1);
+    Vector2D v2(0, 1);
+    Vector2D v3(1, -1);
+    CPPUNIT_ASSERT_EQUAL(v3, v1.reflect(v2));
+  }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Vector2DTest);

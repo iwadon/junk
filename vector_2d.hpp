@@ -2,6 +2,7 @@
 #define VECTOR_2D_HPP_INCLUDED 1
 
 #include <cmath>
+#include <cfloat>
 #include <ostream>
 
 struct Point2D;
@@ -49,6 +50,7 @@ struct Vector2D
   std::string inspect() const;
   float length() const;
   Vector2D &normalize();
+  Vector2D reflect(const Vector2D &other) const;
   Vector2D &rotate(const float rad);
 };
 
@@ -171,7 +173,8 @@ inline Vector2D Vector2D::operator/(const Vector2D &rhs) const
 
 inline bool Vector2D::operator==(const Vector2D &rhs) const
 {
-  return x == rhs.x && y == rhs.y;
+  //return x == rhs.x && y == rhs.y;
+  return fabsf(x - rhs.x) <= FLT_EPSILON && fabsf(y - rhs.y) <= FLT_EPSILON;
 }
 
 inline bool Vector2D::operator!=(const Vector2D &rhs) const
@@ -235,6 +238,14 @@ inline Vector2D &Vector2D::normalize()
   x /= len;
   y /= len;
   return *this;
+}
+
+inline Vector2D Vector2D::reflect(const Vector2D &other) const
+{
+  Vector2D n = other;
+  n.normalize();
+  Vector2D w = *this - n * dot(n) * 2;
+  return w;
 }
 
 inline Vector2D &Vector2D::rotate(const float theta)

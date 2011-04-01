@@ -49,15 +49,39 @@ struct LineSegment2D
    */
   bool bound(std::vector<Point2D> &v, const LineSegment2D &other)
   {
-    Point2D cp;
-    if (!intersection_point_with(cp, other)) {
-      return false;
+    if (other.p1.y == other.p2.y) {
+      Point2D cp;
+      if (!intersection_point_with(cp, other)) {
+	return false;
+      }
+      Point2D p(p2.x, cp.y - (p2.y - cp.y));
+      v.push_back(p1);
+      v.push_back(cp);
+      v.push_back(p);
+      return true;
+    } else if (other.p1.x == other.p2.x) {
+      Point2D cp;
+      if (!intersection_point_with(cp, other)) {
+	return false;
+      }
+      Point2D p(cp.x - (p2.x - cp.x), p2.y);
+      v.push_back(p1);
+      v.push_back(cp);
+      v.push_back(p);
+      return true;
+    } else {
+      Point2D cp;
+      float t2;
+      if (!cross_point(other, &cp, NULL, &t2)) {
+	return false;
+      }
+      //cp + vector() * t2;
+      Point2D p(cp + vector().reflect(other.vector().rotate(M_PI / 2)) * t2);
+      v.push_back(p1);
+      v.push_back(cp);
+      v.push_back(p);
+      return true;
     }
-    v.push_back(p1);
-    v.push_back(cp);
-    Point2D p(p2.x, cp.y - (p2.y - cp.y));
-    v.push_back(p);
-    return true;
   }
 
   /**

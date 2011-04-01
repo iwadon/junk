@@ -42,18 +42,52 @@ bool App::initialize(int argc, char *argv[])
 
 void App::draw()
 {
+#if 0
   LineSegment2D l1(0.0f, 1.0f, 1.0f, 1.0f);
   LineSegment2D l2(0.0f, 0.0f, 0.8f, 1.5f);
   Point2D cp1;
-  //l1.cross_point(l2, &cp1);
-  //l1.intersection_point_with(cp1, l2);
   std::vector<Point2D> v;
   l2.bound(v, l1);
 
   line(l1, 0xff0000ff);
-  //line(l2.p1, cp1, 0x00ff00ff);
-  //line(cp1.x, cp1.y, l2.p2.x, cp1.y - (l2.p2.y - cp1.y), 0x0000ffff);
   lines(v, 0x0000ffff);
+#endif
+#if 0
+  {
+    LineSegment2D l1(0, -3, 0, 3);
+    LineSegment2D l2(-1, 0, 0.5, 0.8);
+    LineSegment2D l3(1, 1, -0.5, 1.8);
+    LineSegment2D l4(1, -1, -0.5, -1.8);
+    LineSegment2D l5(-1, -2, 0.5, -2.8);
+    Point2D cp;
+    std::vector<Point2D> v;
+    line(l1, 0xff0000ff);
+    if (l2.bound(v, l1)) {
+      lines(v, 0x0000ffff);
+    }
+    v.clear();
+    if (l3.bound(v, l1)) {
+      lines(v, 0x00ff00ff);
+    }
+    v.clear();
+    if (l4.bound(v, l1)) {
+      lines(v, 0xffff00ff);
+    }
+    v.clear();
+    if (l5.bound(v, l1)) {
+      lines(v, 0xffff00ff);
+    }
+  }
+#endif
+  {
+    LineSegment2D l1(0.0f, 2.0f, 2.0f, 0.0f);
+    LineSegment2D l2(1.0f, 0.0f, 1.0f, 2.0f);
+    std::vector<Point2D> v;
+    line(l1, 0xff0000ff);
+    if (l2.bound(v, l1)) {
+      lines(v, 0x0000ffff);
+    }
+  }
 }
 
 void App::line(const float x1, const float y1, const float x2, const float y2, uint32_t color)
