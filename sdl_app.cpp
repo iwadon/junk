@@ -176,8 +176,8 @@ void SDLApp::do_input()
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
     if (event.type == SDL_QUIT ||
-	event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE ||
-	event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_q && (event.key.keysym.mod == KMOD_LGUI || event.key.keysym.mod == KMOD_RGUI)) {
+	(event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE) ||
+	(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_q && (event.key.keysym.mod == KMOD_LGUI || event.key.keysym.mod == KMOD_RGUI))) {
       done_ = true;
     } else {
       set_fps();

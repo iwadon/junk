@@ -1,6 +1,7 @@
 #ifndef SONG_HPP_INCLUDED
 #define SONG_HPP_INCLUDED 1
 
+#include <cstddef>
 #if defined(HAVE_TR1_CSTDINT)
 #include <tr1/cstdint>
 #elif defined(HAVE_BOOST)

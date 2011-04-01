@@ -2,6 +2,7 @@
 #include "config.h"
 #endif
 #include "variable_length_value.hpp"
+#include <cstring>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 
