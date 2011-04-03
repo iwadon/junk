@@ -102,6 +102,7 @@ libsequencer_a_SOURCES = audio_stream.hpp \
 			 sampler.cpp sampler.hpp \
 			 sine_wave_oscillator.cpp sine_wave_oscillator.hpp \
 			 song.cpp song.hpp \
+			 sound.cpp sound.hpp \
 			 triangle_wave_oscillator.cpp triangle_wave_oscillator.hpp \
 			 smf.cpp smf.hpp \
 			 smf_track.cpp smf_track.hpp \
@@ -116,6 +117,11 @@ libtest_main_a_LIBADD = liblogger.a
 
 vector_length_benchmark_SOURCES = vector_length_benchmark.cpp
 vector_length_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
+
+noinst_DATA = data/sound_data_sample.bin
+
+data/sound_data_sample.bin: data/sound_data_sample.s
+	$(NASM) $(NASMFLAGS) -o $@ $<
 
 check_PROGRAMS = all_tests
 TESTS = $(check_PROGRAMS) peg_test.sh
@@ -149,6 +155,7 @@ all_tests_SOURCES = \
 	smf_test.cpp \
 	smf_track_test.cpp \
 	song_test.cpp \
+	sound_test.cpp \
 	sprite_test.cpp \
 	texture_pool_test.cpp \
 	texture_test.cpp \
