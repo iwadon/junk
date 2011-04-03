@@ -32,6 +32,7 @@ AC_PROG_LN_S
 AC_PROG_RANLIB
 AC_PROG_CPP
 AC_PROG_MKDIR_P
+AX_PROG_NASM
 
 #AC_ARG_ENABLE(gcov, [  --enable-gcov  turn on gcov [default no]],,enable_gcov=no)
 #AC_MSG_CHECKING(whether to enable gcov)
