@@ -47,7 +47,7 @@ int App::run(int argc, char *argv[])
   }
 
   if (SDL_Init(SDL_INIT_AUDIO) < 0) {
-    SDL_ERROR("SDL_Init()");
+    SDL_ERROR(SDL_Init);
     return 1;
   }
 
@@ -60,7 +60,7 @@ int App::run(int argc, char *argv[])
   spec.callback = App::sdl_audio_callback;
   spec.userdata = this;
   if (SDL_OpenAudio(&spec, &audio_spec_) < 0) {
-    SDL_ERROR("SDL_OpenAudio");
+    SDL_ERROR(SDL_OpenAudio);
     return false;
   }
   SDL_PauseAudio(0);

@@ -52,7 +52,7 @@ s2_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS)
 
 sdl_event_sample_SOURCES = sdl_event_sample.c
 sdl_event_sample_CPPFLAGS = $(SDL_CFLAGS)
-sdl_event_sample_LDADD = $(SDL_LIBS)
+sdl_event_sample_LDADD = liblogger.a $(SDL_LIBS)
 
 sdl_event_sample2_SOURCES = sdl_event_sample2.m
 #sdl_event_sample2_OBJCFLAGS = -framework Cocoa
@@ -70,7 +70,7 @@ smf_play_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS)
 
 noinst_LIBRARIES = liblogger.a libpeg.a libsdlapp.a libsequencer.a libtest_main.a
 
-liblogger_a_SOURCES = logger.cpp logger.hpp
+liblogger_a_SOURCES = logger_c.c logger.h logger_cpp.cpp logger.hpp
 liblogger_a_CPPFLAGS = $(BOOST_CPPFLAGS)
 
 libpeg_a_SOURCES = peg.cpp peg.hpp

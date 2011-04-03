@@ -4,6 +4,6 @@
 #include <SDL.h>
 #include "logger.hpp"
 
-#define SDL_ERROR(func_name) ERROR("%s() failed: %s", func_name, SDL_GetError())
+#define SDL_ERROR(func_name) ERROR(#func_name "() failed: %s", SDL_GetError())
 
 #endif // !defined(SDL_LOGGER_HPP_INCLUDED)

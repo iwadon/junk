@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <SDL.h>
-
-#define SDL_ERROR(func) fprintf(stderr, #func "() failed: %s\n", SDL_GetError())
+#include "sdl_logger.h"
 
 int main(int argc, char *argv[])
 {

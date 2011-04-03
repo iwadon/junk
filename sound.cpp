@@ -14,22 +14,22 @@ static bool read_file(void *&buf, size_t &size, const SP &filename)
   size_t len;
   SDL_RWops *f = SDL_RWFromFile(filename.c_str(), "rb");
   if (f == NULL) {
-    SDL_ERROR("SDL_RWFromFile");
+    SDL_ERROR(SDL_RWFromFile);
     goto error;
   }
   len = SDL_RWseek(f, 0, RW_SEEK_END);
   SDL_RWseek(f, 0, RW_SEEK_SET);
   p = SDL_malloc(len);
   if (p == NULL) {
-    SDL_ERROR("SDL_malloc");
+    SDL_ERROR(SDL_malloc);
     goto error;
   }
   if (SDL_RWread(f, p, len, 1) != 1) {
-    SDL_ERROR("SDL_RWread");
+    SDL_ERROR(SDL_RWread);
     goto error;
   }
   if (SDL_RWclose(f) == -1) {
-    SDL_ERROR("SDL_RWclose");
+    SDL_ERROR(SDL_RWclose);
   }
   buf = p;
   size = size;
@@ -37,7 +37,7 @@ static bool read_file(void *&buf, size_t &size, const SP &filename)
  error:
   if (f != NULL) {
     if (SDL_RWclose(f) == -1) {
-      SDL_ERROR("SDL_RWclose");
+      SDL_ERROR(SDL_RWclose);
     }
   }
   return false;

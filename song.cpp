@@ -21,22 +21,22 @@ bool Song::load_file(const SP &filename)
 {
   SDL_RWops *ctx = SDL_RWFromFile(filename.data(), "rb");
   if (ctx == NULL) {
-    SDL_ERROR("SDL_RWFromFile");
+    SDL_ERROR(SDL_RWFromFile);
     return false;
   }
   size_t len = SDL_RWseek(ctx, 0, RW_SEEK_END);
   SDL_RWseek(ctx, 0, RW_SEEK_SET);
   void *p = SDL_malloc(len);
   if (p == NULL) {
-    SDL_ERROR("SDL_malloc");
+    SDL_ERROR(SDL_malloc);
     return false;
   }
   if (SDL_RWread(ctx, p, len, 1) != 1) {
-    SDL_ERROR("SDL_RWread");
+    SDL_ERROR(SDL_RWread);
     return false;
   }
   if (SDL_RWclose(ctx) == -1) {
-    SDL_ERROR("SDL_RWclose");
+    SDL_ERROR(SDL_RWclose);
     return false;
   }
   smf_ = new SMF(*this);

@@ -91,18 +91,18 @@ bool SDLApp::do_initialize(int argc, char *argv[])
   srand(time(NULL));
 
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
-    SDL_ERROR("SDL_Init");
+    SDL_ERROR(SDL_Init);
     return false;
   }
 
   window_ = SDL_CreateWindow(app_name_.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
   if (window_ == NULL) {
-    SDL_ERROR("SDL_CreateWindow");
+    SDL_ERROR(SDL_CreateWindow);
     return false;
   }
   renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
   if (renderer_ == NULL) {
-    SDL_ERROR("SDL_CreateRenderer");
+    SDL_ERROR(SDL_CreateRenderer);
     return false;
   }
 
@@ -117,7 +117,7 @@ bool SDLApp::do_initialize(int argc, char *argv[])
   spec.callback = SDLApp::audio_callback;
   spec.userdata = this;
   if (SDL_OpenAudio(&spec, &audio_spec_) < 0) {
-    SDL_ERROR("SDL_OpenAudio");
+    SDL_ERROR(SDL_OpenAudio);
     return false;
   }
 
