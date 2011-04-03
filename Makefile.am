@@ -13,6 +13,7 @@ noinst_PROGRAMS = benchmark_sample \
 	sdl_event_sample \
 	sdl_event_sample2 \
 	smf_play \
+	udp_sample \
 	vector_length_benchmark
 
 benchmark_sample_SOURCES = benchmark_sample.cpp
@@ -67,6 +68,8 @@ sdl_event_sample2_LDADD = $(SDL_LIBS)
 smf_play_SOURCES = smf_play.cpp
 smf_play_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 smf_play_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS)
+
+udp_sample_SOURCES = udp_sample.c
 
 noinst_LIBRARIES = liblogger.a libpeg.a libsdlapp.a libsequencer.a libtest_main.a
 
