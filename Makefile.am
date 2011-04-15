@@ -124,7 +124,7 @@ vector_length_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
 noinst_DATA = data/sound_data_sample.bin
 
 data/sound_data_sample.bin: data/sound_data_sample.s
-	$(NASM) $(NASMFLAGS) -o $@ $<
+	$(nasm) -o $@ $<
 
 check_PROGRAMS = all_tests
 TESTS = $(check_PROGRAMS) peg_test.sh
