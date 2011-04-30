@@ -170,7 +170,7 @@
 		F61A1696135886370072D235 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				ORGANIZATIONNAME = "ナツメ株式会社名古屋事業所";
+				ORGANIZATIONNAME = "moonrock.jp";
 			};
 			buildConfigurationList = F61A1699135886370072D235 /* Build configuration list for PBXProject "logger" */;
 			compatibilityVersion = "Xcode 3.2";
