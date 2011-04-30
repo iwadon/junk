@@ -82,7 +82,7 @@ AC_CXX_HEADER_STDCXX_98
 AC_FUNC_MEMCMP
 AC_CHECK_FUNCS([memset socket])
 
-AC_CONFIG_FILES([Doxyfile Makefile])
+AC_CONFIG_FILES([Doxyfile Makefile build.ninja])
 AC_CONFIG_FILES([net_test.sh], [chmod +x net_test.sh])
 AC_CONFIG_FILES([peg_test.sh], [chmod +x peg_test.sh])
 AC_OUTPUT

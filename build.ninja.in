@@ -1,14 +1,14 @@
-srcdir = ..
-builddir = build
-cc = gcc
-cflags = -Wall -Wextra -O2 -g
-cxx = g++
-cxxflags = -Wall -Wextra -O2 -g
-objc = gcc
-objcflags = -Wall -Wextra -O2 -g
-cppflags = -DHAVE_CONFIG_H -I. -I$srcdir -I/Users/don/local/include/SDL -I/Users/don/local/include
-ldflags = -g -L/Users/don/local/lib
-libs =
+srcdir = @srcdir@
+builddir = @builddir@/build
+cc = @CC@
+cflags = @CFLAGS@
+cxx = @CXX@
+cxxflags = @CXXFLAGS@ -I$srcdir
+objc = @OBJC@
+objcflags = @OBJCFLAGS@
+cppflags = @CPPFLAGS@
+ldflags = @LDFLAGS@
+libs = @LIBS@
 
 rule cc
   depfile = $out.d
@@ -85,8 +85,9 @@ build $builddir/smf_play.o: cxx $srcdir/smf_play.cpp
 build $builddir/smf_play: link $builddir/smf_play.o $builddir/libsequencer.a $builddir/libsdlapp.a $builddir/liblogger.a
   libs = -lSDL
 
-build $builddir/logger.o: cxx $srcdir/logger.cpp
-build $builddir/liblogger.a: ar $builddir/logger.o
+build $builddir/logger_c.o: cc $srcdir/logger_c.c
+build $builddir/logger_cpp.o: cxx $srcdir/logger_cpp.cpp
+build $builddir/liblogger.a: ar $builddir/logger_c.o $builddir/logger_cpp.o
 
 build $builddir/peg.o: cxx $srcdir/peg.cpp
 build $builddir/libpeg.a: ar $builddir/peg.o
