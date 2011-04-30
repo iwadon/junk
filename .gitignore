@@ -1,13 +1,24 @@
 *~
 .DS_Store
+.deps
+Doxyfile
+Makefile
 Makefile.in
 _build_
 aclocal.m4
 autom4te.cache
+build
+build.ninja
+config.h
 config.h.in
+config.log
+config.status
 configure
 data/sample Project
 depcomp
 install-sh
 missing
+net_test.sh
 peg_test.sh
+stamp-h1
+xcuserdata
