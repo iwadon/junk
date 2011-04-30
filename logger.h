@@ -24,11 +24,11 @@ void logger_warn(const char *message, ...);
 void logger_error(const char *message, ...);
 void logger_fatal(const char *message, ...);
 
-#define DEBUG(...) logger_debug(__VA_ARGS__)
-#define INFO(...) logger_(__VA_ARGS__)
-#define WARN(...) logger_warn(__VA_ARGS__)
-#define ERROR(...) logger_error(__VA_ARGS__)
-#define FATAL(...) logger_fatal(__VA_ARGS__)
+#define LOG_DEBUG(...) logger_debug(__VA_ARGS__)
+#define LOG_INFO(...) logger_(__VA_ARGS__)
+#define LOG_WARN(...) logger_warn(__VA_ARGS__)
+#define LOG_ERROR(...) logger_error(__VA_ARGS__)
+#define LOG_FATAL(...) logger_fatal(__VA_ARGS__)
 
 #ifdef __cplusplus
 }
