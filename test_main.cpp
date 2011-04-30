@@ -9,13 +9,9 @@
 #include <cppunit/TestResult.h>
 #include <cppunit/TestResultCollector.h>
 #include <cppunit/TextTestProgressListener.h>
-#ifdef HAVE_BOOST
 #include <boost/foreach.hpp>
-#endif
-#ifdef HAVE_BOOST_PROGRAM_OPTIONS
 #include <boost/program_options.hpp>
 namespace po = boost::program_options;
-#endif
 #include "logger.hpp"
 
 int main(int argc, char *argv[])
