@@ -1,32 +1,54 @@
+CC = @CC@
+CFLAGS = @CFLAGS@
+CPP = @CPP@
+CPPFLAGS = @CPPFLAGS@
+CPPUNIT_CFLAGS = @CPPUNIT_CFLAGS@
+CPPUNIT_CONFIG = @CPPUNIT_CONFIG@
+CPPUNIT_LIBS = @CPPUNIT_LIBS@
+CXX = @CXX@
+CXXCPP = @CXXCPP@
+CXXFLAGS = @CXXFLAGS@
+DEFAULT_INCLUDES = -I.@am__isrc@
+DEFS = @DEFS@
+DOXYGEN = @DOXYGEN@
+LDFLAGS = @LDFLAGS@
+LIBS = @LIBS@
+OBJC = @OBJC@
+OBJCFLAGS = @OBJCFLAGS@
+
+top_srcdir = @top_srcdir@
 srcdir = @srcdir@
 builddir = @builddir@/build
-cc = @CC@
-cflags = @CFLAGS@
-cxx = @CXX@
-cxxflags = @CXXFLAGS@ -I$srcdir
-objc = @OBJC@
-objcflags = @OBJCFLAGS@
-cppflags = @CPPFLAGS@
-ldflags = @LDFLAGS@
-libs = @LIBS@
+
+BOOST_CPPFLAGS = @BOOST_CPPFLAGS@
+BOOST_LDFLAGS = @BOOST_LDFLAGS@
+BOOST_PROGRAM_OPTIONS_LIB = @BOOST_PROGRAM_OPTIONS_LIB@
+
+SDL_CFLAGS = @SDL_CFLAGS@
+SDL_LIBS = @SDL_LIBS@
+
+AM_CFLAGS = -Wall -Wextra 
+AM_CXXFLAGS = -Wall -Wextra
+AM_CPPFLAGS = $BOOST_CPPFLAGS $SDL_CFLAGS
+AM_LDFLAGS = $BOOST_LDFLAGS
 
 rule cc
   depfile = $out.d
-  command = $cc -MMD -MF $out.d $cflags $cppflags -c $in -o $out
+  command = $CC -MMD -MF $out.d $DEFS $DEFAULT_INCLUDES $INCLUDES $AM_CPPFLAGS $CPPFLAGS $AM_CFLAGS $CFLAGS -c $in -o $out
   description = CC $out
 
 rule cxx
   depfile = $out.d
-  command = $cxx -MMD -MF $out.d $cxxflags $cppflags -c $in -o $out
+  command = $CXX -MMD -MF $out.d $DEFS $DEFAULT_INCLUDES $INCLUDES $AM_CPPFLAGS $CPPFLAGS $AM_CXXFLAGS $CXXFLAGS -c $in -o $out
   description = CXX $out
 
 rule objc
   depfile = $out.d
-  command = $objc -MMD -MF $out.d $objcflags $cppflags -c $in -o $out
+  command = $OBJC -MMD -MF $out.d $DEFS $DEFUALT_INCLUDES $INCLUDES $AM_CPPFLAGS $CPPFLAGS $AM_OBJCFLAGS $OBJCFLAGS -c $in -o $out
   description = OBJC $out
 
 rule link
-  command = $cxx $ldflags -o $out $in $libs
+  command = $CXX $AM_LDFLAGS $LDFLAGS -o $out $in $LIBS
   description = LINK $out
 
 rule ar
@@ -42,11 +64,12 @@ rule clean
   description = CLEAN $builddir
 
 build $builddir/benchmark_sample.o: cxx $srcdir/benchmark_sample.cpp
+  INCLUDES = $BOOST_CPPFLAGS
 build $builddir/benchmark_sample: link $builddir/benchmark_sample.o
 
 build $builddir/boost_program_options_sample.o: cxx $srcdir/boost_program_options_sample.cpp
 build $builddir/boost_program_options_sample: link $builddir/boost_program_options_sample.o
-  libs = -lboost_program_options-mt
+  LIBS = -lboost_program_options-mt
 
 build $builddir/c1.o: cxx $srcdir/c1.cpp
 build $builddir/c1: link $builddir/c1.o
@@ -57,33 +80,33 @@ build $builddir/map_benchmark: link $builddir/map_benchmark.o
 build $builddir/oscillator_sample.o: cxx $srcdir/oscillator_sample.cpp
 build $builddir/oscillator_sample: link $builddir/oscillator_sample.o \
     $builddir/libsequencer.a $builddir/libsdlapp.a $builddir/liblogger.a
-  libs = -lSDL -lSDL_image
+  LIBS = -lSDL -lSDL_image
 
 build $builddir/pcap_sample.o: cxx $srcdir/pcap_sample.cpp
 build $builddir/pcap_sample: link $builddir/pcap_sample.o
-  libs = -lpcap
+  LIBS = -lpcap
 
 build $builddir/s1.o: cxx $srcdir/s1.cpp
 build $builddir/s1: link $builddir/s1.o
-  libs = -lSDL -lSDL_image
+  LIBS = $SDL_LIBS
 
 build $builddir/s2.o: cxx $srcdir/s2.cpp
 build $builddir/s2: link $builddir/s2.o $builddir/libsdlapp.a $builddir/liblogger.a
-  ldflags = $ldflags -framework OpenGL
-  libs = -lSDL -lSDL_image
+  LDFLAGS = $ldflags -framework OpenGL
+  LIBS = $SDL_LIBS
 
 build $builddir/sdl_event_sample.o: cc $srcdir/sdl_event_sample.c
-build $builddir/sdl_event_sample: link $builddir/sdl_event_sample.o
-  libs = -lSDL
+build $builddir/sdl_event_sample: link $builddir/sdl_event_sample.o $builddir/liblogger.a
+  LIBS = $SDL_LIBS
 
 build $builddir/sdl_event_sample2.o: objc $srcdir/sdl_event_sample2.m
 build $builddir/sdl_event_sample2: link $builddir/sdl_event_sample2.o
-  ldflags = $ldflags -framework Cocoa
-  libs = -lSDL
+  LDFLAGS = $ldflags -framework Cocoa
+  LIBS = -lSDL
 
 build $builddir/smf_play.o: cxx $srcdir/smf_play.cpp
 build $builddir/smf_play: link $builddir/smf_play.o $builddir/libsequencer.a $builddir/libsdlapp.a $builddir/liblogger.a
-  libs = -lSDL
+  LIBS = -lSDL
 
 build $builddir/logger_c.o: cc $srcdir/logger_c.c
 build $builddir/logger_cpp.o: cxx $srcdir/logger_cpp.cpp
@@ -97,19 +120,23 @@ build $builddir/frame_wait_timer.o: cxx $srcdir/frame_wait_timer.cpp
 build $builddir/font.o: cxx $srcdir/font.cpp
 build $builddir/fps.o: cxx $srcdir/fps.cpp
 build $builddir/load_time.o: cxx $srcdir/load_time.cpp
+build $builddir/point_2d.o: cxx $srcdir/point_2d.cpp
 build $builddir/sdl_app.o: cxx $srcdir/sdl_app.cpp
 build $builddir/sprite.o: cxx $srcdir/sprite.cpp
 build $builddir/texture.o: cxx $srcdir/texture.cpp
 build $builddir/texture_pool.o: cxx $srcdir/texture_pool.cpp
+build $builddir/vector_2d.o: cxx $srcdir/vector_2d.cpp
 build $builddir/libsdlapp.a: ar $builddir/controller.o \
     $builddir/frame_wait_timer.o \
     $builddir/font.o \
     $builddir/fps.o \
     $builddir/load_time.o \
+    $builddir/point_2d.o \
     $builddir/sdl_app.o \
     $builddir/sprite.o \
     $builddir/texture.o \
-    $builddir/texture_pool.o
+    $builddir/texture_pool.o \
+    $builddir/vector_2d.o
 
 build $builddir/channel.o: cxx $srcdir/channel.cpp
 build $builddir/filter.o: cxx $srcdir/filter.cpp
@@ -230,9 +257,11 @@ build $builddir/all_tests: link \
     $builddir/voice_test.o \
     $builddir/volume_test.o \
     $builddir/libpeg.a $builddir/libsdlapp.a $builddir/libsequencer.a $builddir/libtest_main.a $builddir/liblogger.a
-  ldflags = $ldflags -framework OpenGL
-  libs = $libs -lcppunit -lSDL -lSDL_image -lboost_program_options-mt
+  LDFLAGS = $ldflags -framework OpenGL
+  LIBS = $libs -lcppunit -lSDL -lSDL_image -lboost_program_options-mt
 
 build check: run $builddir/all_tests
 
-build clean: clean
+rule create_ninja
+    command = cd $top_srcdir && ./config.status $out
+build $builddir/../build.ninja: create_ninja $srcdir/build.ninja.in | $top_srcdir/config.status
