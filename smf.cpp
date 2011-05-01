@@ -129,7 +129,7 @@ void SMF::update()
 bool SMF::parse_data()
 {
   if (memcmp(data_ + 0, "\x4d\x54\x68\x64\x00\x00\x00\x06", 8) != 0) {
-    ERROR("Not SMF format");
+    LOG_ERROR("Not SMF format");
     return false;
   }
   uint16_t format = VALUE16(data_ + 8);
@@ -140,7 +140,7 @@ bool SMF::parse_data()
 #endif
   time_base_ = VALUE16(data_ + 12);
   if ((time_base_ & 0x8000) != 0) {
-    ERROR("Not implemented for negative value of the time base");
+    LOG_ERROR("Not implemented for negative value of the time base");
     return false;
   }
   set_ticks_add_();
@@ -149,7 +149,7 @@ bool SMF::parse_data()
     track_ptr_type t(new SMFTrack(*this));
     size_t chunk_size = 8 + VALUE32(p + 4);
     if (!t->setup(reinterpret_cast<SMFTrack::data_type *>(p), chunk_size)) {
-      ERROR("Error at Track %d", i + 1);
+      LOG_ERROR("Error at Track %d", i + 1);
       return false;
     }
     tracks_.push_back(t);

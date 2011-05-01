@@ -132,7 +132,7 @@ bool Instrument::MixBuffer::prepare(const size_t new_len)
       len = 0;
       return false;
     }
-    INFO("Mix buffer size has changed: %zu -> %zu", len, new_len);
+    LOG_INFO("Mix buffer size has changed: %zu -> %zu", len, new_len);
     len = new_len;
   }
   return true;

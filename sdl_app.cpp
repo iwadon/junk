@@ -121,26 +121,26 @@ bool SDLApp::do_initialize(int argc, char *argv[])
     return false;
   }
 
-  INFO("Audio Drivers:");
+  LOG_INFO("Audio Drivers:");
   int num_audio_drivers = SDL_GetNumAudioDrivers();
   const char *current_audio_driver = SDL_GetCurrentAudioDriver();
   for (int i = 0; i < num_audio_drivers; ++i) {
     const char *audio_driver = SDL_GetAudioDriver(i);
-    INFO("  %d: %s%s", i, audio_driver, !strcmp(audio_driver, current_audio_driver) ? " (current)" : "");
+    LOG_INFO("  %d: %s%s", i, audio_driver, !strcmp(audio_driver, current_audio_driver) ? " (current)" : "");
   }
 
-  INFO("Audio Spec:");
-  INFO("  freq: %d", audio_spec_.freq);
-  INFO("  format: %u (%s, %s, %s, %ubit)", audio_spec_.format,
+  LOG_INFO("Audio Spec:");
+  LOG_INFO("  freq: %d", audio_spec_.freq);
+  LOG_INFO("  format: %u (%s, %s, %s, %ubit)", audio_spec_.format,
        SDL_AUDIO_ISSIGNED(audio_spec_.format) ? "signed" : "unsigned",
        SDL_AUDIO_ISBIGENDIAN(audio_spec_.format) ? "big-endian" : "little-endian",
        SDL_AUDIO_ISFLOAT(audio_spec_.format) ? "float" : "integer",
        SDL_AUDIO_BITSIZE(audio_spec_.format));
-  INFO("  channels: %u", audio_spec_.channels);
-  INFO("  silence: %u", audio_spec_.silence);
-  INFO("  samples: %u", audio_spec_.samples);
-  INFO("  padding: %u", audio_spec_.padding);
-  INFO("  size: %u", audio_spec_.size);
+  LOG_INFO("  channels: %u", audio_spec_.channels);
+  LOG_INFO("  silence: %u", audio_spec_.silence);
+  LOG_INFO("  samples: %u", audio_spec_.samples);
+  LOG_INFO("  padding: %u", audio_spec_.padding);
+  LOG_INFO("  size: %u", audio_spec_.size);
   
   initialize(argc, argv);
 
@@ -159,16 +159,16 @@ void SDLApp::do_finalize()
 
   SDL_GL_DeleteContext(glcontext_);
   glcontext_ = NULL;
-  INFO("Deleted an OpenGL context.");
+  LOG_INFO("Deleted an OpenGL context.");
   SDL_DestroyRenderer(renderer_);
-  INFO("Destroy the rendering context.");
+  LOG_INFO("Destroy the rendering context.");
   renderer_ = NULL;
   SDL_DestroyWindow(window_);
   window_ = NULL;
-  INFO("Destroy a window.");
+  LOG_INFO("Destroy a window.");
 
   SDL_Quit();
-  INFO("Quit SDL system.");
+  LOG_INFO("Quit SDL system.");
 }
 
 void SDLApp::do_input()
