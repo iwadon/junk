@@ -10,7 +10,9 @@
 #include <boost/shared_ptr.hpp>
 #endif
 #include <SDL.h>
+#ifdef ENABLE_OPENGL
 #include <SDL_opengl.h>
+#endif
 #include "logger.hpp"
 #include "point_2d.hpp"
 #include "sdl_app.hpp"
@@ -182,6 +184,7 @@ namespace game
 
   void MyShip::draw(SDLApp &app)
   {
+#ifdef ENABLE_OPENGL
     glPushMatrix();
     glTranslatef(pos_.x, pos_.y, 0.0f);
     glRotatef(rot_, 0.0f, 0.0f, 1.0f);
@@ -193,6 +196,7 @@ namespace game
     SDL_SetRenderDrawColor(app.renderer(), 255, 255, 255, SDL_ALPHA_OPAQUE);
     SDL_RenderFillRect(app.renderer(), &rect_i);
     glPopMatrix();
+#endif
   }
 
   App::App()

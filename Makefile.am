@@ -20,7 +20,7 @@ map_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
 
 oscillator_sample_SOURCES = oscillator_sample.cpp
 oscillator_sample_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
-oscillator_sample_LDFLAGS = -framework OpenGL
+oscillator_sample_LDFLAGS = $(OPENGL_FRAMEWORK)
 oscillator_sample_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS)
 
 pcap_sample_SOURCES = pcap_sample.cpp
@@ -29,7 +29,7 @@ s1_SOURCES = s1.cpp
 
 s2_SOURCES = s2.cpp
 s2_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
-s2_LDFLAGS = -framework OpenGL
+s2_LDFLAGS = $(OPENGL_FRAMEWORK)
 s2_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS)
 
 #smf_dump_SOURCES = smf_dump.cpp
@@ -124,7 +124,7 @@ all_tests_SOURCES = \
 	voice_test.cpp \
 	volume_test.cpp
 all_tests_CPPFLAGS = $(CPPUNIT_CFLAGS) $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
-all_tests_LDFLAGS = -framework OpenGL
+all_tests_LDFLAGS = $(OPENGL_FRAMEWORK)
 all_tests_LDADD = libpeg.a libsdlapp.a libsequencer.a libtest_main.a liblogger.a $(CPPUNIT_LIBS) $(SDL_LIBS) $(BOOST_PROGRAM_OPTIONS_LIB)
 
 AM_CFLAGS = -Wall -Wextra $(COVERAGE_CFLAGS)

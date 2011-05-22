@@ -3,7 +3,9 @@
 #endif
 #include "sprite.hpp"
 #include <SDL.h>
+#ifdef ENABLE_OPENGL
 #include <SDL_opengl.h>
+#endif
 #include "sdl_logger.hpp"
 #include "texture.hpp"
 #include "texture_pool.hpp"
@@ -50,6 +52,7 @@ void Sprite::draw()
   dst.w = texture->width;
   dst.h = texture->height;
 
+#ifdef ENABLE_OPENGL
   glPushMatrix();
   glTranslatef(pos.x, pos.y, 0.0f);
   glRotatef(rot, 0.0f, 0.0f, 1.0f);
@@ -59,4 +62,5 @@ void Sprite::draw()
     SDL_ERROR("SDL_RenderCopy");
   }
   glPopMatrix();
+#endif
 }

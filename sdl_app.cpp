@@ -8,7 +8,9 @@
 #include <iostream>
 #endif
 #include <SDL.h>
+#ifdef ENABLE_OPENGL
 #include <SDL_opengl.h>
+#endif
 #include "font.hpp"
 #include "sdl_logger.hpp"
 
@@ -120,12 +122,14 @@ bool SDLApp::do_initialize(int argc, char *argv[])
   }
   SDL_GL_SetSwapInterval(0);
 
+#ifdef ENABLE_OPENGL
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, 1);
   glDisable(GL_DEPTH_TEST);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
+#endif
 
   SDL_AudioSpec spec;
   memset(&spec, 0, sizeof spec);

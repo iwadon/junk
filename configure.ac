@@ -7,10 +7,16 @@ AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([test_main.cpp])
 AC_CONFIG_HEADER([config.h])
 
-#AC_ARG_ENABLE([opengl], [AS_HELP_STRING([--enable-opengl], [use OpenGL (default is no)])], [use_opengl=$withval], [use_opengl=no])
-#if test "x$use_opengl" != xno; then
-#  AC_DEFINE([USE_OPENGL], [1], [Define 1 to you use OpenGL])
-#fi
+AC_ARG_ENABLE([opengl], [AS_HELP_STRING([--enable-opengl], [use OpenGL (default is no)])], [use_opengl=$withval], [use_opengl=no])
+if test "x$use_opengl" != xno; then
+  AC_DEFINE([ENABLE_OPENGL], [1], [Define 1 to you use OpenGL])
+  case "$host" in
+    *-*-darwin*)
+      OPENGL_FRAMEWORK="-framework OpenGL"
+      AC_SUBST(OPENGL_FRAMEWORK)
+      ;;
+  esac
+fi
 
 AC_ARG_ENABLE([coverage], [AS_HELP_STRING([--enable-coverage], [use gcov and lcov (default is no)])], [use_coverage=$withval], [use_coverage=no])
 if test "x$use_coverage" != xno; then
@@ -31,16 +37,6 @@ AC_PROG_LN_S
 AC_PROG_RANLIB
 AC_PROG_CPP
 AC_PROG_MKDIR_P
-
-#AC_ARG_ENABLE(gcov, [  --enable-gcov  turn on gcov [default no]],,enable_gcov=no)
-#AC_MSG_CHECKING(whether to enable gcov)
-#if test "x$enable_gcov" = xyes; then
-#  AC_MSG_RESULT(yes)
-#  CC="$CC -coverage"
-#  CXX="$CXX -coverage"
-#else
-#  AC_MSG_RESULT(no)
-#fi
 
 AX_WITH_RUBY
 
