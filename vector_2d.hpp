@@ -109,8 +109,8 @@ inline bool Vector2D::operator!=(const Vector2D &rhs) const
 
 inline Vector2D &Vector2D::rotate(const float theta)
 {
-  float s = sin(theta);
-  float c = cos(theta);
+  float s = sinf(theta);
+  float c = cosf(theta);
   float tx = x * c - y * s;
   float ty = x * s + y * c;
   x = tx;
