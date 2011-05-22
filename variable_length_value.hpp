@@ -2,6 +2,7 @@
 #define VARIABLE_LENGTH_VALUE_HPP_INCLUDED 1
 
 #include <cassert>
+#include <cstddef>
 #ifdef HAVE_STDINT_H
 #include <stdint.h>
 #endif
