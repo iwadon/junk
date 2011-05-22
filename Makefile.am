@@ -1,19 +1,38 @@
 AUTOMAKE_OPTIONS = foreign
 
-bin_PROGRAMS = benchmark_sample \
-	       c1 \
-	       map_benchmark \
-	       oscillator_sample \
-	       pcap_sample \
-	       s1 \
-	       s2 \
-	       smf_play \
-	       vector_length_benchmark
+noinst_PROGRAMS = benchmark_sample \
+	boost_program_options_sample \
+	c1 \
+	g1 \
+	line_segment_2d_benchmark \
+	map_benchmark \
+	oscillator_sample \
+	pcap_sample \
+	s1 \
+	s2 \
+	sdl_event_sample \
+	sdl_event_sample2 \
+	smf_play \
+	udp_sample \
+	vector_length_benchmark
 
 benchmark_sample_SOURCES = benchmark_sample.cpp
 benchmark_sample_CPPFLAGS = $(BOOST_CPPFLAGS)
 
+boost_program_options_sample_SOURCES = boost_program_options_sample.cpp
+boost_program_options_sample_CPPFLAGS = $(BOOST_CPPFLAGS)
+boost_program_options_sample_LDFLAGS = $(BOOST_LDFLAGS)
+boost_program_options_sample_LDADD = $(BOOST_PROGRAM_OPTIONS_LIB)
+
 c1_SOURCES = c1.cpp
+
+g1_SOURCES = g1.cpp
+g1_CPPFLAGS = $(SDL_CFLAGS)
+g1_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS)
+
+line_segment_2d_benchmark_SOURCES = line_segment_2d_benchmark.cpp
+line_segment_2d_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
+line_segment_2d_benchmark_LDADD = libsdlapp.a
 
 map_benchmark_SOURCES = map_benchmark.cpp
 map_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
@@ -32,6 +51,16 @@ s2_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 s2_LDFLAGS = $(OPENGL_FRAMEWORK)
 s2_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS)
 
+sdl_event_sample_SOURCES = sdl_event_sample.c
+sdl_event_sample_CPPFLAGS = $(SDL_CFLAGS)
+sdl_event_sample_LDADD = liblogger.a $(SDL_LIBS)
+
+sdl_event_sample2_SOURCES = sdl_event_sample2.m
+#sdl_event_sample2_OBJCFLAGS = -framework Cocoa
+sdl_event_sample2_CPPFLAGS = $(SDL_CFLAGS)
+sdl_event_sample2_LDFLAGS = -framework Cocoa
+sdl_event_sample2_LDADD = $(SDL_LIBS)
+
 #smf_dump_SOURCES = smf_dump.cpp
 #smf_dump_CPPFLAGS = $(BOOST_CPPFLAGS)
 #smf_dump_LDADD = libsequencer.a liblogger.a
@@ -40,9 +69,11 @@ smf_play_SOURCES = smf_play.cpp
 smf_play_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 smf_play_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS)
 
-lib_LIBRARIES = liblogger.a libpeg.a libsdlapp.a libsequencer.a libtest_main.a
+udp_sample_SOURCES = udp_sample.c
 
-liblogger_a_SOURCES = logger.cpp logger.hpp
+noinst_LIBRARIES = liblogger.a libpeg.a libsdlapp.a libsequencer.a libtest_main.a
+
+liblogger_a_SOURCES = logger_c.c logger.h logger_cpp.cpp logger.hpp
 liblogger_a_CPPFLAGS = $(BOOST_CPPFLAGS)
 
 libpeg_a_SOURCES = peg.cpp peg.hpp
@@ -53,10 +84,12 @@ libsdlapp_a_SOURCES = controller.cpp controller.hpp \
 		      font.cpp font.hpp \
 		      fps.cpp fps.hpp \
 		      load_time.cpp load_time.hpp \
+		      point_2d.cpp point_2d.hpp \
 		      sdl_app.cpp sdl_app.hpp \
 		      sprite.cpp sprite.hpp \
 		      texture.cpp texture.hpp \
-		      texture_pool.cpp texture_pool.hpp
+		      texture_pool.cpp texture_pool.hpp \
+		      vector_2d.cpp vector_2d.hpp
 libsdlapp_a_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 
 libsequencer_a_SOURCES = audio_stream.hpp \
@@ -71,6 +104,8 @@ libsequencer_a_SOURCES = audio_stream.hpp \
 			 pseudo_triangle_wave_oscillator.cpp pseudo_triangle_wave_oscillator.hpp \
 			 sampler.cpp sampler.hpp \
 			 sine_wave_oscillator.cpp sine_wave_oscillator.hpp \
+			 song.cpp song.hpp \
+			 sound.cpp sound.hpp \
 			 triangle_wave_oscillator.cpp triangle_wave_oscillator.hpp \
 			 smf.cpp smf.hpp \
 			 smf_track.cpp smf_track.hpp \
@@ -86,18 +121,25 @@ libtest_main_a_LIBADD = liblogger.a
 vector_length_benchmark_SOURCES = vector_length_benchmark.cpp
 vector_length_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
 
+noinst_DATA = data/sound_data_sample.bin
+
+data/sound_data_sample.bin: data/sound_data_sample.s
+	$(nasm) -o $@ $<
+
 check_PROGRAMS = all_tests
 TESTS = $(check_PROGRAMS) peg_test.sh
 
 all_tests_SOURCES = \
 	audio_stream_test.cpp \
 	channel_test.cpp \
+	circle_2d_test.cpp \
 	circular_buffer_test.cpp \
 	filter_test.cpp \
 	font_test.cpp \
 	fps_test.cpp \
 	function_test.cpp \
 	instrument_test.cpp \
+	line_segment_2d_test.cpp \
 	load_time_test.cpp \
 	logger_test.cpp \
 	lot_box_test.cpp \
@@ -115,6 +157,8 @@ all_tests_SOURCES = \
 	sine_wave_oscillator_test.cpp \
 	smf_test.cpp \
 	smf_track_test.cpp \
+	song_test.cpp \
+	sound_test.cpp \
 	sprite_test.cpp \
 	texture_pool_test.cpp \
 	texture_test.cpp \
@@ -129,6 +173,7 @@ all_tests_LDADD = libpeg.a libsdlapp.a libsequencer.a libtest_main.a liblogger.a
 
 AM_CFLAGS = -Wall -Wextra $(COVERAGE_CFLAGS)
 AM_CXXFLAGS = -Wall -Wextra $(COVERAGE_CXXFLAGS)
+AM_OBJCFLAGS = -Wall -Wextra $(COVERAGE_OBJCFLAGS)
 
 OBJECTS = $(all_tests_OBJECTS) \
 	  $(benchmark_sample_OBJECTS) \

@@ -3,9 +3,7 @@
 
 #include <cstdarg>
 #include <ostream>
-#ifdef HAVE_BOOST
 #include <boost/noncopyable.hpp>
-#endif
 
 class Logger : public boost::noncopyable
 {
@@ -33,15 +31,10 @@ private:
   LEVEL level_;
 };
 
-#define DEBUG(...) Logger::get_instance().debug(__VA_ARGS__)
-#define INFO(...) Logger::get_instance().info(__VA_ARGS__)
-#define WARN(...) Logger::get_instance().warn(__VA_ARGS__)
-#define ERROR(...) Logger::get_instance().error(__VA_ARGS__)
-#define FATAL(...) Logger::get_instance().fatal(__VA_ARGS__)
-
-#ifdef HAVE_SDL_H
-#include <SDL.h>
-#define SDL_ERROR(func_name) ERROR("%s() failed: %s", func_name, SDL_GetError())
-#endif
+#define LOG_DEBUG(...) Logger::get_instance().debug(__VA_ARGS__)
+#define LOG_INFO(...) Logger::get_instance().info(__VA_ARGS__)
+#define LOG_WARN(...) Logger::get_instance().warn(__VA_ARGS__)
+#define LOG_ERROR(...) Logger::get_instance().error(__VA_ARGS__)
+#define LOG_FATAL(...) Logger::get_instance().fatal(__VA_ARGS__)
 
 #endif // !defined(LOGGER_HPP_INCLUDED)

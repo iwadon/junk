@@ -298,7 +298,7 @@ namespace peg
     ErrorInfo err;
     Result result = pe.parse(err, src);
     if (!result.status) {
-      ERROR(err.message().c_str());
+      LOG_ERROR(err.message().c_str());
     }
     return result;
   }

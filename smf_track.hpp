@@ -1,9 +1,10 @@
 #ifndef SMF_TRACK_HPP_INCLUDED
 #define SMF_TRACK_HPP_INCLUDED 1
 
-#define SMF_TRACK_DEBUG 1
+//#define SMF_TRACK_DEBUG 1
+//#define ENABLE_RUNNING_STATUS 1
 
-#include <cstdlib>
+#include <cstddef>
 #if defined(HAVE_TR1_CSTDINT)
 #include <tr1/cstdint>
 #elif defined(HAVE_BOOST)
@@ -53,7 +54,9 @@ private:
   uint32_t wait_time_;
   STATE state_;
   FLAG flag_;
+#ifdef ENABLE_RUNNING_STATUS
   data_type prev_status_byte;
+#endif
   void update_wait_time();
 #ifdef SMF_TRACK_DEBUG
   void set_state(const STATE new_state);

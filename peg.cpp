@@ -4,6 +4,7 @@
 #include "peg.hpp"
 #ifdef STDCXX_98_HEADERS
 #include <cctype>
+#include <cstring>
 #include <iostream>
 #endif
 #ifdef HAVE_BOOST
@@ -128,7 +129,7 @@ namespace peg
 
   Result Any::parse(ErrorInfo &err, const char *src)
   {
-    Result result = { true };
+    Result result = { true, NULL };
     if (*src != '\0') {
       result.rest = src + 1;
     } else {

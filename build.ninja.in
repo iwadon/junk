@@ -1,0 +1,267 @@
+CC = @CC@
+CFLAGS = @CFLAGS@
+CPP = @CPP@
+CPPFLAGS = @CPPFLAGS@
+CPPUNIT_CFLAGS = @CPPUNIT_CFLAGS@
+CPPUNIT_CONFIG = @CPPUNIT_CONFIG@
+CPPUNIT_LIBS = @CPPUNIT_LIBS@
+CXX = @CXX@
+CXXCPP = @CXXCPP@
+CXXFLAGS = @CXXFLAGS@
+DEFAULT_INCLUDES = -I.@am__isrc@
+DEFS = @DEFS@
+DOXYGEN = @DOXYGEN@
+LDFLAGS = @LDFLAGS@
+LIBS = @LIBS@
+OBJC = @OBJC@
+OBJCFLAGS = @OBJCFLAGS@
+
+top_srcdir = @top_srcdir@
+srcdir = @srcdir@
+builddir = @builddir@/build
+
+BOOST_CPPFLAGS = @BOOST_CPPFLAGS@
+BOOST_LDFLAGS = @BOOST_LDFLAGS@
+BOOST_PROGRAM_OPTIONS_LIB = @BOOST_PROGRAM_OPTIONS_LIB@
+
+SDL_CFLAGS = @SDL_CFLAGS@
+SDL_LIBS = @SDL_LIBS@
+
+AM_CFLAGS = -Wall -Wextra 
+AM_CXXFLAGS = -Wall -Wextra
+AM_CPPFLAGS = $BOOST_CPPFLAGS $SDL_CFLAGS
+AM_LDFLAGS = $BOOST_LDFLAGS
+
+rule cc
+  depfile = $out.d
+  command = $CC -MMD -MF $out.d $DEFS $DEFAULT_INCLUDES $INCLUDES $AM_CPPFLAGS $CPPFLAGS $AM_CFLAGS $CFLAGS -c $in -o $out
+  description = CC $out
+
+rule cxx
+  depfile = $out.d
+  command = $CXX -MMD -MF $out.d $DEFS $DEFAULT_INCLUDES $INCLUDES $AM_CPPFLAGS $CPPFLAGS $AM_CXXFLAGS $CXXFLAGS -c $in -o $out
+  description = CXX $out
+
+rule objc
+  depfile = $out.d
+  command = $OBJC -MMD -MF $out.d $DEFS $DEFUALT_INCLUDES $INCLUDES $AM_CPPFLAGS $CPPFLAGS $AM_OBJCFLAGS $OBJCFLAGS -c $in -o $out
+  description = OBJC $out
+
+rule link
+  command = $CXX $AM_LDFLAGS $LDFLAGS -o $out $in $LIBS
+  description = LINK $out
+
+rule ar
+  command = ar crs $out $in
+  description = AR $out
+
+rule run
+  command = $in
+  description = RUN $in
+
+rule clean
+  command = rm -rf $builddir
+  description = CLEAN $builddir
+
+build $builddir/benchmark_sample.o: cxx $srcdir/benchmark_sample.cpp
+  INCLUDES = $BOOST_CPPFLAGS
+build $builddir/benchmark_sample: link $builddir/benchmark_sample.o
+
+build $builddir/boost_program_options_sample.o: cxx $srcdir/boost_program_options_sample.cpp
+build $builddir/boost_program_options_sample: link $builddir/boost_program_options_sample.o
+  LIBS = -lboost_program_options-mt
+
+build $builddir/c1.o: cxx $srcdir/c1.cpp
+build $builddir/c1: link $builddir/c1.o
+
+build $builddir/map_benchmark.o: cxx $srcdir/map_benchmark.cpp
+build $builddir/map_benchmark: link $builddir/map_benchmark.o
+
+build $builddir/oscillator_sample.o: cxx $srcdir/oscillator_sample.cpp
+build $builddir/oscillator_sample: link $builddir/oscillator_sample.o \
+    $builddir/libsequencer.a $builddir/libsdlapp.a $builddir/liblogger.a
+  LIBS = -lSDL -lSDL_image
+
+build $builddir/pcap_sample.o: cxx $srcdir/pcap_sample.cpp
+build $builddir/pcap_sample: link $builddir/pcap_sample.o
+  LIBS = -lpcap
+
+build $builddir/s1.o: cxx $srcdir/s1.cpp
+build $builddir/s1: link $builddir/s1.o
+  LIBS = $SDL_LIBS
+
+build $builddir/s2.o: cxx $srcdir/s2.cpp
+build $builddir/s2: link $builddir/s2.o $builddir/libsdlapp.a $builddir/liblogger.a
+  LDFLAGS = $ldflags -framework OpenGL
+  LIBS = $SDL_LIBS
+
+build $builddir/sdl_event_sample.o: cc $srcdir/sdl_event_sample.c
+build $builddir/sdl_event_sample: link $builddir/sdl_event_sample.o $builddir/liblogger.a
+  LIBS = $SDL_LIBS
+
+build $builddir/sdl_event_sample2.o: objc $srcdir/sdl_event_sample2.m
+build $builddir/sdl_event_sample2: link $builddir/sdl_event_sample2.o
+  LDFLAGS = $ldflags -framework Cocoa
+  LIBS = -lSDL
+
+build $builddir/smf_play.o: cxx $srcdir/smf_play.cpp
+build $builddir/smf_play: link $builddir/smf_play.o $builddir/libsequencer.a $builddir/libsdlapp.a $builddir/liblogger.a
+  LIBS = -lSDL
+
+build $builddir/logger_c.o: cc $srcdir/logger_c.c
+build $builddir/logger_cpp.o: cxx $srcdir/logger_cpp.cpp
+build $builddir/liblogger.a: ar $builddir/logger_c.o $builddir/logger_cpp.o
+
+build $builddir/peg.o: cxx $srcdir/peg.cpp
+build $builddir/libpeg.a: ar $builddir/peg.o
+
+build $builddir/controller.o: cxx $srcdir/controller.cpp
+build $builddir/frame_wait_timer.o: cxx $srcdir/frame_wait_timer.cpp
+build $builddir/font.o: cxx $srcdir/font.cpp
+build $builddir/fps.o: cxx $srcdir/fps.cpp
+build $builddir/load_time.o: cxx $srcdir/load_time.cpp
+build $builddir/point_2d.o: cxx $srcdir/point_2d.cpp
+build $builddir/sdl_app.o: cxx $srcdir/sdl_app.cpp
+build $builddir/sprite.o: cxx $srcdir/sprite.cpp
+build $builddir/texture.o: cxx $srcdir/texture.cpp
+build $builddir/texture_pool.o: cxx $srcdir/texture_pool.cpp
+build $builddir/vector_2d.o: cxx $srcdir/vector_2d.cpp
+build $builddir/libsdlapp.a: ar $builddir/controller.o \
+    $builddir/frame_wait_timer.o \
+    $builddir/font.o \
+    $builddir/fps.o \
+    $builddir/load_time.o \
+    $builddir/point_2d.o \
+    $builddir/sdl_app.o \
+    $builddir/sprite.o \
+    $builddir/texture.o \
+    $builddir/texture_pool.o \
+    $builddir/vector_2d.o
+
+build $builddir/channel.o: cxx $srcdir/channel.cpp
+build $builddir/filter.o: cxx $srcdir/filter.cpp
+build $builddir/instrument.o: cxx $srcdir/instrument.cpp
+build $builddir/oscillator.o: cxx $srcdir/oscillator.cpp
+build $builddir/oscillator_factory.o: cxx $srcdir/oscillator_factory.cpp
+build $builddir/oscillator_stream.o: cxx $srcdir/oscillator_stream.cpp
+build $builddir/patch.o: cxx $srcdir/patch.cpp
+build $builddir/pseudo_triangle_wave_oscillator.o: cxx $srcdir/pseudo_triangle_wave_oscillator.cpp
+build $builddir/sampler.o: cxx $srcdir/sampler.cpp
+build $builddir/sine_wave_oscillator.o: cxx $srcdir/sine_wave_oscillator.cpp
+build $builddir/song.o: cxx $srcdir/song.cpp
+build $builddir/triangle_wave_oscillator.o: cxx $srcdir/triangle_wave_oscillator.cpp
+build $builddir/smf.o: cxx $srcdir/smf.cpp
+build $builddir/smf_track.o: cxx $srcdir/smf_track.cpp
+build $builddir/variable_length_value.o: cxx $srcdir/variable_length_value.cpp
+build $builddir/voice.o: cxx $srcdir/voice.cpp
+build $builddir/libsequencer.a: ar $builddir/channel.o \
+    $builddir/filter.o \
+    $builddir/instrument.o \
+    $builddir/oscillator.o \
+    $builddir/oscillator_factory.o \
+    $builddir/oscillator_stream.o \
+    $builddir/patch.o \
+    $builddir/pseudo_triangle_wave_oscillator.o \
+    $builddir/sampler.o \
+    $builddir/sine_wave_oscillator.o \
+    $builddir/song.o \
+    $builddir/triangle_wave_oscillator.o \
+    $builddir/smf.o \
+    $builddir/smf_track.o \
+    $builddir/variable_length_value.o \
+    $builddir/voice.o
+
+build $builddir/test_main.o: cxx $srcdir/test_main.cpp
+build $builddir/libtest_main.a: ar $builddir/test_main.o
+
+build $builddir/vector_length_benchmark.o: cxx $srcdir/vector_length_benchmark.cpp
+build $builddir/vector_length_benchmark: link $builddir/vector_length_benchmark.o
+
+build all: phony || $builddir/benchmark_sample $builddir/boost_program_options_sample $builddir/c1 \
+    $builddir/map_benchmark $builddir/oscillator_sample $builddir/pcap_sample $builddir/s1 $builddir/s2 \
+    $builddir/sdl_event_sample $builddir/sdl_event_sample2 $builddir/smf_play \
+    $builddir/liblogger.a $builddir/libpeg.a $builddir/libsdlapp.a $builddir/libsequencer.a $builddir/libtest_main.a \
+    $builddir/vector_length_benchmark
+
+build $builddir/audio_stream_test.o: cxx $srcdir/audio_stream_test.cpp
+build $builddir/channel_test.o: cxx $srcdir/channel_test.cpp
+build $builddir/circle_2d_test.o: cxx $srcdir/circle_2d_test.cpp
+build $builddir/circular_buffer_test.o: cxx $srcdir/circular_buffer_test.cpp
+build $builddir/filter_test.o: cxx $srcdir/filter_test.cpp
+build $builddir/font_test.o: cxx $srcdir/font_test.cpp
+build $builddir/fps_test.o: cxx $srcdir/fps_test.cpp
+build $builddir/function_test.o: cxx $srcdir/function_test.cpp
+build $builddir/instrument_test.o: cxx $srcdir/instrument_test.cpp
+build $builddir/line_segment_2d_test.o: cxx $srcdir/line_segment_2d_test.cpp
+build $builddir/load_time_test.o: cxx $srcdir/load_time_test.cpp
+build $builddir/logger_test.o: cxx $srcdir/logger_test.cpp
+build $builddir/lot_box_test.o: cxx $srcdir/lot_box_test.cpp
+build $builddir/object_test.o: cxx $srcdir/object_test.cpp
+build $builddir/observer_test.o: cxx $srcdir/observer_test.cpp
+build $builddir/oscillator_factory_test.o: cxx $srcdir/oscillator_factory_test.cpp
+build $builddir/oscillator_stream_test.o: cxx $srcdir/oscillator_stream_test.cpp
+build $builddir/oscillator_test.o: cxx $srcdir/oscillator_test.cpp
+build $builddir/patch_test.o: cxx $srcdir/patch_test.cpp
+build $builddir/peg_test.o: cxx $srcdir/peg_test.cpp
+build $builddir/point_2d_test.o: cxx $srcdir/point_2d_test.cpp
+build $builddir/pseudo_triangle_wave_oscillator_test.o: cxx $srcdir/pseudo_triangle_wave_oscillator_test.cpp
+build $builddir/rect_test.o: cxx $srcdir/rect_test.cpp
+build $builddir/sampler_test.o: cxx $srcdir/sampler_test.cpp
+build $builddir/sine_wave_oscillator_test.o: cxx $srcdir/sine_wave_oscillator_test.cpp
+build $builddir/smf_test.o: cxx $srcdir/smf_test.cpp
+build $builddir/smf_track_test.o: cxx $srcdir/smf_track_test.cpp
+build $builddir/song_test.o: cxx $srcdir/song_test.cpp
+build $builddir/sprite_test.o: cxx $srcdir/sprite_test.cpp
+build $builddir/texture_pool_test.o: cxx $srcdir/texture_pool_test.cpp
+build $builddir/texture_test.o: cxx $srcdir/texture_test.cpp
+build $builddir/triangle_wave_oscillator_test.o: cxx $srcdir/triangle_wave_oscillator_test.cpp
+build $builddir/variable_length_value_test.o: cxx $srcdir/variable_length_value_test.cpp
+build $builddir/vector_2d_test.o: cxx $srcdir/vector_2d_test.cpp
+build $builddir/voice_test.o: cxx $srcdir/voice_test.cpp
+build $builddir/volume_test.o: cxx $srcdir/volume_test.cpp
+build $builddir/all_tests: link \
+    $builddir/audio_stream_test.o \
+    $builddir/channel_test.o \
+    $builddir/circle_2d_test.o \
+    $builddir/circular_buffer_test.o \
+    $builddir/filter_test.o \
+    $builddir/font_test.o \
+    $builddir/fps_test.o \
+    $builddir/function_test.o \
+    $builddir/instrument_test.o \
+    $builddir/line_segment_2d_test.o \
+    $builddir/load_time_test.o \
+    $builddir/logger_test.o \
+    $builddir/lot_box_test.o \
+    $builddir/object_test.o \
+    $builddir/observer_test.o \
+    $builddir/oscillator_factory_test.o \
+    $builddir/oscillator_stream_test.o \
+    $builddir/oscillator_test.o \
+    $builddir/patch_test.o \
+    $builddir/peg_test.o \
+    $builddir/point_2d_test.o \
+    $builddir/pseudo_triangle_wave_oscillator_test.o \
+    $builddir/rect_test.o \
+    $builddir/sampler_test.o \
+    $builddir/sine_wave_oscillator_test.o \
+    $builddir/smf_test.o \
+    $builddir/smf_track_test.o \
+    $builddir/song_test.o \
+    $builddir/sprite_test.o \
+    $builddir/texture_pool_test.o \
+    $builddir/texture_test.o \
+    $builddir/triangle_wave_oscillator_test.o \
+    $builddir/variable_length_value_test.o \
+    $builddir/vector_2d_test.o \
+    $builddir/voice_test.o \
+    $builddir/volume_test.o \
+    $builddir/libpeg.a $builddir/libsdlapp.a $builddir/libsequencer.a $builddir/libtest_main.a $builddir/liblogger.a
+  LDFLAGS = $ldflags -framework OpenGL
+  LIBS = $libs -lcppunit -lSDL -lSDL_image -lboost_program_options-mt
+
+build check: run $builddir/all_tests
+
+rule create_ninja
+    command = cd $top_srcdir && ./config.status $out
+build $builddir/../build.ninja: create_ninja $srcdir/build.ninja.in | $top_srcdir/config.status

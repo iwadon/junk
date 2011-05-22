@@ -19,7 +19,7 @@ Texture::~Texture()
   if (texture != NULL) {
     SDL_DestroyTexture(texture);
     texture = NULL;
-    INFO("Texture %p(%s) is destroyed.", this, filename.c_str());
+    LOG_INFO("Texture %p(%s) is destroyed.", this, filename.c_str());
   }
 }
 
@@ -28,12 +28,12 @@ bool Texture::load_file(const SP &filename_)
   assert(renderer != NULL);
   SDL_Surface *surface = IMG_Load(filename_.c_str());
   if (surface == NULL) {
-    ERROR("IMG_Load() failed: %s", IMG_GetError());
+    LOG_ERROR("IMG_Load() failed: %s", IMG_GetError());
     return false;
   }
   SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, surface);
   if (tex == NULL) {
-    SDL_ERROR("SDL_CreateTextureFromSurface");
+    SDL_ERROR(SDL_CreateTextureFromSurface);
     SDL_FreeSurface(surface);
     return false;
   }
@@ -41,7 +41,7 @@ bool Texture::load_file(const SP &filename_)
   texture = tex;
   int w, h;
   if (SDL_QueryTexture(texture, NULL, NULL, &w, &h) == -1) {
-    SDL_ERROR("SDL_QueryTexture");
+    SDL_ERROR(SDL_QueryTexture);
     SDL_DestroyTexture(texture);
     texture = NULL;
     return false;
@@ -49,6 +49,6 @@ bool Texture::load_file(const SP &filename_)
   width = w;
   height = h;
   filename_.CopyToString(&filename);
-  INFO("Texture %p(%s) loaded.", this, filename.c_str());
+  LOG_INFO("Texture %p(%s) loaded.", this, filename.c_str());
   return true;
 }

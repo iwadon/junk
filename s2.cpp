@@ -32,7 +32,7 @@ namespace game
   static const float DEMOBOX_H = 10;
   static const float MYSHIP_W = 30;
   static const float MYSHIP_H = 50;
-  static const size_t OBJ_NUM = 400;
+  static const size_t OBJ_NUM = 500;
 
   class Object
   {
@@ -180,6 +180,7 @@ namespace game
 
   void MyShip::move()
   {
+    rot_ += 1.0f;
   }
 
   void MyShip::draw(SDLApp &app)

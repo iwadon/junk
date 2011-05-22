@@ -30,6 +30,7 @@ fi
 
 # Checks for programs.
 AC_PROG_AWK
+AC_PROG_OBJC
 AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_INSTALL
@@ -37,6 +38,7 @@ AC_PROG_LN_S
 AC_PROG_RANLIB
 AC_PROG_CPP
 AC_PROG_MKDIR_P
+AX_PROG_NASM
 
 AX_WITH_RUBY
 
@@ -76,7 +78,7 @@ AC_CXX_HEADER_STDCXX_98
 AC_FUNC_MEMCMP
 AC_CHECK_FUNCS([memset socket])
 
-AC_CONFIG_FILES([Doxyfile Makefile])
+AC_CONFIG_FILES([Doxyfile Makefile build.ninja])
 AC_CONFIG_FILES([net_test.sh], [chmod +x net_test.sh])
 AC_CONFIG_FILES([peg_test.sh], [chmod +x peg_test.sh])
 AC_OUTPUT
