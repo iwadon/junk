@@ -52,7 +52,7 @@ bool Sound::load_file(const SP &filename)
   }
   const char *p = reinterpret_cast<const char *>(buf);
   if (memcmp(p, HEADER_ID, sizeof HEADER_ID) != 0) {
-    ERROR("SNDファイルではありません: %s", filename.c_str());
+    LOG_ERROR("SNDファイルではありません: %s", filename.c_str());
     return false;
   }
   SDL_free(buf);
