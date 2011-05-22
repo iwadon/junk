@@ -56,9 +56,9 @@ sdl_event_sample_CPPFLAGS = $(SDL_CFLAGS)
 sdl_event_sample_LDADD = liblogger.a $(SDL_LIBS)
 
 sdl_event_sample2_SOURCES = sdl_event_sample2.m
-#sdl_event_sample2_OBJCFLAGS = -framework Cocoa
+#sdl_event_sample2_OBJCFLAGS = $(COCOA_FRAMEWORK)
 sdl_event_sample2_CPPFLAGS = $(SDL_CFLAGS)
-sdl_event_sample2_LDFLAGS = -framework Cocoa
+sdl_event_sample2_LDFLAGS = $(COCOA_FRAMEWORK)
 sdl_event_sample2_LDADD = $(SDL_LIBS)
 
 #smf_dump_SOURCES = smf_dump.cpp

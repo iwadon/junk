@@ -1,12 +1,17 @@
+#ifdef __APPLE__
+
 #import <Cocoa/Cocoa.h>
 #include <stdio.h>
 #include <SDL.h>
 
 #define SDL_ERROR(func) fprintf(stderr, #func "() failed: %s\n", SDL_GetError())
 
+#endif // defined(__APPLE__)
+
 int main(int argc, char *argv[])
 {
 #pragma unused(argc, argv)
+#ifdef __APPLE__
   SDL_Surface *screen;
   int done = 0;
   SDL_Event event;
@@ -43,5 +48,6 @@ int main(int argc, char *argv[])
   SDL_Delay(500);
   SDL_Quit();
   [pool release];
+#endif // defined(__APPLE__)
   return 0;
 }

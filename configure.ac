@@ -52,6 +52,13 @@ AX_BOOST_BASE
 AX_BOOST_PROGRAM_OPTIONS
 AC_CHECK_LIB([pcap], [pcap_lookupdev])
 
+case "$host" in
+  *-*-darwin*)
+    COCOA_FRAMEWORK="-framework Cocoa"
+    AC_SUBST(COCOA_FRAMEWORK)
+    ;;
+esac
+
 # Checks for header files.
 AC_CHECK_HEADERS([arpa/inet.h mach/mach_time.h netinet/in.h pcap.h pcap/pcap.h stdint.h sys/socket.h unistd.h])
 AC_LANG_PUSH(C++)
