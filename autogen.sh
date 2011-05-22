@@ -15,9 +15,13 @@ AUTOHEADER="autoheader"
 AUTOMAKE="automake -a"
 AUTOCONF="autoconf"
 
+echo $ACLOCAL
 $ACLOCAL
+echo $AUTOHEADER
 $AUTOHEADER
+echo $AUTOMAKE
 $AUTOMAKE
+echo $AUTOCONF
 $AUTOCONF
 
 cd $build_dir
