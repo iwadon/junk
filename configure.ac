@@ -7,11 +7,13 @@ AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([test_main.cpp])
 AC_CONFIG_HEADER([config.h])
 
+SYSTEMNAME=`uname -s`
+
 AC_ARG_ENABLE([opengl], [AS_HELP_STRING([--enable-opengl], [use OpenGL (default is no)])], [use_opengl=$withval], [use_opengl=no])
 if test "x$use_opengl" != xno; then
   AC_DEFINE([ENABLE_OPENGL], [1], [Define 1 to you use OpenGL])
-  case "$host" in
-    *-*-darwin*)
+  case "$SYSTEMNAME" in
+    Darwin)
       OPENGL_FRAMEWORK="-framework OpenGL"
       AC_SUBST(OPENGL_FRAMEWORK)
       ;;
@@ -52,8 +54,8 @@ AX_BOOST_BASE
 AX_BOOST_PROGRAM_OPTIONS
 AC_CHECK_LIB([pcap], [pcap_lookupdev])
 
-case "$host" in
-  *-*-darwin*)
+case "$SYSTEMNAME" in
+  Darwin)
     COCOA_FRAMEWORK="-framework Cocoa"
     AC_SUBST(COCOA_FRAMEWORK)
     ;;
