@@ -1,12 +1,10 @@
 #ifndef PEG_HPP_INCLUDED
 #define PEG_HPP_INCLUDED 1
 
-#ifdef STDCXX_98_HEADERS
 #include <iostream>
 #include <string>
 #include <utility>
 #include <vector>
-#endif
 #include "logger.hpp"
 
 namespace peg
