@@ -2,40 +2,28 @@
 #include "config.h"
 #endif
 #include "variable_length_value.hpp"
+#include <gtest/gtest.h>
 #include <cstring>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/TestAssert.h>
-
-class VariableLengthValueTest : public CppUnit::TestCase
-{
-  CPPUNIT_TEST_SUITE(VariableLengthValueTest);
-  CPPUNIT_TEST(test_data);
-  CPPUNIT_TEST(test_value);
-  CPPUNIT_TEST_SUITE_END();
-public:
-  void test_data();
-  void test_value();
-};
 
 #define ASSERT_DATA(V, D, L) {						\
     VariableLengthValue v(V);						\
     const VariableLengthValue::data_type *d;				\
     VariableLengthValue::len_type l;					\
     v.data(&d, &l);							\
-    CPPUNIT_ASSERT_EQUAL(static_cast<VariableLengthValue::len_type>(L), l); \
-    CPPUNIT_ASSERT(!memcmp(d, D, L));					\
+    ASSERT_EQ(static_cast<VariableLengthValue::len_type>(L), l); \
+    ASSERT_TRUE(!memcmp(d, D, L));					\
   }
 
 #define ASSERT_VALUE(D, L, V) {						\
     VariableLengthValue d(D, L);					\
     VariableLengthValue::value_type v = d.value();			\
-    CPPUNIT_ASSERT_EQUAL(static_cast<VariableLengthValue::value_type>(V), v); \
+    ASSERT_EQ(static_cast<VariableLengthValue::value_type>(V), v);	\
     VariableLengthValue d2(D, 0);					\
     VariableLengthValue::value_type v2 = d2.value();			\
-    CPPUNIT_ASSERT_EQUAL(static_cast<VariableLengthValue::value_type>(V), v2); \
+    ASSERT_EQ(static_cast<VariableLengthValue::value_type>(V), v2);	\
   }
 
-void VariableLengthValueTest::test_data()
+TEST(VariableLengthValueTest, data)
 {
   ASSERT_DATA(      0x00,             "\x00", 1);
   ASSERT_DATA(      0x7f,             "\x7f", 1);
@@ -47,7 +35,7 @@ void VariableLengthValueTest::test_data()
   ASSERT_DATA(0x0fffffff, "\xff\xff\xff\x7f", 4);
 }
 
-void VariableLengthValueTest::test_value()
+TEST(VariableLengthValueTest, value)
 {
   ASSERT_VALUE(            "\x00", 1,       0x00);
   ASSERT_VALUE(            "\x7f", 1,       0x7f);
@@ -58,5 +46,3 @@ void VariableLengthValueTest::test_value()
   ASSERT_VALUE("\x81\x80\x80\x00", 4,   0x200000);
   ASSERT_VALUE("\xff\xff\xff\x7f", 4, 0x0fffffff);
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(VariableLengthValueTest);

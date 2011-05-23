@@ -2,43 +2,39 @@
 #include "config.h"
 #endif
 #include "texture_pool.hpp"
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/TestAssert.h>
+#include <gtest/gtest.h>
 #include <SDL.h>
 
-class TexturePoolTest : public CppUnit::TestCase
+class TexturePoolTest : public ::testing::Test
 {
-  CPPUNIT_TEST_SUITE(TexturePoolTest);
-  CPPUNIT_TEST(test_load_file);
-  CPPUNIT_TEST_SUITE_END();
-public:
-  void setUp();
-  void tearDown();
-  void test_load_file();
-private:
+protected:
   SDL_Window *window_;
   SDL_Renderer *renderer_;
+
+  void SetUp()
+  {
+    window_ = NULL;
+    renderer_ = NULL;
+    window_ = SDL_CreateWindow("TextureTest", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 10, 10, 0);
+    ASSERT_TRUE(window_ != NULL);
+    renderer_ = SDL_CreateRenderer(window_, -1, 0);
+    ASSERT_TRUE(renderer_ != NULL);
+  }
+
+  void TearDown()
+  {
+    SDL_DestroyRenderer(renderer_);
+    SDL_DestroyWindow(window_);
+    renderer_ = NULL;
+    window_ = NULL;
+  }
 };
 
-void TexturePoolTest::setUp()
-{
-  window_ = SDL_CreateWindow("texture_test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 10, 10, 0);
-  renderer_ = SDL_CreateRenderer(window_, -1, 0);
-}
-
-void TexturePoolTest::tearDown()
-{
-  SDL_DestroyRenderer(renderer_);
-  SDL_DestroyWindow(window_);
-}
-
-void TexturePoolTest::test_load_file()
+TEST_F(TexturePoolTest, load_file)
 {
   Texture *tex;
   tex = TexturePool::get_instance().load_file(renderer_, "data/font5x5.png");
-  CPPUNIT_ASSERT(tex != NULL);
+  ASSERT_TRUE(tex != NULL);
   tex = TexturePool::get_instance().load_file(renderer_, "UNKNOWN FILE");
-  CPPUNIT_ASSERT(tex == NULL);
+  ASSERT_TRUE(tex == NULL);
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(TexturePoolTest);
