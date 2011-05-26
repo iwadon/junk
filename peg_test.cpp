@@ -181,6 +181,7 @@ void PegTest::test_parse()
   // not-predicate
   PEG_ASSERT(peg::parse((!peg::char_('a') >> +peg::any)[action1], "abc"), false, "", "abc");
   PEG_ASSERT(peg::parse((!peg::char_('a') >> +peg::any)[action1], "cba"), true, "cba", "");
+  PEG_ASSERT(peg::parse(!peg::any, ""), true, "", "");
 
   // rule
   peg::Rule a_or_b = (peg::char_('a') / peg::char_('b'))[action1];
