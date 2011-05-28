@@ -44,6 +44,12 @@ oscillator_sample_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS)
 
 pcap_sample_SOURCES = pcap_sample.cpp
 
+#peg_sample2_SOURCES = peg_sample2.cpp
+#peg_sample2_CXXFLAGS = $(GTEST_CXXFLAGS)
+#peg_sample2_CPPFLAGS = $(GTEST_CPPFLAGS) $(BOOST_CPPFLAGS)
+#peg_sample2_LDFLAGS = $(GTEST_LDFLAGS)
+#peg_sample2_LDADD = libpeg.a liblogger.a -L$(builddir) libgtest.a
+
 s1_SOURCES = s1.cpp
 
 s2_SOURCES = s2.cpp
@@ -126,10 +132,16 @@ noinst_DATA = data/sound_data_sample.bin
 data/sound_data_sample.bin: data/sound_data_sample.s
 	$(nasm) -o $@ $<
 
-check_PROGRAMS = all_tests all_gtests
+check_PROGRAMS = all_gtests
 TESTS = $(check_PROGRAMS) peg_test.sh
 
-all_tests_SOURCES = \
+GTEST_DIR = $(builddir)/gtest
+libgtest_a_SOURCES = $(GTEST_DIR)/src/gtest-all.cc $(GTEST_DIR)/src/gtest_main.cc
+libgtest_a_CPPFLAGS = -I$(GTEST_DIR)/include -I$(GTEST_DIR)
+
+GMOCK_DIR = $(builddir)/gmock
+
+all_gtests_SOURCES = \
 	audio_stream_test.cpp \
 	channel_test.cpp \
 	circle_2d_test.cpp \
@@ -139,6 +151,9 @@ all_tests_SOURCES = \
 	fps_test.cpp \
 	function_test.cpp \
 	instrument_test.cpp \
+	line_segment_2d_test.cpp \
+	load_time_test.cpp \
+	logger_test.cpp \
 	lot_box_test.cpp \
 	object_test.cpp \
 	observer_test.cpp \
@@ -157,29 +172,17 @@ all_tests_SOURCES = \
 	song_test.cpp \
 	sound_test.cpp \
 	sprite_test.cpp \
-	voice_test.cpp
-all_tests_CPPFLAGS = $(CPPUNIT_CFLAGS) $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
-all_tests_LDFLAGS = $(OPENGL_FRAMEWORK)
-all_tests_LDADD = libpeg.a libsdlapp.a libsequencer.a libtest_main.a liblogger.a $(CPPUNIT_LIBS) $(SDL_LIBS) $(BOOST_PROGRAM_OPTIONS_LIB)
-
-GTEST_DIR = $(builddir)/gtest
-libgtest_a_SOURCES = $(GTEST_DIR)/src/gtest-all.cc $(GTEST_DIR)/src/gtest_main.cc
-libgtest_a_CPPFLAGS = -I$(GTEST_DIR)/include -I$(GTEST_DIR)
-
-all_gtests_SOURCES = \
-	line_segment_2d_test.cpp \
-	load_time_test.cpp \
-	logger_test.cpp \
 	texture_pool_test.cpp \
 	texture_test.cpp \
 	triangle_wave_oscillator_test.cpp \
 	variable_length_value_test.cpp \
 	vector_2d_test.cpp \
-	volume_test.cpp
+	volume_test.cpp \
+	voice_test.cpp
 all_gtests_CXXFLAGS =
-all_gtests_CPPFLAGS = -I$(GTEST_DIR)/include $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
+all_gtests_CPPFLAGS = -I$(GTEST_DIR)/include -I$(GMOCK_DIR)/include $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 all_gtests_LDFLAGS =
-all_gtests_LDADD = libsequencer.a libsdlapp.a liblogger.a -L$(builddir) libgtest.a $(SDL_LIBS)
+all_gtests_LDADD = libpeg.a libsequencer.a libsdlapp.a liblogger.a -L$(builddir) libgtest.a $(SDL_LIBS)
 
 AM_CFLAGS = -Wall -Wextra $(COVERAGE_CFLAGS)
 AM_CXXFLAGS = -Wall -Wextra $(COVERAGE_CXXFLAGS)

@@ -2,43 +2,31 @@
 #include "config.h"
 #endif
 #include "oscillator_stream.hpp"
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/TestAssert.h>
+#include <gtest/gtest.h>
 
-class OscillatorStreamTest : public CppUnit::TestCase
-{
-  CPPUNIT_TEST_SUITE(OscillatorStreamTest);
-  CPPUNIT_TEST(test_read);
-  CPPUNIT_TEST_SUITE_END();
-public:
-  void test_read();
-};
-
-void OscillatorStreamTest::test_read()
+TEST(OscillatorStreamTest, read)
 {
   int16_t buf[10];
   OscillatorStream os1;
   size_t read_size = os1.read(buf, sizeof buf, 1.0f);
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(sizeof buf), read_size);
+  EXPECT_EQ(static_cast<size_t>(sizeof buf), read_size);
   static const int16_t result1[] = {0, 32767, 0, -32767, 0, 32767, 0, -32767, 0, 32767};
-  CPPUNIT_ASSERT_EQUAL(0, memcmp(buf, result1, 10));
+  EXPECT_EQ(0, memcmp(buf, result1, 10));
 
   OscillatorStream os2;
   read_size = os2.read(buf, sizeof buf, 1.5f);
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(sizeof buf), read_size);
+  EXPECT_EQ(static_cast<size_t>(sizeof buf), read_size);
   static const int16_t result2[] = {0, 23169, -32767, 23169, 0, -23169, 32767, -23169, 0, 23169};
   //static const int16_t result2[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   for (int i = 0; i < 10; ++i) {
-    CPPUNIT_ASSERT_EQUAL(result2[i], buf[i]);
+    EXPECT_EQ(result2[i], buf[i]);
   }
 
   OscillatorStream os3;
   read_size = os3.read(buf, sizeof buf, 0.5f);
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(sizeof buf), read_size);
+  EXPECT_EQ(static_cast<size_t>(sizeof buf), read_size);
   static const int16_t result3[] = {0, 23169, 32767, 23169, 0, -23169, -32767, -23169, 0, 23169};
   for (int i = 0; i < 10; ++i) {
-    CPPUNIT_ASSERT_EQUAL(result3[i], buf[i]);
+    EXPECT_EQ(result3[i], buf[i]);
   }
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(OscillatorStreamTest);

@@ -32,3 +32,14 @@ Vector2D Point2D::operator-(const Point2D &rhs) const
   Vector2D v(rhs, *this);
   return v;
 }
+
+Point2D &Point2D::rotate(const float rad, const Point2D &center)
+{
+  float dx = x - center.x;
+  float dy = y - center.y;
+  float s = sinf(rad);
+  float c = cosf(rad);
+  x = dx * c - dy * s;
+  y = dx * s + dy * c;
+  return *this;
+}

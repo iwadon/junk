@@ -11,11 +11,11 @@
 #else
 typedef unsigned char uint8_t;
 #endif
+#include "sp.hpp"
 
 
 class Instrument;
 class SMF;
-class SP;
 
 /**
  * @brief シーケンスデータを扱うためのクラス

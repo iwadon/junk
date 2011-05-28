@@ -2,24 +2,7 @@
 #include "config.h"
 #endif
 #include "peg.hpp"
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/TestAssert.h>
-
-class PegTest : public CppUnit::TestCase
-{
-  CPPUNIT_TEST_SUITE(PegTest);
-  CPPUNIT_TEST(test_inspect);
-  CPPUNIT_TEST(test_str);
-  CPPUNIT_TEST(test_parse);
-  CPPUNIT_TEST(test_example_1);
-  CPPUNIT_TEST_SUITE_END();
-public:
-  void test_inspect();
-  void test_str();
-  void test_parse();
-  void test_example_1();
-private:
-};
+#include <gtest/gtest.h>
 
 static std::string str_;
 
@@ -32,104 +15,104 @@ static void action1(const char *first, const char *last)
 #define PEG_ASSERT(PEG, STATUS, MATCHED, REST) {			\
     str_.clear();							\
     peg::Result result = PEG;						\
-    CPPUNIT_ASSERT_EQUAL(std::string(REST), std::string(result.rest));	\
-    CPPUNIT_ASSERT_EQUAL(std::string(MATCHED), str_);			\
-    CPPUNIT_ASSERT_EQUAL(STATUS, result.status);			\
+    EXPECT_EQ(std::string(REST), std::string(result.rest));	\
+    EXPECT_EQ(std::string(MATCHED), str_);			\
+    EXPECT_EQ(STATUS, result.status);			\
   }
 
-void PegTest::test_inspect()
+TEST(PegTest, inspect)
 {
   // any
-  CPPUNIT_ASSERT_EQUAL(std::string("#<peg::Any>"), peg::any.inspect());
+  EXPECT_EQ(std::string("#<peg::Any>"), peg::any.inspect());
 
   // char_
-  CPPUNIT_ASSERT_EQUAL(std::string("#<peg::Char 'a'>"), peg::char_('a').inspect());
-  CPPUNIT_ASSERT_EQUAL(std::string("#<peg::Char '\\xEF'>"), peg::char_(0xef).inspect());
-  CPPUNIT_ASSERT_EQUAL(std::string("#<peg::Char '\\x12'>"), peg::char_(0x12).inspect());
+  EXPECT_EQ(std::string("#<peg::Char 'a'>"), peg::char_('a').inspect());
+  EXPECT_EQ(std::string("#<peg::Char '\\xEF'>"), peg::char_(0xef).inspect());
+  EXPECT_EQ(std::string("#<peg::Char '\\x12'>"), peg::char_(0x12).inspect());
 
   // string
-  CPPUNIT_ASSERT_EQUAL(std::string("#<peg::String \"abc\">"), peg::str("abc").inspect());
-  CPPUNIT_ASSERT_EQUAL(std::string("#<peg::String \"\\x12\\xEF\\x20'\"\\t\\r\\n\">"), peg::str("\x12\xef '\"\t\r\n").inspect());
+  EXPECT_EQ(std::string("#<peg::String \"abc\">"), peg::str("abc").inspect());
+  EXPECT_EQ(std::string("#<peg::String \"\\x12\\xEF\\x20'\"\\t\\r\\n\">"), peg::str("\x12\xef '\"\t\r\n").inspect());
 
   // range
-  CPPUNIT_ASSERT_EQUAL(std::string("#<peg::Range 'a'..'z'>"), peg::range('a', 'z').inspect());
+  EXPECT_EQ(std::string("#<peg::Range 'a'..'z'>"), peg::range('a', 'z').inspect());
 
   // sequence
-  CPPUNIT_ASSERT_EQUAL(std::string("#<peg::Sequence #<peg::Char 'a'>, #<peg::Any>>"), (peg::char_('a') >> peg::any).inspect());
+  EXPECT_EQ(std::string("#<peg::Sequence #<peg::Char 'a'>, #<peg::Any>>"), (peg::char_('a') >> peg::any).inspect());
 
   // ordered choice
-  CPPUNIT_ASSERT_EQUAL(std::string("#<peg::OrderedChoice #<peg::Char 'a'>, #<peg::Char 'b'>>"), (peg::char_('a') / peg::char_('b')).inspect());
+  EXPECT_EQ(std::string("#<peg::OrderedChoice #<peg::Char 'a'>, #<peg::Char 'b'>>"), (peg::char_('a') / peg::char_('b')).inspect());
 
   // zero-or-more
-  CPPUNIT_ASSERT_EQUAL(std::string("#<peg::ZeroOrMore #<peg::Char 'a'>>"), (*peg::char_('a')).inspect());
+  EXPECT_EQ(std::string("#<peg::ZeroOrMore #<peg::Char 'a'>>"), (*peg::char_('a')).inspect());
 
   // one-or-more
-  CPPUNIT_ASSERT_EQUAL(std::string("#<peg::OneOrMore #<peg::Char 'a'>>"), (+peg::char_('a')).inspect());
+  EXPECT_EQ(std::string("#<peg::OneOrMore #<peg::Char 'a'>>"), (+peg::char_('a')).inspect());
 
   // optional
-  CPPUNIT_ASSERT_EQUAL(std::string("#<peg::Optional #<peg::Char 'a'>>"), (-peg::char_('a')).inspect());
+  EXPECT_EQ(std::string("#<peg::Optional #<peg::Char 'a'>>"), (-peg::char_('a')).inspect());
 
   // and-predicate
-  CPPUNIT_ASSERT_EQUAL(std::string("#<peg::AndPredicate #<peg::Char 'a'>>"), (&peg::char_('a')).inspect());
+  EXPECT_EQ(std::string("#<peg::AndPredicate #<peg::Char 'a'>>"), (&peg::char_('a')).inspect());
 
   // not-predicate
-  CPPUNIT_ASSERT_EQUAL(std::string("#<peg::NotPredicate #<peg::Char 'a'>>"), (!peg::char_('a')).inspect());
+  EXPECT_EQ(std::string("#<peg::NotPredicate #<peg::Char 'a'>>"), (!peg::char_('a')).inspect());
 
   // rule
   peg::Rule pe = peg::char_('a');
-  CPPUNIT_ASSERT_EQUAL(std::string("#<peg::Rule #<peg::Char 'a'>>"), pe.inspect());
+  EXPECT_EQ(std::string("#<peg::Rule #<peg::Char 'a'>>"), pe.inspect());
 
   // result
   peg::Result result = peg::parse(peg::any, "abc");
-  CPPUNIT_ASSERT_EQUAL(std::string("#<peg::Result OK \"bc\">"), result.inspect());
+  EXPECT_EQ(std::string("#<peg::Result OK \"bc\">"), result.inspect());
   result = peg::parse(!peg::any, "abc");
-  CPPUNIT_ASSERT_EQUAL(std::string("#<peg::Result NG \"abc\">"), result.inspect());
+  EXPECT_EQ(std::string("#<peg::Result NG \"abc\">"), result.inspect());
 }
 
-void PegTest::test_str()
+TEST(PegTest, str)
 {
   // any
-  CPPUNIT_ASSERT_EQUAL(std::string("."), peg::any.str());
+  EXPECT_EQ(std::string("."), peg::any.str());
 
   // byte
-  CPPUNIT_ASSERT_EQUAL(std::string("[4B]"), peg::byte(4).str());
+  EXPECT_EQ(std::string("[4B]"), peg::byte(4).str());
 
   // char_
-  CPPUNIT_ASSERT_EQUAL(std::string("'a'"), peg::char_('a').str());
+  EXPECT_EQ(std::string("'a'"), peg::char_('a').str());
 
   // string
-  CPPUNIT_ASSERT_EQUAL(std::string("\"abc\""), peg::str("abc").str());
+  EXPECT_EQ(std::string("\"abc\""), peg::str("abc").str());
 
   // range
-  CPPUNIT_ASSERT_EQUAL(std::string("[0-9]"), peg::range('0', '9').str());
+  EXPECT_EQ(std::string("[0-9]"), peg::range('0', '9').str());
 
   // sequence
-  CPPUNIT_ASSERT_EQUAL(std::string("'a' 'b'"), (peg::char_('a') >> peg::char_('b')).str());
+  EXPECT_EQ(std::string("'a' 'b'"), (peg::char_('a') >> peg::char_('b')).str());
 
   // ordered choice
-  CPPUNIT_ASSERT_EQUAL(std::string("'a' / 'b'"), (peg::char_('a') / peg::char_('b')).str());
+  EXPECT_EQ(std::string("'a' / 'b'"), (peg::char_('a') / peg::char_('b')).str());
 
   // zero-or-more
-  CPPUNIT_ASSERT_EQUAL(std::string("'a'*"), (*peg::char_('a')).str());
+  EXPECT_EQ(std::string("'a'*"), (*peg::char_('a')).str());
 
   // one-or-more
-  CPPUNIT_ASSERT_EQUAL(std::string("'a'+"), (+peg::char_('a')).str());
+  EXPECT_EQ(std::string("'a'+"), (+peg::char_('a')).str());
 
   // optional
-  CPPUNIT_ASSERT_EQUAL(std::string("'a'?"), (-peg::char_('a')).str());
+  EXPECT_EQ(std::string("'a'?"), (-peg::char_('a')).str());
 
   // and-predicate
-  CPPUNIT_ASSERT_EQUAL(std::string("&'a'"), (&peg::char_('a')).str());
+  EXPECT_EQ(std::string("&'a'"), (&peg::char_('a')).str());
 
   // not-predicate
-  CPPUNIT_ASSERT_EQUAL(std::string("!'a'"), (!peg::char_('a')).str());
+  EXPECT_EQ(std::string("!'a'"), (!peg::char_('a')).str());
 
   // rule
   peg::Rule a_or_b = peg::char_('a') / peg::char_('b');
-  CPPUNIT_ASSERT_EQUAL(std::string("'a' / 'b'"), a_or_b.str());
+  EXPECT_EQ(std::string("'a' / 'b'"), a_or_b.str());
 }
 
-void PegTest::test_parse()
+TEST(PegTest, parse)
 {
   // any
   PEG_ASSERT(peg::parse(peg::any[action1], "foo"), true, "f", "oo");
@@ -201,7 +184,7 @@ void PegTest::test_parse()
  *   Sum ← Product (('+' / '-') Product)*
  *   Expr ← Sum
  */
-void PegTest::test_example_1()
+TEST(PegTest, example_1)
 {
   peg::Rule value, product, sum, expr;
   value = (+peg::range('0', '9')) / (peg::char_('(') >> expr >> peg::char_(')'));
@@ -210,5 +193,3 @@ void PegTest::test_example_1()
   expr = sum;
   PEG_ASSERT(peg::parse(expr[action1], "(123+456)*789"), true, "(123+456)*789", "");
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(PegTest);

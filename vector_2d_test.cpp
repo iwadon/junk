@@ -159,8 +159,8 @@ TEST(Vector2DTest, angle_length)
   EXPECT_FLOAT_EQ(1.0f, v1.x);
   EXPECT_FLOAT_EQ(1.0f, v1.y);
   v1 = Vector2D::angle_length(M_PI * 0.5f, 1.f);
-  EXPECT_FLOAT_EQ(0.0f, v1.x);
-  EXPECT_FLOAT_EQ(1.0f, v1.y);
+  EXPECT_NEAR(0.0f, v1.x, FLT_EPSILON);
+  EXPECT_NEAR(1.0f, v1.y, FLT_EPSILON);
 }
 
 TEST(Vector2DTest, cross)
@@ -209,8 +209,8 @@ TEST(Vector2DTest, rotate)
 {
   Vector2D v1(1.0f, 0.0f);
   EXPECT_EQ(v1, v1.rotate(M_PI * 0.5f));
-  EXPECT_FLOAT_EQ(0.0f, v1.x);
-  EXPECT_FLOAT_EQ(1.0f, v1.y);
+  EXPECT_NEAR(0.0f, v1.x, FLT_EPSILON);
+  EXPECT_NEAR(1.0f, v1.y, FLT_EPSILON);
 }
 
 TEST(Vector2DTest, LSHIFT)

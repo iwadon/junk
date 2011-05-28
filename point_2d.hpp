@@ -19,6 +19,7 @@ struct Point2D
   Vector2D operator-(const Point2D &rhs) const;
   bool operator==(const Point2D &rhs) const;
   std::string inspect() const;
+  Point2D &rotate(const float rad, const Point2D &center);
 };
 
 inline Point2D::Point2D()

@@ -2,51 +2,19 @@
 #include "config.h"
 #endif
 #include "smf_track.hpp"
-#ifdef STDCXX_98_HEADERS
-#include <string>
-#endif
-#if defined(HAVE_TR1_CSTDINT)
-#include <tr1/cstdint>
-#elif defined(HAVE_BOOST)
-#include <boost/cstdint.hpp>
-#elif defined(HAVE_STDINT_H)
-#include <stdint.h>
-#endif
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/TestAssert.h>
+#include <gtest/gtest.h>
 #include "instrument.hpp"
 #include "smf.hpp"
 #include "song.hpp"
 
-class SMFTrackTest : public CppUnit::TestCase
+class SMFTrackTest : public ::testing::Test
 {
-  CPPUNIT_TEST_SUITE(SMFTrackTest);
-  CPPUNIT_TEST(test_is_playing);
-#ifdef SMF_TRACK_DEBUG
-  CPPUNIT_TEST(test_inspect);
-#endif
-  CPPUNIT_TEST(test_pause);
-  CPPUNIT_TEST(test_play);
-  CPPUNIT_TEST(test_resume);
-  CPPUNIT_TEST(test_setup);
-  CPPUNIT_TEST(test_stop);
-  CPPUNIT_TEST(test_update);
-  CPPUNIT_TEST_SUITE_END();
-public:
+protected:
   Song song_;
   Instrument inst_;
-  void setUp();
-  void tearDown();
-  void test_is_playing();
-#ifdef SMF_TRACK_DEBUG
-  void test_inspect();
-#endif
-  void test_pause();
-  void test_play();
-  void test_resume();
-  void test_setup();
-  void test_stop();
-  void test_update();
+
+  void SetUp();
+  void TearDown();
 };
 
 static const SMFTrack::data_type MTRK_00[] =
@@ -64,97 +32,99 @@ static const SMFTrack::data_type MTRK_01[] =
   "\x01\x80\x3e\x40"		// note off
   "\x01\xff\x2f\x00";		// end of track
 
-void SMFTrackTest::setUp()
+void SMFTrackTest::SetUp()
 {
   song_.set_instrument(&inst_);
 }
 
-void SMFTrackTest::tearDown()
+void SMFTrackTest::TearDown()
 {
 }
 
-void SMFTrackTest::test_is_playing()
+TEST_F(SMFTrackTest, is_playing)
 {
   SMF smf(song_);
   SMFTrack t(smf);
-  CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
+  EXPECT_EQ(false, t.is_playing());
   t.setup(MTRK_00, sizeof MTRK_00 - 1);
-  CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
+  EXPECT_EQ(false, t.is_playing());
   t.play();
-  CPPUNIT_ASSERT_EQUAL(true, t.is_playing());
+  EXPECT_EQ(true, t.is_playing());
   t.update();
-  CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
+  EXPECT_EQ(false, t.is_playing());
 }
 
 #ifdef SMF_TRACK_DEBUG
-void SMFTrackTest::test_inspect()
+
+TEST_F(SMFTrackTest, inspect)
 {
   SMF smf(song_);
   SMFTrack t(smf);
-  CPPUNIT_ASSERT_EQUAL(std::string("#<SMFTrack NONE>"), t.inspect());
+  EXPECT_EQ(std::string("#<SMFTrack NONE>"), t.inspect());
   t.setup(MTRK_01, sizeof MTRK_01 - 1);
-  CPPUNIT_ASSERT_EQUAL(std::string("#<SMFTrack INITIALIZED>"), t.inspect());
+  EXPECT_EQ(std::string("#<SMFTrack INITIALIZED>"), t.inspect());
   t.play();
-  CPPUNIT_ASSERT_EQUAL(std::string("#<SMFTrack PLAYING>"), t.inspect());
+  EXPECT_EQ(std::string("#<SMFTrack PLAYING>"), t.inspect());
   t.pause();
-  CPPUNIT_ASSERT_EQUAL(std::string("#<SMFTrack PLAYING PAUSED>"), t.inspect());
+  EXPECT_EQ(std::string("#<SMFTrack PLAYING PAUSED>"), t.inspect());
   t.update();
-  CPPUNIT_ASSERT_EQUAL(std::string("#<SMFTrack PLAYING PAUSED>"), t.inspect());
+  EXPECT_EQ(std::string("#<SMFTrack PLAYING PAUSED>"), t.inspect());
   t.resume();
-  CPPUNIT_ASSERT_EQUAL(std::string("#<SMFTrack PLAYING>"), t.inspect());
+  EXPECT_EQ(std::string("#<SMFTrack PLAYING>"), t.inspect());
   t.update();
-  CPPUNIT_ASSERT_EQUAL(std::string("#<SMFTrack PLAYING>"), t.inspect());
+  EXPECT_EQ(std::string("#<SMFTrack PLAYING>"), t.inspect());
   t.stop();
-  CPPUNIT_ASSERT_EQUAL(std::string("#<SMFTrack STOPPED>"), t.inspect());
+  EXPECT_EQ(std::string("#<SMFTrack STOPPED>"), t.inspect());
   t.update();
-  CPPUNIT_ASSERT_EQUAL(std::string("#<SMFTrack STOPPED>"), t.inspect());
+  EXPECT_EQ(std::string("#<SMFTrack STOPPED>"), t.inspect());
 }
-#endif
 
-void SMFTrackTest::test_pause()
+#endif // defined(SMF_TRACK_DEBUG)
+
+TEST_F(SMFTrackTest, pause)
 {
   SMF smf(song_);
   SMFTrack t(smf);
   t.setup(MTRK_00, sizeof MTRK_00 - 1);
-  CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
-  CPPUNIT_ASSERT_EQUAL(false, t.is_paused());
+  EXPECT_EQ(false, t.is_playing());
+  EXPECT_EQ(false, t.is_paused());
   t.pause();
-  CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
-  CPPUNIT_ASSERT_EQUAL(true, t.is_paused());
+  EXPECT_EQ(false, t.is_playing());
+  EXPECT_EQ(true, t.is_paused());
   t.update();
-  CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
-  CPPUNIT_ASSERT_EQUAL(true, t.is_paused());
+  EXPECT_EQ(false, t.is_playing());
+  EXPECT_EQ(true, t.is_paused());
   t.play();
-  CPPUNIT_ASSERT_EQUAL(true, t.is_playing());
-  CPPUNIT_ASSERT_EQUAL(true, t.is_paused());
+  EXPECT_EQ(true, t.is_playing());
+  EXPECT_EQ(true, t.is_paused());
   t.update();
-  CPPUNIT_ASSERT_EQUAL(true, t.is_playing());
-  CPPUNIT_ASSERT_EQUAL(true, t.is_paused());
+  EXPECT_EQ(true, t.is_playing());
+  EXPECT_EQ(true, t.is_paused());
   t.resume();
-  CPPUNIT_ASSERT_EQUAL(true, t.is_playing());
-  CPPUNIT_ASSERT_EQUAL(false, t.is_paused());
+  EXPECT_EQ(true, t.is_playing());
+  EXPECT_EQ(false, t.is_paused());
   t.update();
-  CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
-  CPPUNIT_ASSERT_EQUAL(false, t.is_paused());
+  EXPECT_EQ(false, t.is_playing());
+  EXPECT_EQ(false, t.is_paused());
 }
 
-void SMFTrackTest::test_play()
+TEST_F(SMFTrackTest, play)
 {
   SMF smf(song_);
   SMFTrack t(smf);
   t.setup(MTRK_01, sizeof MTRK_01 - 1);
-  CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
+  EXPECT_EQ(false, t.is_playing());
   t.play();
-  CPPUNIT_ASSERT_EQUAL(true, t.is_playing());
+  EXPECT_EQ(true, t.is_playing());
   for (int i = 0; i < 6; ++i) {
     t.update();
-    CPPUNIT_ASSERT_EQUAL(true, t.is_playing());
+    EXPECT_EQ(true, t.is_playing());
   }
   t.update();
-  CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
+  EXPECT_EQ(false, t.is_playing());
 }
 
-void SMFTrackTest::test_resume()
+TEST_F(SMFTrackTest, resume)
 {
   SMF smf(song_);
   SMFTrack t(smf);
@@ -162,50 +132,44 @@ void SMFTrackTest::test_resume()
   t.pause();
   t.play();
   t.update();
-  CPPUNIT_ASSERT_EQUAL(true, t.is_playing());
-  CPPUNIT_ASSERT_EQUAL(true, t.is_paused());
+  EXPECT_EQ(true, t.is_playing());
+  EXPECT_EQ(true, t.is_paused());
   t.resume();
-  CPPUNIT_ASSERT_EQUAL(true, t.is_playing());
-  CPPUNIT_ASSERT_EQUAL(false, t.is_paused());
+  EXPECT_EQ(true, t.is_playing());
+  EXPECT_EQ(false, t.is_paused());
   t.update();
-  CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
-  CPPUNIT_ASSERT_EQUAL(false, t.is_paused());
+  EXPECT_EQ(false, t.is_playing());
+  EXPECT_EQ(false, t.is_paused());
 }
 
-void SMFTrackTest::test_setup()
+TEST_F(SMFTrackTest, setup)
 {
   SMF smf(song_);
   SMFTrack t(smf);
-  CPPUNIT_ASSERT_EQUAL(true, t.setup(MTRK_00, sizeof MTRK_00 - 1));
-  CPPUNIT_ASSERT_EQUAL(false, t.setup("ABCDEFG", 7));
-  CPPUNIT_ASSERT_EQUAL(false, t.setup("ABCDEFGH", 8));
-  CPPUNIT_ASSERT_EQUAL(false, t.setup("MTrk\x00\x00\x10\x00", 8));
+  EXPECT_EQ(true, t.setup(MTRK_00, sizeof MTRK_00 - 1));
+  EXPECT_EQ(false, t.setup("ABCDEFG", 7));
+  EXPECT_EQ(false, t.setup("ABCDEFGH", 8));
+  EXPECT_EQ(false, t.setup("MTrk\x00\x00\x10\x00", 8));
 }
 
-void SMFTrackTest::test_stop()
+TEST_F(SMFTrackTest, stop)
 {
   SMF smf(song_);
   SMFTrack t(smf);
   t.setup(MTRK_01, sizeof MTRK_01 - 1);
-  CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
+  EXPECT_EQ(false, t.is_playing());
   t.play();
-  CPPUNIT_ASSERT_EQUAL(true, t.is_playing());
+  EXPECT_EQ(true, t.is_playing());
   t.update();
-  CPPUNIT_ASSERT_EQUAL(true, t.is_playing());
+  EXPECT_EQ(true, t.is_playing());
   t.stop();
-  CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
+  EXPECT_EQ(false, t.is_playing());
   t.update();
-  CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
+  EXPECT_EQ(false, t.is_playing());
 
   t.play();
   t.pause();
   t.stop();
-  CPPUNIT_ASSERT_EQUAL(false, t.is_playing());
-  CPPUNIT_ASSERT_EQUAL(false, t.is_paused());
+  EXPECT_EQ(false, t.is_playing());
+  EXPECT_EQ(false, t.is_paused());
 }
-
-void SMFTrackTest::test_update()
-{
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(SMFTrackTest);
