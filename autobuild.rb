@@ -27,13 +27,16 @@ files = {}
 loop do
   prev_files = files
   files = {}
-  `#{git} ls-files ..`.each_line do |file|
-    file.chomp!
+  git_result = `#{git} ls-files ..`.split
+  git_result.each do |file|
     files[file] = {:mtime => File.mtime(file)}
   end
   new_files = files.keys - prev_files.keys
   removed_files = prev_files.keys - files.keys
-  updated = new_files + removed_files
+  updated_files = prev_files.keys.select do |k|
+    prev_files[k][:mtime] != files[k][:mtime]
+  end
+  updated = new_files + removed_files + updated_files
   files.each do |file, info|
     t = File.mtime(file)
     if t != info[:mtime]
@@ -43,8 +46,8 @@ loop do
   end
   unless updated.empty?
     STDERR.puts(" Updated #{updated.size} file(s)")
-    system("make check")
+    system(build)
   end
-  STDERR.putc('.')
+  #STDERR.putc('.')
   sleep wait_time
 end
