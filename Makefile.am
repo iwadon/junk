@@ -150,6 +150,7 @@ all_gtests_SOURCES = \
 	font_test.cpp \
 	fps_test.cpp \
 	function_test.cpp \
+	function_test2.cpp \
 	instrument_test.cpp \
 	line_segment_2d_test.cpp \
 	load_time_test.cpp \
