@@ -44,12 +44,6 @@ oscillator_sample_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS)
 
 pcap_sample_SOURCES = pcap_sample.cpp
 
-#peg_sample2_SOURCES = peg_sample2.cpp
-#peg_sample2_CXXFLAGS = $(GTEST_CXXFLAGS)
-#peg_sample2_CPPFLAGS = $(GTEST_CPPFLAGS) $(BOOST_CPPFLAGS)
-#peg_sample2_LDFLAGS = $(GTEST_LDFLAGS)
-#peg_sample2_LDADD = libpeg.a liblogger.a -L$(builddir) libgtest.a
-
 s1_SOURCES = s1.cpp
 
 s2_SOURCES = s2.cpp
@@ -136,8 +130,11 @@ check_PROGRAMS = all_gtests
 TESTS = $(check_PROGRAMS) peg_test.sh
 
 GTEST_DIR = $(builddir)/gtest
+GTEST_CPPFLAGS = -I$(GTEST_DIR)/include -I$(GTEST_DIR)
+GTEST_LIBS = -L$(builddir) libgtest.a
+
 libgtest_a_SOURCES = $(GTEST_DIR)/src/gtest-all.cc $(GTEST_DIR)/src/gtest_main.cc
-libgtest_a_CPPFLAGS = -I$(GTEST_DIR)/include -I$(GTEST_DIR)
+libgtest_a_CPPFLAGS = $(GTEST_CPPFLAGS)
 
 GMOCK_DIR = $(builddir)/gmock
 
@@ -162,8 +159,8 @@ all_gtests_SOURCES = \
 	oscillator_stream_test.cpp \
 	oscillator_test.cpp \
 	patch_test.cpp \
-	peg_test.cpp \
 	point_2d_test.cpp \
+	property_test.cpp \
 	pseudo_triangle_wave_oscillator_test.cpp \
 	rect_test.cpp \
 	sampler_test.cpp \
@@ -183,7 +180,7 @@ all_gtests_SOURCES = \
 all_gtests_CXXFLAGS =
 all_gtests_CPPFLAGS = -I$(GTEST_DIR)/include -I$(GMOCK_DIR)/include $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 all_gtests_LDFLAGS =
-all_gtests_LDADD = libpeg.a libsequencer.a libsdlapp.a liblogger.a -L$(builddir) libgtest.a $(SDL_LIBS)
+all_gtests_LDADD = libpeg.a libsequencer.a libsdlapp.a liblogger.a $(GTEST_LIBS) $(SDL_LIBS)
 
 AM_CFLAGS = -Wall -Wextra $(COVERAGE_CFLAGS)
 AM_CXXFLAGS = -Wall -Wextra $(COVERAGE_CXXFLAGS)
