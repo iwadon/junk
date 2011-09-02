@@ -8,6 +8,8 @@ noinst_PROGRAMS = benchmark_sample \
 	map_benchmark \
 	oscillator_sample \
 	pcap_sample \
+	peg_sample \
+	peg_sample2 \
 	s1 \
 	s2 \
 	sdl_event_sample \
@@ -43,6 +45,14 @@ oscillator_sample_LDFLAGS = $(OPENGL_FRAMEWORK)
 oscillator_sample_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS)
 
 pcap_sample_SOURCES = pcap_sample.cpp
+
+peg_sample_SOURCES = peg_sample.cpp
+peg_sample_CPPFLAGS = $(GTEST_CPPFLAGS) $(BOOST_CPPFLAGS)
+peg_sample_LDADD = libpeg.a liblogger.a $(GTEST_LIBS)
+
+peg_sample2_SOURCES = peg_sample2.cpp
+peg_sample2_CPPFLAGS = $(GTEST_CPPFLAGS) $(BOOST_CPPFLAGS)
+peg_sample2_LDADD = libpeg.a liblogger.a $(GTEST_LIBS)
 
 s1_SOURCES = s1.cpp
 
@@ -159,6 +169,7 @@ all_gtests_SOURCES = \
 	oscillator_stream_test.cpp \
 	oscillator_test.cpp \
 	patch_test.cpp \
+	peg_test.cpp \
 	point_2d_test.cpp \
 	property_test.cpp \
 	pseudo_triangle_wave_oscillator_test.cpp \
