@@ -41,8 +41,8 @@ peg::Rule PegSample::Identifier = !peg::any;
 peg::Rule PegSample::IdentStart = !peg::any;
 peg::Rule PegSample::IdnetCont = !peg::any;
 peg::Rule PegSample::Literal = !peg::any;
-peg::Rule PegSample::Class = !peg::any;
-peg::Rule PegSample::Range = !peg::any;
+peg::Rule PegSample::Class = peg::char_('[') >> *(!peg::char_(']') >> Range) >> peg::char_(']') >> Spacing;
+peg::Rule PegSample::Range = (Char >> peg::char_('-') >> Char) / Char;
 peg::Rule PegSample::Char =
   (peg::char_('\\') >> (peg::char_('a') / peg::char_('b') / peg::char_('e') / peg::char_('f')
 			/ peg::char_('n') / peg::char_('r') / peg::char_('t') / peg::char_('v')
@@ -89,10 +89,28 @@ TEST_F(PegSample, Literal)
 
 TEST_F(PegSample, Class)
 {
+  peg::Result result = peg::parse(Class, "[a-z] \t\r\n");
+  EXPECT_EQ(true, result.status);
+  EXPECT_STREQ("", result.rest);
+
+  result = peg::parse(Class, "[abc]");
+  EXPECT_EQ(true, result.status);
+  EXPECT_STREQ("", result.rest);
+
+  result = peg::parse(Class, "[]");
+  EXPECT_EQ(true, result.status);
+  EXPECT_STREQ("", result.rest);
 }
 
 TEST_F(PegSample, Range)
 {
+  peg::Result result = peg::parse(Range, "a-z");
+  EXPECT_EQ(true, result.status);
+  EXPECT_STREQ("", result.rest);
+
+  result = peg::parse(Range, "a");
+  EXPECT_EQ(true, result.status);
+  EXPECT_STREQ("", result.rest);
 }
 
 TEST_F(PegSample, Char)
