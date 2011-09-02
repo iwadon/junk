@@ -10,6 +10,15 @@
 class PegSample : public ::testing::Test
 {
 public:
+  // Herarchical syntax
+  static peg::Rule Grammar;
+  static peg::Rule Definition;
+  static peg::Rule Expression;
+  static peg::Rule Sequence;
+  static peg::Rule Prefix;
+  static peg::Rule Suffix;
+  static peg::Rule Primary;
+  // Lexical syntax
   static peg::Rule Identifier;
   static peg::Rule IdentStart;
   static peg::Rule IdentCont;
@@ -37,7 +46,14 @@ public:
   static peg::Rule END;
 };
 
-peg::Rule PegSample::Identifier = !peg::any;
+peg::Rule PegSample::Grammar = !peg::any;
+peg::Rule PegSample::Definition = !peg::any;
+peg::Rule PegSample::Expression = !peg::any;
+peg::Rule PegSample::Sequence = !peg::any;
+peg::Rule PegSample::Prefix = !peg::any;
+peg::Rule PegSample::Suffix = !peg::any;
+peg::Rule PegSample::Primary = !peg::any;
+peg::Rule PegSample::Identifier = IdentStart >> *IdentCont >> Spacing;
 peg::Rule PegSample::IdentStart = peg::range('a', 'z') / peg::range('A', 'Z') / peg::char_('_');
 peg::Rule PegSample::IdentCont = IdentStart / peg::range('0', '9');
 peg::Rule PegSample::Literal =
@@ -73,8 +89,40 @@ peg::Rule PegSample::Action = peg::char_('{') >> *(!peg::char_('}') >> peg::any)
 peg::Rule PegSample::BEGIN = peg::char_('<') >> Spacing;
 peg::Rule PegSample::END = peg::char_('>') >> Spacing;
 
+TEST_F(PegSample, Grammar)
+{
+}
+
+TEST_F(PegSample, Definition)
+{
+}
+
+TEST_F(PegSample, Expression)
+{
+}
+
+TEST_F(PegSample, Sequence)
+{
+}
+
+TEST_F(PegSample, Prefix)
+{
+}
+
+TEST_F(PegSample, Suffix)
+{
+}
+
+TEST_F(PegSample, Primary)
+{
+}
+
 TEST_F(PegSample, Identifier)
 {
+  peg::Result result;
+  result = peg::parse(Identifier, "a0_bc2_3d \t\r\n");
+  EXPECT_EQ(true, result.status);
+  EXPECT_STREQ("", result.rest);
 }
 
 TEST_F(PegSample, IdentStart)
