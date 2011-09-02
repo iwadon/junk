@@ -179,7 +179,7 @@ TEST_F(PegSample, EndOfFile)
 
 TEST_F(PegSample, Action)
 {
-  peg::Result result = peg::parse(Action, "{ for (int i; i < 10; ++i) { printf(\"hello.\\n\"); } } \t\r\n");
+  peg::Result result = peg::parse(Action, "{ printf(\"Hello.\n\"); }");
   EXPECT_EQ(true, result.status);
   EXPECT_STREQ("", result.rest);
 }
