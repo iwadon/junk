@@ -45,6 +45,11 @@ TEST(PegTest, inspect)
   // range
   EXPECT_EQ(std::string("#<peg::Range 'a'..'z'>"), peg::range('a', 'z').inspect());
 
+  // class
+  EXPECT_EQ(std::string("#<peg::Class a>"), peg::class_("a").inspect());
+  EXPECT_EQ(std::string("#<peg::Class 0-9>"), peg::class_("0-9").inspect());
+  EXPECT_EQ(std::string("#<peg::Class a-zA-Z0-9_>"), peg::class_("a-zA-Z0-9_").inspect());
+
   // sequence
   EXPECT_EQ(std::string("#<peg::Sequence #<peg::Char 'a'>, #<peg::Any>>"), (peg::char_('a') >> peg::any).inspect());
 
@@ -95,6 +100,11 @@ TEST(PegTest, str)
 
   // range
   EXPECT_EQ(std::string("[0-9]"), peg::range('0', '9').str());
+
+  // class
+  EXPECT_EQ(std::string("[a]"), peg::class_("a").str());
+  EXPECT_EQ(std::string("[0-9]"), peg::class_("0-9").str());
+  EXPECT_EQ(std::string("[a-zA-Z0-9_]"), peg::class_("a-zA-Z0-9_").str());
 
   // sequence
   EXPECT_EQ(std::string("'a' 'b'"), (peg::char_('a') >> peg::char_('b')).str());
@@ -175,6 +185,13 @@ TEST(PegTest, parse)
   // range
   PEG_ASSERT(peg::parse(peg::range('0', '3')[action1], "123"), true, "1", "23");
   PEG_ASSERT(peg::parse((+peg::range('0', '3'))[action1], "135"), true, "13", "5");
+
+  // class
+  PEG_ASSERT2(peg::class_("a")[action1], "abc", true, "a", "bc");
+  PEG_ASSERT2(peg::class_("a-c")[action1], "b", true, "b", "");
+  PEG_ASSERT2(peg::class_("a-c")[action1], "d", false, "", "d");
+  PEG_ASSERT2(peg::class_("a-zA-Z0-9_")[action1], "5", true, "5", "");
+  PEG_ASSERT2(peg::class_("a-zA-Z0-9_")[action1], "@", false, "", "@");
 
   // sequence
   PEG_ASSERT(peg::parse((peg::char_('f') >> peg::char_('o'))[action1], "foo"), true, "fo", "o");

@@ -295,6 +295,56 @@ namespace peg
     return str;
   }
 
+  Class::Class(const char *str)
+    : str_(str)
+  {
+  }
+
+  Result Class::parse(ErrorInfo &err, const char *src)
+  {
+    Result result = {false, src};
+    if (src[0] != '\0' && str_[0] != '\0') {
+      const char *p = str_;
+      while (*p != '\0') {
+	if (strlen(p) >= 3 && p[1] == '-') {
+	  if (p[0] <= src[0] && src[0] <= p[2]) {
+	    result.status = true;
+	    result.rest = src + 1;
+	    break;
+	  } else {
+	    p += 3;
+	  }
+	} else {
+	  if (p[0] == src[0]) {
+	    result.status = true;
+	    result.rest = src + 1;
+	    break;
+	  } else {
+	    ++p;
+	  }
+	}
+      }
+    }
+    err.update(*this, result);
+    return result;
+  }
+
+  std::string Class::str() const
+  {
+    std::string s("[");
+    s += str_;
+    s += "]";
+    return s;
+  }
+
+  std::string Class::inspect() const
+  {
+    std::string str("#<peg::Class ");
+    str += encode_str(str_, 0);
+    str += ">";
+    return str;
+  }
+
   Sequence::Sequence(ParsingExpression &lhs, ParsingExpression &rhs)
     : lhs_(lhs)
     , rhs_(rhs)
@@ -604,6 +654,12 @@ namespace peg
   ParsingExpression &range(const char first, const char last)
   {
     ParsingExpression *pe = new Range(first, last);
+    return *pe;
+  }
+
+  ParsingExpression &class_(const char *str)
+  {
+    ParsingExpression *pe = new Class(str);
     return *pe;
   }
 }
