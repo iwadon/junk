@@ -35,12 +35,13 @@ TEST(PegTest, inspect)
 
   // char_
   EXPECT_EQ(std::string("#<peg::Char 'a'>"), peg::char_('a').inspect());
+  EXPECT_EQ(std::string("#<peg::Char '\\''>"), peg::char_('\'').inspect());
   EXPECT_EQ(std::string("#<peg::Char '\\xEF'>"), peg::char_(0xef).inspect());
   EXPECT_EQ(std::string("#<peg::Char '\\x12'>"), peg::char_(0x12).inspect());
 
   // string
   EXPECT_EQ(std::string("#<peg::String \"abc\">"), peg::str("abc").inspect());
-  EXPECT_EQ(std::string("#<peg::String \"\\x12\\xEF\\x20'\"\\t\\r\\n\">"), peg::str("\x12\xef '\"\t\r\n").inspect());
+  EXPECT_EQ(std::string("#<peg::String \"\\x12\\xEF\\x20'\\\"\\t\\r\\n\">"), peg::str("\x12\xef '\"\t\r\n").inspect());
 
   // class
   EXPECT_EQ(std::string("#<peg::Class a>"), peg::class_("a").inspect());
@@ -91,9 +92,11 @@ TEST(PegTest, str)
 
   // char_
   EXPECT_EQ(std::string("'a'"), peg::char_('a').str());
+  EXPECT_EQ(std::string("'\\''"), peg::char_('\'').str());
 
   // string
   EXPECT_EQ(std::string("\"abc\""), peg::str("abc").str());
+  EXPECT_EQ(std::string("\"\\\"'\""), peg::str("\"'").str());
 
   // class
   EXPECT_EQ(std::string("[a]"), peg::class_("a").str());

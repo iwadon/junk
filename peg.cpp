@@ -14,11 +14,11 @@
 
 namespace peg
 {
-  const char *encode_char(const char ch)
+  const char *encode_char(const char ch, const char quote)
   {
     static char buf[4 + 1];
     char *p = buf;
-    if (isgraph(ch)) {
+    if (ch != quote && isgraph(ch)) {
       *p++ = ch;
     } else {
       *p++ = '\\';
@@ -33,8 +33,12 @@ namespace peg
 	*p++ = 't';
 	break;
       default:
-	snprintf(p, sizeof buf - 1, "x%02X", static_cast<unsigned char>(ch));
-	p += 3;
+	if (ch == quote) {
+	  *p++ = quote;
+	} else {
+	  snprintf(p, sizeof buf - 1, "x%02X", static_cast<unsigned char>(ch));
+	  p += 3;
+	}
 	break;
       }
     }
@@ -62,7 +66,7 @@ namespace peg
       if (c == '\0') {
 	break;
       }
-      s += encode_char(c);
+      s += encode_char(c, '"');
     }
     if (i == l && len > l) {
       s += "...";
@@ -207,7 +211,7 @@ namespace peg
   std::string Char::str() const
   {
     std::string str = "'";
-    str += encode_char(chr_);
+    str += encode_char(chr_, '\'');
     str += "'";
     return str;
   }
@@ -215,7 +219,7 @@ namespace peg
   std::string Char::inspect() const
   {
     std::string str("#<peg::Char '");
-    str += encode_char(chr_);
+    str += encode_char(chr_, '\'');
     str += "'>";
     return str;
   }
