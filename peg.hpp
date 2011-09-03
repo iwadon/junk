@@ -62,6 +62,7 @@ namespace peg
   private:
     ParsingExpression *pe_;
     F action_;
+    mutable bool in_inspect_;
   };
 
   class Any : public ParsingExpression
@@ -206,7 +207,8 @@ namespace peg
     std::string inspect() const;
   private:
     ParsingExpression *pe_;
-    mutable bool in_str;
+    mutable bool in_str_;
+    mutable bool in_inspect_;
   };
 
   template <typename F>
@@ -262,6 +264,7 @@ namespace peg
   inline Action<F>::Action(ParsingExpression *pe, F f)
     : pe_(pe)
     , action_(f)
+    , in_inspect_(false)
   {
   }
 
@@ -288,7 +291,14 @@ namespace peg
   template <typename F>
   inline std::string Action<F>::inspect() const
   {
-    return pe_->inspect();
+    if (in_inspect_) {
+      return "[...]";
+    } else {
+      in_inspect_ = true;
+      std::string str(pe_->inspect());
+      in_inspect_ = false;
+      return str;
+    }
   }
 
   inline Result parse(ParsingExpression &pe, const char *src)

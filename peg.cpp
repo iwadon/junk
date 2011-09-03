@@ -522,13 +522,15 @@ namespace peg
 
   Rule::Rule()
     : pe_(NULL)
-    , in_str(false)
+    , in_str_(false)
+    , in_inspect_(false)
   {
   }
 
   Rule::Rule(ParsingExpression &pe)
     : pe_(boost::addressof(pe))
-    , in_str(false)
+    , in_str_(false)
+    , in_inspect_(false)
   {
   }
 
@@ -541,21 +543,26 @@ namespace peg
 
   std::string Rule::str() const
   {
-    std::string s;
-    if (in_str) {
-      s = "[...]";
+    if (in_str_) {
+      return "[...]";
     } else {
-      in_str = true;
-      s += pe_->str();
-      in_str = false;
+      in_str_ = true;
+      std::string s(pe_->str());
+      in_str_ = false;
+      return s;
     }
-    return s;
   }
 
   std::string Rule::inspect() const
   {
     std::string str("#<peg::Rule ");
-    str += pe_->inspect();
+    if (in_inspect_) {
+      str += "[...]";
+    } else {
+      in_inspect_ = true;
+      str += pe_->inspect();
+      in_inspect_ = false;
+    }
     str += ">";
     return str;
   }
