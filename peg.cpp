@@ -296,7 +296,7 @@ namespace peg
   std::string Class::str() const
   {
     std::string s("[");
-    s += str_;
+    s += encode_str(str_, 0);
     s += "]";
     return s;
   }
