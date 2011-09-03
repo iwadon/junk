@@ -48,11 +48,19 @@ public:
 
 peg::Rule PegSample::Grammar = !peg::any;
 peg::Rule PegSample::Definition = !peg::any;
-peg::Rule PegSample::Expression = !peg::any;
-peg::Rule PegSample::Sequence = !peg::any;
-peg::Rule PegSample::Prefix = !peg::any;
-peg::Rule PegSample::Suffix = !peg::any;
-peg::Rule PegSample::Primary = !peg::any;
+peg::Rule PegSample::Expression = Sequence >> *(SLASH >> Sequence);
+peg::Rule PegSample::Sequence = Prefix >> *(Prefix);
+peg::Rule PegSample::Prefix = (AND >> Action) / (AND >> Suffix) / (NOT >> Suffix) / Suffix;
+peg::Rule PegSample::Suffix = Primary >> -(QUESTION / STAR / PLUS);
+peg::Rule PegSample::Primary =
+  (Identifier >> !LEFTARROW)
+  / (OPEN >> Expression >> CLOSE)
+  / Literal
+  / Class
+  / DOT
+  / Action
+  / BEGIN
+  / END;
 peg::Rule PegSample::Identifier = IdentStart >> *IdentCont >> Spacing;
 peg::Rule PegSample::IdentStart = peg::range('a', 'z') / peg::range('A', 'Z') / peg::char_('_');
 peg::Rule PegSample::IdentCont = IdentStart / peg::range('0', '9');
@@ -115,6 +123,17 @@ TEST_F(PegSample, Suffix)
 
 TEST_F(PegSample, Primary)
 {
+  peg::Result result;
+
+  result = peg::parse(Primary, "a0_bc2_3d \t\r\n");
+  EXPECT_EQ(true, result.status);
+  EXPECT_STREQ("", result.rest);
+
+  result = peg::parse(Primary, "( \t\r\nfoo \t\r\n) \t\r\n");
+  EXPECT_EQ(true, result.status);
+  EXPECT_STREQ("", result.rest);
+
+  std::cerr << Expression.str() << std::endl;
 }
 
 TEST_F(PegSample, Identifier)
