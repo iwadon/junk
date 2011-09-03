@@ -111,6 +111,8 @@ TEST(PegTest, str)
   // ordered choice
   EXPECT_EQ(std::string("'a' / 'b'"), (peg::char_('a') / peg::char_('b')).str());
   EXPECT_EQ(std::string("'a' / 'b' / 'c'"), (peg::char_('a') / peg::char_('b') / peg::char_('c')).str());
+  EXPECT_EQ(std::string("'a' / 'b' / 'c'"), (peg::char_('a') / (peg::char_('b') / peg::char_('c'))).str());
+  EXPECT_EQ(std::string("'a' / ('b' 'c')"), (peg::char_('a') / (peg::char_('b') >> peg::char_('c'))).str());
 
   // zero-or-more
   EXPECT_EQ(std::string(".*"), (*peg::any).str());

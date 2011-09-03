@@ -364,9 +364,22 @@ namespace peg
 
   std::string OrderedChoice::str() const
   {
-    std::string str = lhs_.str();
+    std::string str("");
+    if (!lhs_.is_ordered_choice() && lhs_.is_operator()) {
+      str += "(";
+    }
+    str += lhs_.str();
+    if (!lhs_.is_ordered_choice() && lhs_.is_operator()) {
+      str += ")";
+    }
     str += " / ";
+    if (!rhs_.is_ordered_choice() && rhs_.is_operator()) {
+      str += "(";
+    }
     str += rhs_.str();
+    if (!rhs_.is_ordered_choice() && rhs_.is_operator()) {
+      str += ")";
+    }
     return str;
   }
 

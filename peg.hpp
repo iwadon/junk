@@ -25,8 +25,9 @@ namespace peg
     virtual std::string str() const = 0;
     virtual std::string inspect() const = 0;
     virtual bool is_operator() const = 0;
-    template <typename F>
-    ParsingExpression &operator[](F f);
+    virtual bool is_sequence() const { return false; }
+    virtual bool is_ordered_choice() const { return false; }
+    template <typename F> ParsingExpression &operator[](F f);
     ParsingExpression &operator>>(ParsingExpression &rhs);
     ParsingExpression &operator/(ParsingExpression &rhs);
     ParsingExpression &operator*();
@@ -132,6 +133,7 @@ namespace peg
     std::string str() const;
     std::string inspect() const;
     bool is_operator() const { return true; }
+    bool is_sequence() const { return true; }
   private:
     ParsingExpression &lhs_;
     ParsingExpression &rhs_;
@@ -145,6 +147,7 @@ namespace peg
     std::string str() const;
     std::string inspect() const;
     bool is_operator() const { return true; }
+    bool is_ordered_choice() const { return true; }
   private:
     ParsingExpression &lhs_;
     ParsingExpression &rhs_;
