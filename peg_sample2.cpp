@@ -72,7 +72,7 @@ TEST(PegSample2, reserved_words)
 
 TEST(PegSample2, exprAction)
 {
-  peg::Rule integer = +peg::range('0', '9');
+  peg::Rule integer = +peg::class_("0-9");
   A a;
   peg::Rule expr = (integer[boost::bind(&A::push, &a, _1, _2)] >> peg::char_('+') >> integer[boost::bind(&A::push, &a, _1, _2)])[boost::bind(&A::add, &a, _1, _2)];
   peg::Result result;

@@ -255,46 +255,6 @@ namespace peg
     return str;
   }
 
-  Range::Range(const char first, const char last)
-    : first_(first)
-    , last_(last)
-  {
-  }
-
-  Result Range::parse(ErrorInfo &err, const char *src)
-  {
-    Result result;
-    if (*src >= first_ && *src <= last_) {
-      result.status = true;
-      result.rest = src + 1;
-    } else {
-      result.status = false;
-      result.rest = src;
-    }
-    err.update(*this, result);
-    return result;
-  }
-
-  std::string Range::str() const
-  {
-    std::string str = "[";
-    str += first_;
-    str += "-";
-    str += last_;
-    str += "]";
-    return str;
-  }
-
-  std::string Range::inspect() const
-  {
-    std::string str("#<peg::Range '");
-    str += encode_char(first_);
-    str += "'..'";
-    str += encode_char(last_);
-    str += "'>";
-    return str;
-  }
-
   Class::Class(const char *str)
     : str_(str)
   {
@@ -648,12 +608,6 @@ namespace peg
   ParsingExpression &str(const char *str)
   {
     ParsingExpression *pe = new String(str);
-    return *pe;
-  }
-
-  ParsingExpression &range(const char first, const char last)
-  {
-    ParsingExpression *pe = new Range(first, last);
     return *pe;
   }
 

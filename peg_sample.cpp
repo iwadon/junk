@@ -62,19 +62,17 @@ peg::Rule PegSample::Primary =
   / BEGIN
   / END;
 peg::Rule PegSample::Identifier = IdentStart >> *IdentCont >> Spacing;
-peg::Rule PegSample::IdentStart = peg::range('a', 'z') / peg::range('A', 'Z') / peg::char_('_');
-peg::Rule PegSample::IdentCont = IdentStart / peg::range('0', '9');
+peg::Rule PegSample::IdentStart = peg::class_("a-zA-Z_");
+peg::Rule PegSample::IdentCont = IdentStart / peg::class_("0-9");
 peg::Rule PegSample::Literal =
   (peg::char_('\'') >> *(!peg::char_('\'') >> Char) >> peg::char_('\'') >> Spacing)
   / (peg::char_('"') >> *(!peg::char_('"') >> Char) >> peg::char_('"') >> Spacing);
 peg::Rule PegSample::Class = peg::char_('[') >> *(!peg::char_(']') >> Range) >> peg::char_(']') >> Spacing;
 peg::Rule PegSample::Range = (Char >> peg::char_('-') >> Char) / Char;
 peg::Rule PegSample::Char =
-  (peg::char_('\\') >> (peg::char_('a') / peg::char_('b') / peg::char_('e') / peg::char_('f')
-			/ peg::char_('n') / peg::char_('r') / peg::char_('t') / peg::char_('v')
-			/ peg::char_('\'') / peg::char_('"') / peg::char_('[') / peg::char_(']') / peg::char_('\\')))
-  / (peg::char_('\\') >> peg::range('0', '3') >> peg::range('0', '7') >> peg::range('0', '7'))
-  / (peg::char_('\\') >> peg::range('0', '7') >> peg::range('0', '7'))
+  (peg::char_('\\') >> peg::class_("abefnrtv'\"[]\\"))
+  / (peg::char_('\\') >> peg::class_("0-3") >> peg::class_("0-7") >> peg::class_("0-7"))
+  / (peg::char_('\\') >> peg::class_("0-7") >> peg::class_("0-7"))
   / peg::str("\\-")
   / ((!peg::char_('\\')) >> peg::any);
 peg::Rule PegSample::LEFTARROW = peg::str("<-") >> Spacing;

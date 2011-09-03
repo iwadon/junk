@@ -112,19 +112,6 @@ namespace peg
     std::string str_;
   };
 
-  class Range : public ParsingExpression
-  {
-  public:
-    Range(const char first, const char last);
-    Result parse(ErrorInfo &err, const char *src);
-    std::string str() const;
-    std::string inspect() const;
-    bool is_operator() const { return false; }
-  private:
-    char first_;
-    char last_;
-  };
-
   class Class : public ParsingExpression
   {
   public:
@@ -343,7 +330,6 @@ namespace peg
   ParsingExpression &byte(const size_t bytes);
   ParsingExpression &char_(const char chr);
   ParsingExpression &str(const char *str);
-  ParsingExpression &range(const char first, const char last);
   ParsingExpression &class_(const char *str);
 
   const char *encode_char(const char ch);

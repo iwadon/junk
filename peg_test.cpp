@@ -42,9 +42,6 @@ TEST(PegTest, inspect)
   EXPECT_EQ(std::string("#<peg::String \"abc\">"), peg::str("abc").inspect());
   EXPECT_EQ(std::string("#<peg::String \"\\x12\\xEF\\x20'\"\\t\\r\\n\">"), peg::str("\x12\xef '\"\t\r\n").inspect());
 
-  // range
-  EXPECT_EQ(std::string("#<peg::Range 'a'..'z'>"), peg::range('a', 'z').inspect());
-
   // class
   EXPECT_EQ(std::string("#<peg::Class a>"), peg::class_("a").inspect());
   EXPECT_EQ(std::string("#<peg::Class 0-9>"), peg::class_("0-9").inspect());
@@ -98,9 +95,6 @@ TEST(PegTest, str)
   // string
   EXPECT_EQ(std::string("\"abc\""), peg::str("abc").str());
 
-  // range
-  EXPECT_EQ(std::string("[0-9]"), peg::range('0', '9').str());
-
   // class
   EXPECT_EQ(std::string("[a]"), peg::class_("a").str());
   EXPECT_EQ(std::string("[0-9]"), peg::class_("0-9").str());
@@ -120,7 +114,7 @@ TEST(PegTest, str)
   EXPECT_EQ(std::string("[4B]*"), (*peg::byte(4)).str());
   EXPECT_EQ(std::string("'a'*"), (*peg::char_('a')).str());
   EXPECT_EQ(std::string("\"abc\"*"), (*peg::str("abc")).str());
-  EXPECT_EQ(std::string("[0-9]*"), (*peg::range('0', '9')).str());
+  EXPECT_EQ(std::string("[0-9]*"), (*peg::class_("0-9")).str());
   EXPECT_EQ(std::string("('a' 'b')*"), (*(peg::char_('a') >> peg::char_('b'))).str());
   EXPECT_EQ(std::string("('a' / 'b')*"), (*(peg::char_('a') / peg::char_('b'))).str());
   EXPECT_EQ(std::string("(.*)*"), (*(*peg::any)).str());
@@ -138,7 +132,7 @@ TEST(PegTest, str)
   EXPECT_EQ(std::string("[4B]+"), (+peg::byte(4)).str());
   EXPECT_EQ(std::string("'a'+"), (+peg::char_('a')).str());
   EXPECT_EQ(std::string("\"abc\"+"), (+peg::str("abc")).str());
-  EXPECT_EQ(std::string("[0-9]+"), (+peg::range('0', '9')).str());
+  EXPECT_EQ(std::string("[0-9]+"), (+peg::class_("0-9")).str());
   EXPECT_EQ(std::string("('a' 'b')+"), (+(peg::char_('a') >> peg::char_('b'))).str());
   EXPECT_EQ(std::string("('a' / 'b')+"), (+(peg::char_('a') / peg::char_('b'))).str());
   EXPECT_EQ(std::string("(.*)+"), (+(*peg::any)).str());
@@ -181,10 +175,6 @@ TEST(PegTest, parse)
   // string
   PEG_ASSERT(peg::parse(peg::str("foo")[action1], "foobarbaz"), true, "foo", "barbaz");
   PEG_ASSERT(peg::parse(peg::str("bar")[action1], "foobarbaz"), false, "", "foobarbaz");
-
-  // range
-  PEG_ASSERT(peg::parse(peg::range('0', '3')[action1], "123"), true, "1", "23");
-  PEG_ASSERT(peg::parse((+peg::range('0', '3'))[action1], "135"), true, "13", "5");
 
   // class
   PEG_ASSERT2(peg::class_("a")[action1], "abc", true, "a", "bc");
@@ -256,7 +246,7 @@ TEST(PegTest, parse)
 TEST(PegTest, example_1)
 {
   peg::Rule value, product, sum, expr;
-  value = (+peg::range('0', '9')) / (peg::char_('(') >> expr >> peg::char_(')'));
+  value = (+peg::class_("0-9")) / (peg::char_('(') >> expr >> peg::char_(')'));
   product = value >> *((peg::char_('*') / peg::char_('/')) >> value);
   sum = product >> *((peg::char_('+') / peg::char_('-')) >> product);
   expr = sum;
