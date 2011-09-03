@@ -24,6 +24,7 @@ namespace peg
     virtual Result parse(ErrorInfo &err, const char *src) = 0;
     virtual std::string str() const = 0;
     virtual std::string inspect() const = 0;
+    virtual bool is_operator() const = 0;
     template <typename F>
     ParsingExpression &operator[](F f);
     ParsingExpression &operator>>(ParsingExpression &rhs);
@@ -59,6 +60,7 @@ namespace peg
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
     std::string inspect() const;
+    bool is_operator() const { return false; }
   private:
     ParsingExpression *pe_;
     F action_;
@@ -71,6 +73,7 @@ namespace peg
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
     std::string inspect() const;
+    bool is_operator() const { return false; }
   };
 
   class Byte : public ParsingExpression
@@ -80,6 +83,7 @@ namespace peg
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
     std::string inspect() const;
+    bool is_operator() const { return false; }
   private:
     size_t bytes_;
   };
@@ -91,6 +95,7 @@ namespace peg
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
     std::string inspect() const;
+    bool is_operator() const { return false; }
   private:
     char chr_;
   };
@@ -102,6 +107,7 @@ namespace peg
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
     std::string inspect() const;
+    bool is_operator() const { return false; }
   private:
     std::string str_;
   };
@@ -113,6 +119,7 @@ namespace peg
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
     std::string inspect() const;
+    bool is_operator() const { return false; }
   private:
     char first_;
     char last_;
@@ -125,6 +132,7 @@ namespace peg
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
     std::string inspect() const;
+    bool is_operator() const { return true; }
   private:
     ParsingExpression &lhs_;
     ParsingExpression &rhs_;
@@ -137,6 +145,7 @@ namespace peg
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
     std::string inspect() const;
+    bool is_operator() const { return true; }
   private:
     ParsingExpression &lhs_;
     ParsingExpression &rhs_;
@@ -149,6 +158,7 @@ namespace peg
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
     std::string inspect() const;
+    bool is_operator() const { return true; }
   private:
     ParsingExpression &pe_;
   };
@@ -160,6 +170,7 @@ namespace peg
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
     std::string inspect() const;
+    bool is_operator() const { return true; }
   private:
     ParsingExpression &pe_;
   };
@@ -171,6 +182,7 @@ namespace peg
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
     std::string inspect() const;
+    bool is_operator() const { return true; }
   private:
     ParsingExpression &pe_;
   };
@@ -182,6 +194,7 @@ namespace peg
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
     std::string inspect() const;
+    bool is_operator() const { return true; }
   private:
     ParsingExpression &pe_;
   };
@@ -193,6 +206,7 @@ namespace peg
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
     std::string inspect() const;
+    bool is_operator() const { return true; }
   private:
     ParsingExpression &pe_;
   };
@@ -205,6 +219,7 @@ namespace peg
     Result parse(ErrorInfo &err, const char *src);
     std::string str() const;
     std::string inspect() const;
+    bool is_operator() const { return pe_->is_operator(); }
   private:
     ParsingExpression *pe_;
     mutable bool in_str_;

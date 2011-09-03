@@ -384,7 +384,14 @@ namespace peg
 
   std::string ZeroOrMore::str() const
   {
-    std::string str = pe_.str();
+    std::string str("");
+    if (pe_.is_operator()) {
+      str += "(";
+    }
+    str += pe_.str();
+    if (pe_.is_operator()) {
+      str += ")";
+    }
     str += "*";
     return str;
   }
@@ -419,7 +426,14 @@ namespace peg
 
   std::string OneOrMore::str() const
   {
-    std::string str = pe_.str();
+    std::string str("");
+    if (pe_.is_operator()) {
+      str += "(";
+    }
+    str += pe_.str();
+    if (pe_.is_operator()) {
+      str += ")";
+    }
     str += "+";
     return str;
   }

@@ -20,6 +20,14 @@ static void action1(const char *first, const char *last)
     EXPECT_EQ(STATUS, result.status);			\
   }
 
+#define PEG_ASSERT2(PEG, SRC, STATUS, MATCHED, REST) {	\
+    str_.clear();					\
+    peg::Result result = peg::parse(PEG, SRC);		\
+    EXPECT_EQ(STATUS, result.status);			\
+    EXPECT_STREQ(REST, result.rest);			\
+    EXPECT_STREQ(MATCHED, str_.c_str());		\
+  }
+
 TEST(PegTest, inspect)
 {
   // any
@@ -71,6 +79,8 @@ TEST(PegTest, inspect)
 
 TEST(PegTest, str)
 {
+  peg::Rule r;
+
   // any
   EXPECT_EQ(std::string("."), peg::any.str());
 
@@ -88,15 +98,48 @@ TEST(PegTest, str)
 
   // sequence
   EXPECT_EQ(std::string("'a' 'b'"), (peg::char_('a') >> peg::char_('b')).str());
+  EXPECT_EQ(std::string("'a' 'b' 'c'"), (peg::char_('a') >> peg::char_('b') >> peg::char_('c')).str());
+  //EXPECT_EQ(std::string("'a' 'b' 'c'"), (peg::char_('a') / peg::char_('b') >> peg::char_('c')).str());
 
   // ordered choice
   EXPECT_EQ(std::string("'a' / 'b'"), (peg::char_('a') / peg::char_('b')).str());
+  EXPECT_EQ(std::string("'a' / 'b' / 'c'"), (peg::char_('a') / peg::char_('b') / peg::char_('c')).str());
 
   // zero-or-more
+  EXPECT_EQ(std::string(".*"), (*peg::any).str());
+  EXPECT_EQ(std::string("[4B]*"), (*peg::byte(4)).str());
   EXPECT_EQ(std::string("'a'*"), (*peg::char_('a')).str());
+  EXPECT_EQ(std::string("\"abc\"*"), (*peg::str("abc")).str());
+  EXPECT_EQ(std::string("[0-9]*"), (*peg::range('0', '9')).str());
+  EXPECT_EQ(std::string("('a' 'b')*"), (*(peg::char_('a') >> peg::char_('b'))).str());
+  EXPECT_EQ(std::string("('a' / 'b')*"), (*(peg::char_('a') / peg::char_('b'))).str());
+  EXPECT_EQ(std::string("(.*)*"), (*(*peg::any)).str());
+  EXPECT_EQ(std::string("(.+)*"), (*(+peg::any)).str());
+  EXPECT_EQ(std::string("(.?)*"), (*(-peg::any)).str());
+  EXPECT_EQ(std::string("(&.)*"), (*(&peg::any)).str());
+  EXPECT_EQ(std::string("(!.)*"), (*(!peg::any)).str());
+  r = peg::any;
+  EXPECT_EQ(std::string(".*"), (*r).str());
+  r = peg::any >> peg::any;
+  EXPECT_EQ(std::string("(. .)*"), (*r).str());
 
   // one-or-more
+  EXPECT_EQ(std::string(".+"), (+peg::any).str());
+  EXPECT_EQ(std::string("[4B]+"), (+peg::byte(4)).str());
   EXPECT_EQ(std::string("'a'+"), (+peg::char_('a')).str());
+  EXPECT_EQ(std::string("\"abc\"+"), (+peg::str("abc")).str());
+  EXPECT_EQ(std::string("[0-9]+"), (+peg::range('0', '9')).str());
+  EXPECT_EQ(std::string("('a' 'b')+"), (+(peg::char_('a') >> peg::char_('b'))).str());
+  EXPECT_EQ(std::string("('a' / 'b')+"), (+(peg::char_('a') / peg::char_('b'))).str());
+  EXPECT_EQ(std::string("(.*)+"), (+(*peg::any)).str());
+  EXPECT_EQ(std::string("(.+)+"), (+(+peg::any)).str());
+  EXPECT_EQ(std::string("(.?)+"), (+(-peg::any)).str());
+  EXPECT_EQ(std::string("(&.)+"), (+(&peg::any)).str());
+  EXPECT_EQ(std::string("(!.)+"), (+(!peg::any)).str());
+  r = peg::any;
+  EXPECT_EQ(std::string(".+"), (+r).str());
+  r = peg::any >> peg::any;
+  EXPECT_EQ(std::string("(. .)+"), (+r).str());
 
   // optional
   EXPECT_EQ(std::string("'a'?"), (-peg::char_('a')).str());
@@ -143,6 +186,15 @@ TEST(PegTest, parse)
   PEG_ASSERT(peg::parse((peg::char_('a') / peg::char_('z'))[action1], "baz"), false, "", "baz");
   PEG_ASSERT(peg::parse(((peg::char_('a') >> peg::char_('b')) / (peg::char_('a') >> peg::char_('c')))[action1], "abc"), true, "ab", "c");
   PEG_ASSERT(peg::parse(((peg::char_('a') >> peg::char_('b')) / (peg::char_('a') >> peg::char_('c')))[action1], "acd"), true, "ac", "d");
+
+  // (a / b) c
+  PEG_ASSERT2((peg::char_('a') / peg::char_('b') >> peg::char_('c'))[action1], "acbc", true, "ac", "bc");
+  // a (b / c)
+  PEG_ASSERT2((peg::char_('a') >> peg::char_('b') / peg::char_('c'))[action1], "ab", true, "ab", "");
+  PEG_ASSERT2((peg::char_('a') >> peg::char_('b') / peg::char_('c'))[action1], "ac", true, "ac", "");
+  // (a b) / c
+  PEG_ASSERT2(((peg::char_('a') >> peg::char_('b')) / peg::char_('c'))[action1], "ab", true, "ab", "");
+  PEG_ASSERT2(((peg::char_('a') >> peg::char_('b')) / peg::char_('c'))[action1], "c", true, "c", "");
 
   // zero-or-more
   PEG_ASSERT(peg::parse((*peg::char_('a'))[action1], "aabbcc"), true, "aa", "bbcc");
