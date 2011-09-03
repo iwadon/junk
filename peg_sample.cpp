@@ -87,8 +87,8 @@ peg::Rule PegSample::CLOSE = peg::char_(')') >> Spacing;
 peg::Rule PegSample::DOT = peg::char_('.') >> Spacing;
 peg::Rule PegSample::Spacing = *(Space / Comment);
 peg::Rule PegSample::Comment = peg::char_('#') >> *(!EndOfLine >> peg::any) >> EndOfLine;
-peg::Rule PegSample::Space = peg::char_(' ') / peg::char_('\t') / EndOfLine;
-peg::Rule PegSample::EndOfLine = peg::str("\r\n") / peg::char_('\n') / peg::char_('\r');
+peg::Rule PegSample::Space = peg::class_(" \t") / EndOfLine;
+peg::Rule PegSample::EndOfLine = peg::str("\r\n") / peg::class_("\r\n");
 peg::Rule PegSample::EndOfFile = !peg::any;
 
 peg::Rule PegSample::Action = peg::char_('{') >> *(!peg::char_('}') >> peg::any) >> peg::char_('}') >> Spacing;
