@@ -57,10 +57,6 @@ rule run
   command = $in
   description = RUN $in
 
-rule clean
-  command = rm -rf $builddir
-  description = CLEAN $builddir
-
 build $builddir/benchmark_sample.o: cxx $srcdir/benchmark_sample.cpp
   INCLUDES = $BOOST_CPPFLAGS
 build $builddir/benchmark_sample: link $builddir/benchmark_sample.o
