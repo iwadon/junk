@@ -197,8 +197,7 @@ AM_CFLAGS = -Wall -Wextra $(COVERAGE_CFLAGS)
 AM_CXXFLAGS = -Wall -Wextra $(COVERAGE_CXXFLAGS)
 AM_OBJCFLAGS = -Wall -Wextra $(COVERAGE_OBJCFLAGS)
 
-OBJECTS = $(all_tests_OBJECTS) \
-	  $(all_gtests_OBJECTS) \
+OBJECTS = $(all_gtests_OBJECTS) \
 	  $(benchmark_sample_OBJECTS) \
 	  $(c1_OBJECTS) \
 	  $(liblogger_a_OBJECTS) \
@@ -213,7 +212,7 @@ OBJECTS = $(all_tests_OBJECTS) \
 	  $(smf_play_OBJECTS) \
 	  $(vector_length_benchmark_OBJECTS)
 
-TEST_OBJECTS = $(all_tests_OBJECTS) \
+TEST_OBJECTS = \
 	  $(all_gtests_OBJECTS) \
 	  $(liblogger_a_OBJECTS) \
 	  $(libpeg_a_OBJECTS) \
