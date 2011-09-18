@@ -260,9 +260,9 @@ build $builddir/all_tests: link $
 
 build check: run $builddir/all_tests
 
-rule rebuild_ninja
-    command = $builddir/config.status $out
-build $builddir/build.ninja: rebuild_ninja $srcdir/build.ninja.in | $builddir/config.status
+rule configure
+    command = $builddir/config.status build.ninja
+build $builddir/build.ninja: configure | $builddir/config.status $srcdir/build.ninja.in
 
 build $builddir/gtest-all.o: cxx $gtestdir/src/gtest-all.cc
   INCLUDES = -I$gtestdir/include -I$gtestdir $INCLUDES
