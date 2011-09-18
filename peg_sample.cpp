@@ -95,6 +95,12 @@ peg::Rule PegSample::Action = peg::char_('{') >> *(!peg::char_('}') >> peg::any)
 peg::Rule PegSample::BEGIN = peg::char_('<') >> Spacing;
 peg::Rule PegSample::END = peg::char_('>') >> Spacing;
 
+#define PEG_EXPECT(PEG, SRC, STATUS, REST) {		\
+    peg::Result result = peg::parse(PEG, SRC);		\
+    EXPECT_EQ(STATUS, result.status);			\
+    EXPECT_STREQ(REST, result.rest);			\
+  }
+
 TEST_F(PegSample, Grammar)
 {
 }
@@ -105,10 +111,16 @@ TEST_F(PegSample, Definition)
 
 TEST_F(PegSample, Expression)
 {
+  PEG_EXPECT(Expression, "foo", true, "");
+  PEG_EXPECT(Expression, "foo / bar", true, "");
+  PEG_EXPECT(Expression, "foo / bar / baz", true, "");
 }
 
 TEST_F(PegSample, Sequence)
 {
+  PEG_EXPECT(Sequence, "foo", true, "");
+  PEG_EXPECT(Sequence, "foo bar", true, "");
+  PEG_EXPECT(Sequence, "foo bar baz", true, "");
 }
 
 TEST_F(PegSample, Prefix)
@@ -121,17 +133,8 @@ TEST_F(PegSample, Suffix)
 
 TEST_F(PegSample, Primary)
 {
-  peg::Result result;
-
-  result = peg::parse(Primary, "a0_bc2_3d \t\r\n");
-  EXPECT_EQ(true, result.status);
-  EXPECT_STREQ("", result.rest);
-
-  result = peg::parse(Primary, "( \t\r\nfoo \t\r\n) \t\r\n");
-  EXPECT_EQ(true, result.status);
-  EXPECT_STREQ("", result.rest);
-
-  std::cerr << Expression.str() << std::endl;
+  PEG_EXPECT(Primary, "a0_bc2_3d \t\r\n", true, "");
+  PEG_EXPECT(Primary, "( \t\r\nfoo \t\r\n) \t\r\n", true, "");
 }
 
 TEST_F(PegSample, Identifier)
