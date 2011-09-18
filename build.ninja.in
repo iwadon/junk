@@ -185,6 +185,7 @@ build $builddir/filter_test.o: cxx $srcdir/filter_test.cpp
 build $builddir/font_test.o: cxx $srcdir/font_test.cpp
 build $builddir/fps_test.o: cxx $srcdir/fps_test.cpp
 build $builddir/function_test.o: cxx $srcdir/function_test.cpp
+build $builddir/function_test2.o: cxx $srcdir/function_test2.cpp
 build $builddir/instrument_test.o: cxx $srcdir/instrument_test.cpp
 build $builddir/line_segment_2d_test.o: cxx $srcdir/line_segment_2d_test.cpp
 build $builddir/load_time_test.o: cxx $srcdir/load_time_test.cpp
@@ -198,6 +199,7 @@ build $builddir/oscillator_test.o: cxx $srcdir/oscillator_test.cpp
 build $builddir/patch_test.o: cxx $srcdir/patch_test.cpp
 build $builddir/peg_test.o: cxx $srcdir/peg_test.cpp
 build $builddir/point_2d_test.o: cxx $srcdir/point_2d_test.cpp
+build $builddir/property_test.o: cxx $srcdir/property_test.cpp
 build $builddir/pseudo_triangle_wave_oscillator_test.o: cxx $srcdir/pseudo_triangle_wave_oscillator_test.cpp
 build $builddir/rect_test.o: cxx $srcdir/rect_test.cpp
 build $builddir/sampler_test.o: cxx $srcdir/sampler_test.cpp
@@ -205,6 +207,7 @@ build $builddir/sine_wave_oscillator_test.o: cxx $srcdir/sine_wave_oscillator_te
 build $builddir/smf_test.o: cxx $srcdir/smf_test.cpp
 build $builddir/smf_track_test.o: cxx $srcdir/smf_track_test.cpp
 build $builddir/song_test.o: cxx $srcdir/song_test.cpp
+build $builddir/sound_test.o: cxx $srcdir/sound_test.cpp
 build $builddir/sprite_test.o: cxx $srcdir/sprite_test.cpp
 build $builddir/texture_pool_test.o: cxx $srcdir/texture_pool_test.cpp
 build $builddir/texture_test.o: cxx $srcdir/texture_test.cpp
@@ -213,7 +216,7 @@ build $builddir/variable_length_value_test.o: cxx $srcdir/variable_length_value_
 build $builddir/vector_2d_test.o: cxx $srcdir/vector_2d_test.cpp
 build $builddir/voice_test.o: cxx $srcdir/voice_test.cpp
 build $builddir/volume_test.o: cxx $srcdir/volume_test.cpp
-build $builddir/all_tests: link $
+build $builddir/all_gtests: link $
     $builddir/audio_stream_test.o $
     $builddir/channel_test.o $
     $builddir/circle_2d_test.o $
@@ -222,6 +225,7 @@ build $builddir/all_tests: link $
     $builddir/font_test.o $
     $builddir/fps_test.o $
     $builddir/function_test.o $
+    $builddir/function_test2.o $
     $builddir/instrument_test.o $
     $builddir/line_segment_2d_test.o $
     $builddir/load_time_test.o $
@@ -235,6 +239,7 @@ build $builddir/all_tests: link $
     $builddir/patch_test.o $
     $builddir/peg_test.o $
     $builddir/point_2d_test.o $
+    $builddir/property_test.o $
     $builddir/pseudo_triangle_wave_oscillator_test.o $
     $builddir/rect_test.o $
     $builddir/sampler_test.o $
@@ -242,6 +247,7 @@ build $builddir/all_tests: link $
     $builddir/smf_test.o $
     $builddir/smf_track_test.o $
     $builddir/song_test.o $
+    $builddir/sound_test.o $
     $builddir/sprite_test.o $
     $builddir/texture_pool_test.o $
     $builddir/texture_test.o $
@@ -250,11 +256,11 @@ build $builddir/all_tests: link $
     $builddir/vector_2d_test.o $
     $builddir/voice_test.o $
     $builddir/volume_test.o $
-    $builddir/libpeg.a $builddir/libsdlapp.a $builddir/libsequencer.a $builddir/libtest_main.a $builddir/liblogger.a
+    $builddir/libpeg.a $builddir/libsdlapp.a $builddir/libsequencer.a $builddir/liblogger.a $builddir/libgtest.a
   LDFLAGS = $ldflags -framework OpenGL
-  LIBS = $libs -lcppunit -lSDL -lSDL_image -lboost_program_options-mt
+  LIBS = $libs -lSDL -lSDL_image -lboost_program_options-mt
 
-build check: run $builddir/all_tests
+build check: run $builddir/all_gtests
 
 rule configure
     command = $builddir/config.status build.ninja
@@ -270,4 +276,4 @@ build $builddir/peg_sample.o: cxx $srcdir/peg_sample.cpp
   INCLUDES = -I$gtestdir/include $INCLUDES
 build $builddir/peg_sample: link $builddir/peg_sample.o $builddir/libpeg.a $builddir/liblogger.a $builddir/libgtest.a
 
-default $builddir/peg_sample
+#default $builddir/peg_sample
