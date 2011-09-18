@@ -53,10 +53,6 @@ rule ar
   command = ar crs $out $in
   description = AR $out
 
-rule run
-  command = $in
-  description = RUN $in
-
 build $builddir/benchmark_sample.o: cxx $srcdir/benchmark_sample.cpp
   INCLUDES = $BOOST_CPPFLAGS
 build $builddir/benchmark_sample: link $builddir/benchmark_sample.o
@@ -171,12 +167,6 @@ build $builddir/libtest_main.a: ar $builddir/test_main.o
 build $builddir/vector_length_benchmark.o: cxx $srcdir/vector_length_benchmark.cpp
 build $builddir/vector_length_benchmark: link $builddir/vector_length_benchmark.o
 
-build all: phony || $builddir/benchmark_sample $builddir/boost_program_options_sample $builddir/c1 $
-    $builddir/map_benchmark $builddir/oscillator_sample $builddir/pcap_sample $builddir/s1 $builddir/s2 $
-    $builddir/sdl_event_sample $builddir/sdl_event_sample2 $builddir/smf_play $
-    $builddir/liblogger.a $builddir/libpeg.a $builddir/libsdlapp.a $builddir/libsequencer.a $builddir/libtest_main.a $
-    $builddir/vector_length_benchmark
-
 build $builddir/audio_stream_test.o: cxx $srcdir/audio_stream_test.cpp
 build $builddir/channel_test.o: cxx $srcdir/channel_test.cpp
 build $builddir/circle_2d_test.o: cxx $srcdir/circle_2d_test.cpp
@@ -259,8 +249,6 @@ build $builddir/all_gtests: link $
     $builddir/libpeg.a $builddir/libsdlapp.a $builddir/libsequencer.a $builddir/liblogger.a $builddir/libgtest.a
   LDFLAGS = $ldflags -framework OpenGL
   LIBS = $libs -lSDL -lSDL_image -lboost_program_options-mt
-
-build check: run $builddir/all_gtests
 
 rule configure
     command = $builddir/config.status build.ninja
