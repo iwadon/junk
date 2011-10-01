@@ -8,100 +8,80 @@
 #include <boost/bind.hpp>
 #include <boost/lexical_cast.hpp>
 
-struct A
-{
-  std::stack<int> stack_;
-
-  void push(const char *b, const char *e);
-  void add(const char *b, const char *e);
+namespace {
+  std::stack<int> stack;
+  void INT(const char *beg, const char *end) {
+    std::string s(beg, end);
+    int i = boost::lexical_cast<int>(s);
+    stack.push(i);
+  }
+  void ADD(const char *, const char *) {
+    int a = stack.top();
+    stack.pop();
+    int b = stack.top();
+    stack.pop();
+    int c = b + a;
+    stack.push(c);
+  }
+  void SUB(const char *, const char *) {
+    int a = stack.top();
+    stack.pop();
+    int b = stack.top();
+    stack.pop();
+    int c = b - a;
+    stack.push(c);
+  }
+  void MUL(const char *, const char *) {
+    int a = stack.top();
+    stack.pop();
+    int b = stack.top();
+    stack.pop();
+    int c = b * a;
+    stack.push(c);
+  }
+  void DIV(const char *, const char *) {
+    int a = stack.top();
+    stack.pop();
+    int b = stack.top();
+    stack.pop();
+    int c = b / a;
+    stack.push(c);
+  }
 };
 
-void A::push(const char *b, const char *e)
-{
-  std::string s(b, e);
-  int x = strtol(s.c_str(), NULL, 10);
-  stack_.push(x);
-}
+#define EXPECT_EXPR_EQ(a, b) {			\
+    peg::Result result = peg::parse(Expr, (b));	\
+    EXPECT_TRUE(result.status);			\
+    EXPECT_STREQ("", result.rest);		\
+    EXPECT_EQ(1U, stack.size());		\
+    EXPECT_EQ((a), stack.top());		\
+    while (!stack.empty()) {			\
+      stack.pop();				\
+    }						\
+  }
 
-void A::add(const char *b, const char *e)
-{
-  int x = stack_.top();
-  stack_.pop();
-  int y = stack_.top();
-  stack_.pop();
-  stack_.push(x + y);
-}
+/*
+ * http://en.wikipedia.org/wiki/Parsing_expression_grammar
+ *
+ * Value   ← [0-9]+ / '(' Expr ')'
+ * Product ← Value (('*' / '/') Value)*
+ * Sum     ← Product (('+' / '-') Product)*
+ * Expr    ← Sum
+ */
+TEST(PegSample2, Calc) {
+  peg::Rule Value, Product, Sum, Expr;
+  Value = (+peg::class_("[0-9]"))[&INT] / (peg::char_('(') >> Expr >> peg::char_(')'));
+  Product = Value >> *((peg::char_('*') >> Value)[&MUL] / (peg::char_('/') >> Value)[&DIV]);
+  Sum = Product >> *((peg::char_('+') >> Product)[&ADD] / (peg::char_('-') >> Product)[&SUB]);
+  Expr = Sum;
 
-TEST(PegSample2, blank)
-{
-  peg::Rule blank = peg::char_(' ') / peg::char_('\t');
-  peg::Result result;
-
-  result = peg::parse(blank, " ");
-  EXPECT_TRUE(result.status);
-  result = peg::parse(blank, "\t");
-  EXPECT_TRUE(result.status);
-  result = peg::parse(blank, "a");
-  EXPECT_FALSE(result.status);
-}
-
-TEST(PegSample2, expr)
-{
-  peg::Rule blank = peg::char_(' ') / peg::char_('\t');
-  peg::Rule expr = *blank >> peg::str("hello");
-  peg::Result result;
-
-  result = peg::parse(expr, "hello");
-  EXPECT_TRUE(result.status);
-  result = peg::parse(expr, "bye");
-  EXPECT_FALSE(result.status);
-}
-
-TEST(PegSample2, reserved_words)
-{
-  peg::Rule reserved_words = peg::str("hello") / peg::str("world");
-  peg::Result result;
-
-  result = peg::parse(reserved_words, "hello");
-  EXPECT_TRUE(result.status);
-  result = peg::parse(reserved_words, "world");
-  EXPECT_TRUE(result.status);
-  result = peg::parse(reserved_words, "bye");
-  EXPECT_FALSE(result.status);
-}
-
-TEST(PegSample2, exprAction)
-{
-  peg::Rule integer = +peg::class_("0-9");
-  A a;
-  peg::Rule expr = (integer[boost::bind(&A::push, &a, _1, _2)] >> peg::char_('+') >> integer[boost::bind(&A::push, &a, _1, _2)])[boost::bind(&A::add, &a, _1, _2)];
-  peg::Result result;
-
-  result = peg::parse(expr, "1+2");
-  EXPECT_TRUE(result.status);
-  ASSERT_FALSE(a.stack_.empty());
-  int i = a.stack_.top();
-  EXPECT_EQ(3, i);
-}
-
-TEST(PegSample2, Class)
-{
-  peg::Rule Class, Range, Char;
-  Class = peg::char_('[') >> *(!peg::char_(']') >> Range) >> peg::char_(']');
-  Range = (Char >> peg::char_('-') >> Char) / Char;
-  Char = peg::char_('\\') >> (peg::char_('a') / peg::char_('b') / peg::char_('e') / peg::char_('f') / peg::char_('n') / peg::char_('r') / peg::char_('t') / peg::char_('v') / peg::char_('\'') / peg::char_('"') / peg::char_('[') / peg::char_(']') / peg::char_('\\'));
-  //Char = !peg::char_('\\') >> peg::any;
-  peg::Result result;
-
-  result = peg::parse(Class, "[]");
-  EXPECT_TRUE(result.status);
-  EXPECT_STREQ("", result.rest);
-
-  result = peg::parse(Class, "[\\a\\b\\e\\f\\n\\r\\t\\v\\\'\\\"\\[\\]\\\\]");
-  EXPECT_TRUE(result.status);
-  EXPECT_STREQ("", result.rest);
-
-  //result = peg::parse(Class, "[a-b]");
-  //EXPECT_TRUE(result.status);
-  //EXPECT_STREQ("", result.rest);
+  EXPECT_EXPR_EQ(  12, "12");
+  EXPECT_EXPR_EQ(  15, "12+3");
+  EXPECT_EXPR_EQ(   9, "12-3");
+  EXPECT_EXPR_EQ(  36, "12*3");
+  EXPECT_EXPR_EQ(   4, "12/3");
+  EXPECT_EXPR_EQ(   7, "1+2*3");
+  EXPECT_EXPR_EQ(   9, "(1+2)*3");
+  EXPECT_EXPR_EQ( 352, "12*34-56");
+  EXPECT_EXPR_EQ(-264, "12*(34-56)");
 }
