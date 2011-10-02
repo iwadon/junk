@@ -181,6 +181,7 @@ build $builddir/line_segment_2d_test.o: cxx $srcdir/line_segment_2d_test.cpp
 build $builddir/load_time_test.o: cxx $srcdir/load_time_test.cpp
 build $builddir/logger_test.o: cxx $srcdir/logger_test.cpp
 build $builddir/lot_box_test.o: cxx $srcdir/lot_box_test.cpp
+build $builddir/memory_allocator_test.o: cxx $srcdir/memory_allocator_test.cpp
 build $builddir/object_test.o: cxx $srcdir/object_test.cpp
 build $builddir/observer_test.o: cxx $srcdir/observer_test.cpp
 build $builddir/oscillator_factory_test.o: cxx $srcdir/oscillator_factory_test.cpp
@@ -221,6 +222,7 @@ build $builddir/all_gtests: link $
     $builddir/load_time_test.o $
     $builddir/logger_test.o $
     $builddir/lot_box_test.o $
+    $builddir/memory_allocator_test.o $
     $builddir/object_test.o $
     $builddir/observer_test.o $
     $builddir/oscillator_factory_test.o $

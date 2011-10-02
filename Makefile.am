@@ -136,7 +136,7 @@ noinst_DATA = data/sound_data_sample.bin
 data/sound_data_sample.bin: data/sound_data_sample.s
 	$(nasm) -o $@ $<
 
-check_PROGRAMS = all_gtests
+check_PROGRAMS = all_gtests memory_allocator_test
 TESTS = $(check_PROGRAMS) peg_test.sh
 
 GTEST_DIR = $(builddir)/gtest
@@ -192,6 +192,12 @@ all_gtests_CXXFLAGS =
 all_gtests_CPPFLAGS = -I$(GTEST_DIR)/include -I$(GMOCK_DIR)/include $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 all_gtests_LDFLAGS =
 all_gtests_LDADD = libpeg.a libsequencer.a libsdlapp.a liblogger.a $(GTEST_LIBS) $(SDL_LIBS)
+
+memory_allocator_test_SOURCES = \
+	memory_allocator_test.cpp \
+	memory_allocator.cpp memory_allocator.hpp
+memory_allocator_test_CPPFLAGS = -I$(GTEST_DIR)/include
+memory_allocator_test_LDADD = $(GTEST_LIBS)
 
 AM_CFLAGS = -Wall -Wextra $(COVERAGE_CFLAGS)
 AM_CXXFLAGS = -Wall -Wextra $(COVERAGE_CXXFLAGS)
