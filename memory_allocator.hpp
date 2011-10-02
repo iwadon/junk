@@ -9,7 +9,6 @@ class MemoryAllocator
 private:
   static const uint32_t CHUNK_ID_USED = 0x75536544U; // 'uSeD'
   static const uint32_t CHUNK_ID_FREE = 0x46724565U; // 'FrEe'
-  static const uint32_t CHUNK_ID_END_ = 0x654e64ffU; // 'eNd\xff'
 
   struct Chunk
   {
