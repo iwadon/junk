@@ -1,10 +1,6 @@
 #ifndef MEMALLOC_H_INCLUDED
 #define MEMALLOC_H_INCLUDED 1
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stddef.h>
 #include <stdint.h>
 
@@ -26,6 +22,10 @@ struct MemAllocChunk
   uint32_t prev;
   uint32_t next;
 };
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 void MemAllocInitialize(MemAlloc *ma, void *addr, size_t size);
 void *MemAllocAllocate(MemAlloc *ma, size_t size);
