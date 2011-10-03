@@ -194,6 +194,8 @@ all_gtests_LDFLAGS =
 all_gtests_LDADD = libpeg.a libsequencer.a libsdlapp.a liblogger.a $(GTEST_LIBS) $(SDL_LIBS)
 
 memory_allocator_test_SOURCES = \
+	memalloc_test.cpp \
+	memalloc.c memalloc.h \
 	memory_allocator_test.cpp \
 	memory_allocator.cpp memory_allocator.hpp
 memory_allocator_test_CPPFLAGS = -I$(GTEST_DIR)/include

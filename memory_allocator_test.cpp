@@ -14,6 +14,12 @@ TEST(MemoryAllocatorTest, allocate) {
   ASSERT_TRUE(ma.allocate(1) == NULL);
 }
 
+TEST(MemoryAllocatorTest, allocate2) {
+  char buf[MemoryAllocator::PADDING_SIZE + 4];
+  MemoryAllocator ma(buf, sizeof buf);
+  ASSERT_EQ(ma.allocate(1), buf + MemoryAllocator::PADDING_SIZE);
+}
+
 TEST(MemoryAllocatorTest, free) {
   char buf[256];
   MemoryAllocator ma(buf, sizeof buf);
