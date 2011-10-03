@@ -7,17 +7,17 @@
 TEST(MemoryAllocatorTest, allocate) {
   char buf[256];
   MemoryAllocator ma(buf, sizeof buf);
-  ASSERT_EQ(ma.allocate(101), buf + MemoryAllocator::PADDING_SIZE);
-  ASSERT_EQ(ma.allocate(51), buf + MemoryAllocator::PADDING_SIZE + 104 + MemoryAllocator::PADDING_SIZE);
+  ASSERT_EQ(ma.allocate(101), buf + 16);
+  ASSERT_EQ(ma.allocate(51), buf + 16 + 104 + 16);
   ASSERT_TRUE(ma.allocate(100) == NULL);
-  ASSERT_EQ(ma.allocate(51), buf + MemoryAllocator::PADDING_SIZE + 104 + MemoryAllocator::PADDING_SIZE + 52 + MemoryAllocator::PADDING_SIZE);
+  ASSERT_EQ(ma.allocate(51), buf + 16 + 104 + 16 + 52 + 16);
   ASSERT_TRUE(ma.allocate(1) == NULL);
 }
 
 TEST(MemoryAllocatorTest, allocate2) {
-  char buf[MemoryAllocator::PADDING_SIZE + 4];
+  char buf[16 + 4];
   MemoryAllocator ma(buf, sizeof buf);
-  ASSERT_EQ(ma.allocate(1), buf + MemoryAllocator::PADDING_SIZE);
+  ASSERT_EQ(ma.allocate(1), buf + 16);
 }
 
 TEST(MemoryAllocatorTest, free) {
@@ -50,7 +50,7 @@ TEST(MemoryAllocatorTest, free) {
 }
 
 TEST(MemoryAllocatorTest, max_free_size) {
-  char buf[256 + MemoryAllocator::PADDING_SIZE];
+  char buf[256 + 16];
   MemoryAllocator ma(buf, sizeof buf);
   ma.allocate(101);
   ASSERT_EQ(136U, ma.max_free_size());
