@@ -1,22 +1,31 @@
 #include "memalloc.h"
 #include <assert.h>
-#include <stdio.h>
 
-#define ALIGN_SIZE 4
+#ifndef MEMALLOC_ALIGN_SIZE
+#define MEMALLOC_ALIGN_SIZE 4
+#endif
+
+//#define ENABLE_PRINT_MAP
 
 static MemAllocChunk *prev_chunk(MemAllocChunk *c)
 {
+  assert(c != NULL);
   return (MemAllocChunk *)(((int8_t *) c) - c->prev);
 }
 
 static MemAllocChunk *next_chunk(MemAllocChunk *c)
 {
+  assert(c != NULL);
   return (MemAllocChunk *)(((int8_t *) c) + c->next);
 }
 
+#ifdef ENABLE_PRINT_MAP
+#include <stdio.h>
 static void print_map(MemAlloc *ma)
 {
-  MemAllocChunk *c = ma->top;
+  MemAllocChunk *c;
+  assert(ma != NULL);
+  c = ma->top;
   printf("Address          ID   Size       Prev       Next\n");
   printf("================ ==== ========== ========== ==========\n");
   while (!0) {
@@ -28,6 +37,7 @@ static void print_map(MemAlloc *ma)
   }
   printf("[END]\n");
 }
+#endif // defined(ENABLE_PRINT_MAP)
 
 void MemAllocInitialize(MemAlloc *ma, void *addr, size_t size)
 {
@@ -38,12 +48,16 @@ void MemAllocInitialize(MemAlloc *ma, void *addr, size_t size)
   ma->top->id = MEMALLOC_CHUNK_ID_FREE;
   ma->top->size = size - sizeof (MemAllocChunk);
   ma->top->prev = ma->top->next = 0;
-  //print_map(ma);
+#ifdef ENABLE_PRINT_MAP
+  print_map(ma);
+#endif
 }
 
 void *MemAllocAllocate(MemAlloc *ma, size_t size)
 {
-  size_t sz = (size + (ALIGN_SIZE - 1)) / ALIGN_SIZE * ALIGN_SIZE;
+  size_t sz;
+  assert(ma != NULL);
+  sz = (size + (MEMALLOC_ALIGN_SIZE - 1)) / MEMALLOC_ALIGN_SIZE * MEMALLOC_ALIGN_SIZE;
   MemAllocChunk *c = ma->top;
   while (!0) {
     if (c->id == MEMALLOC_CHUNK_ID_FREE && c->size >= sz) {
@@ -64,14 +78,15 @@ void *MemAllocAllocate(MemAlloc *ma, size_t size)
   }
   c->id = MEMALLOC_CHUNK_ID_USED;
   c->size = sz;
-  //print_map(ma);
+#ifdef ENABLE_PRINT_MAP
+  print_map(ma);
+#endif
   return ((int8_t *) c) + sizeof (MemAllocChunk);
 }
 
 void MemAllocFree(MemAlloc *ma, void *addr)
 {
   MemAllocChunk *c;
-
   assert(ma != NULL);
   if (addr == NULL) {
     return;
@@ -92,15 +107,17 @@ void MemAllocFree(MemAlloc *ma, void *addr)
       pc->next = c->next;
     }
   }
-  //print_map(ma);
+#ifdef ENABLE_PRINT_MAP
+  print_map(ma);
+#endif
 }
 
 size_t MemAllocGetMaxFreeSize(MemAlloc *ma)
 {
   size_t max_size;
-  MemAllocChunk *c = ma->top;
-
+  MemAllocChunk *c;
   assert(ma != NULL);
+  c = ma->top;
   max_size = 0;
   while (!0) {
     if (c->id == MEMALLOC_CHUNK_ID_FREE && c->size > max_size) {
