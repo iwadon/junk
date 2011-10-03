@@ -50,13 +50,13 @@ TEST(MemoryAllocatorTest, free) {
 }
 
 TEST(MemoryAllocatorTest, max_free_size) {
-  char buf[256 + 16];
+  char buf[256];
   MemoryAllocator ma(buf, sizeof buf);
   ma.allocate(101);
-  ASSERT_EQ(136U, ma.max_free_size());
+  ASSERT_EQ(120U, ma.max_free_size());
   ma.allocate(51);
-  ASSERT_EQ(68U, ma.max_free_size());
-  ma.allocate(53);
+  ASSERT_EQ(52U, ma.max_free_size());
+  ma.allocate(51);
   ASSERT_EQ(0U, ma.max_free_size());
   ma.allocate(19);
   ASSERT_EQ(0U, ma.max_free_size());
