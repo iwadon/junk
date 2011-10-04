@@ -4,8 +4,6 @@
 #include "memalloc.h"
 #include <gtest/gtest.h>
 
-#define PADDING_SIZE (sizeof (MemAllocChunk))
-
 TEST(MemAllocTest, allocate) {
   char buf[256];
   MemAlloc ma;
@@ -14,15 +12,15 @@ TEST(MemAllocTest, allocate) {
   ASSERT_EQ(MemAllocAllocate(&ma, 51), buf + 16 + 104 + 16);
   ASSERT_EQ(52U, MemAllocGetMaxFreeSize(&ma));
   ASSERT_TRUE(MemAllocAllocate(&ma, 100) == NULL);
-  ASSERT_EQ(MemAllocAllocate(&ma, 51), buf + PADDING_SIZE + 104 + PADDING_SIZE + 52 + PADDING_SIZE);
+  ASSERT_EQ(MemAllocAllocate(&ma, 51), buf + 16 + 104 + 16 + 52 + 16);
   ASSERT_TRUE(MemAllocAllocate(&ma, 1) == NULL);
 }
 
 TEST(MemAllocTest, allocate2) {
-  char buf[PADDING_SIZE + 4];
+  char buf[16 + 4];
   MemAlloc ma;
   MemAllocInitialize(&ma, buf, sizeof buf);
-  ASSERT_EQ(MemAllocAllocate(&ma, 1), buf + PADDING_SIZE);
+  ASSERT_EQ(MemAllocAllocate(&ma, 1), buf + 16);
 }
 
 TEST(MemAllocTest, free) {
