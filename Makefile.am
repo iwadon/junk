@@ -164,6 +164,7 @@ all_gtests_SOURCES = \
 	logger_test.cpp \
 	lot_box_test.cpp \
 	object_test.cpp \
+	object_counter_test.cpp \
 	observer_test.cpp \
 	oscillator_factory_test.cpp \
 	oscillator_stream_test.cpp \
