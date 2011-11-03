@@ -209,8 +209,19 @@ TEST(Vector2DTest, rotate)
 {
   Vector2D v1(1.0f, 0.0f);
   EXPECT_EQ(v1, v1.rotate(M_PI * 0.5f));
+  //EXPECT_FLOAT_EQ(0.0f, v1.x);
   EXPECT_NEAR(0.0f, v1.x, FLT_EPSILON);
-  EXPECT_NEAR(1.0f, v1.y, FLT_EPSILON);
+  EXPECT_FLOAT_EQ(1.0f, v1.y);
+
+  Vector2D v2(3.0f, 2.0f);
+  EXPECT_EQ(v2, v2.rotate(M_PI * 0.5f));
+  EXPECT_FLOAT_EQ(-2.0f, v2.x);
+  EXPECT_FLOAT_EQ( 3.0f, v2.y);
+
+  Vector2D v3(3.0f, 2.0f);
+  EXPECT_EQ(v3, v3.rotate(M_PI * 2.0f));
+  EXPECT_FLOAT_EQ(3.0f, v3.x);
+  EXPECT_FLOAT_EQ(2.0f, v3.y);
 }
 
 TEST(Vector2DTest, LSHIFT)
