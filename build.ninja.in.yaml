@@ -1,0 +1,54 @@
+var:
+  top_srcdir: "@top_srcdir@"
+  srcdir: "@srcdir@"
+  builddir: "@builddir@"
+  gtestdir: "$builddir/gtest"
+  CC: "@CC@"
+  CFLAGS: "@CFLAGS@"
+  CPP: "@CPP@"
+  CPPFLAGS: "@CPPFLAGS@"
+  CXX: "@CXX@"
+  CXXCPP: "@CXXCPP@"
+  CXXFLAGS: "@CXXFLAGS@"
+  DEFAULT_INCLUDES: "-I$builddir -I$srcdir"
+  DEFS: "@DEFS@"
+  LDFLAGS: "@LDFLAGS@"
+  LIBS: "@LIBS@"
+  OBJC: "@OBJC@"
+  OBJCFLAGS: "@OBJCFLAGS@"
+  BOOST_CPPFLAGS: "@BOOST_CPPFLAGS@"
+  BOOST_LDFLAGS: "@BOOST_LDFLAGS@"
+  BOOST_PROGRAM_OPTIONS_LIB: "@BOOST_PROGRAM_OPTIONS_LIB@"
+  SDL_CFLAGS: "@SDL_CFLAGS@"
+  SDL_LIBS: "@SDL_LIBS@"
+  AM_CFLAGS: "-Wall -Wextra"
+  AM_CPPFLAGS: "$BOOST_CPPFLAGS $SDL_CFLAGS"
+  AM_CXXFLAGS: "-Wall -Wextra"
+  AM_LDFLAGS: "$BOOST_LDFLAGS"
+rule:
+  cc:
+    depfile: "$out.d"
+    command: "$CC $DEFS -MMD -MF $out.d $DEFAULT_INCLUDES $INCLUDES $AM_CPPFLAGS $CPPFLAGS $AM_CFLAGS $CFLAGS -c $in -o $out"
+    description: "CC $out"
+  cxx:
+    depfile: "$out.d"
+    command: "$CXX $DEFS $DEFAULT_INCLUDES $INCLUDES $AM_CPPFLAGS $CPPFLAGS $AM_CXXFLAGS $CXXFLAGS -MMD -MF $out.d -c -o $out $in"
+    description: "CXX $out"
+  objc:
+    depfile: "$out.d"
+    command: "$OBJC -MMD -MF $out.d $DEFS $DEFUALT_INCLUDES $INCLUDES $AM_CPPFLAGS $CPPFLAGS $AM_OBJCFLAGS $OBJCFLAGS -c $in -o $out"
+    description: "OBJC $out"
+  link:
+    command: "$CXX $AM_LDFLAGS $LDFLAGS -o $out $in $LIBS"
+    description: "LINK $out"
+  ar:
+    command: "ar crs $out $in"
+    description: "AR $out"
+program:
+  $builddir/serial_number_test:
+    src: [$srcdir/serial_number_test.cpp, $builddir/libgtest.a]
+    CPPFLAGS: -I$gtestdir/include $CPPFLAGS
+library:
+  $builddir/libgtest.a:
+    src: [$gtestdir/src/gtest-all.cc, $gtestdir/src/gtest_main.cc]
+    CPPFLAGS: -I$gtestdir/include -I$gtestdir $CPPFLAGS
