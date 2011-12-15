@@ -52,6 +52,7 @@ struct Vector2D
   Vector2D &normalize();
   Vector2D reflect(const Vector2D &other) const;
   Vector2D &rotate(const float rad);
+  float angle() const;
 };
 
 inline Vector2D::Vector2D()
@@ -235,8 +236,10 @@ inline float Vector2D::length() const
 inline Vector2D &Vector2D::normalize()
 {
   float len = length();
-  x /= len;
-  y /= len;
+  if (len > 0.0f) {
+    x /= len;
+    y /= len;
+  }
   return *this;
 }
 
@@ -257,6 +260,11 @@ inline Vector2D &Vector2D::rotate(const float theta)
   x = tx;
   y = ty;
   return *this;
+}
+
+inline float Vector2D::angle() const
+{
+  return atan2f(y, x);
 }
 
 static inline Vector2D operator*(const float f, const Vector2D &v)
