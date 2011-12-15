@@ -6,18 +6,24 @@
 
 static int n = 0;
 
-class TestObserver : public Observer
+class TestSubject;
+
+class TestObserver : public Observer<TestSubject>
 {
 public:
-  void update(Subject */*subject*/)
+  void update(Subject<TestSubject> */*subject*/)
   {
     ++n;
   }
 };
 
+class TestSubject : public Subject<TestSubject>
+{
+};
+
 TEST(ObserverTest, notify)
 {
-  Subject s;
+  TestSubject s;
   TestObserver o;
   n = 0;
   s.notify();
