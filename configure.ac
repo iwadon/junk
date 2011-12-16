@@ -3,9 +3,10 @@
 
 AC_PREREQ(2.61)
 AC_INIT(junk, 0.0.0, don@na.rim.or.jp)
-AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([test_main.cpp])
 AC_CONFIG_HEADER([config.h])
+AC_CANONICAL_TARGET
+AM_INIT_AUTOMAKE
 
 SYSTEMNAME=`uname -s`
 
