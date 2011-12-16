@@ -123,7 +123,7 @@ program:
       - $builddir/libsdlapp.a
       - $builddir/libsequencer.a
       - $builddir/libgtest.a
-    INCLUDES: -I$gtestdir/include $INCLUDES
+    CPPFLAGS: -I$gtestdir/include $CPPFLAGS
     LIBS: $SDL_LIBS $LIBS
   $builddir/memory_allocator_test:
     src:
@@ -132,10 +132,10 @@ program:
       - $srcdir/memory_allocator.cpp
       - $srcdir/memory_allocator_test.cpp
       - $builddir/libgtest.a
-    INCLUDES: -I$gtestdir/include $INCLUDES
+    CPPFLAGS: -I$gtestdir/include $CPPFLAGS
   $builddir/serial_number_test:
     src: [$srcdir/serial_number_test.cpp, $builddir/libgtest.a]
-    INCLUDES: -I$gtestdir/include $INCLUDES
+    CPPFLAGS: -I$gtestdir/include $CPPFLAGS
 library:
   $builddir/liblogger.a:
     src:
@@ -154,7 +154,7 @@ library:
       - $srcdir/texture.cpp
       - $srcdir/texture_pool.cpp
       - $srcdir/vector_2d.cpp
-    INCLUDES: $SDL_CFLAGS $BOOST_CPPFLAGS $INCLUDES
+    CPPFLAGS: $SDL_CFLAGS $BOOST_CPPFLAGS $CPPFLAGS
   $builddir/libsequencer.a:
     src:
       - $srcdir/channel.cpp
@@ -174,16 +174,16 @@ library:
       - $srcdir/smf_track.cpp
       - $srcdir/variable_length_value.cpp
       - $srcdir/voice.cpp
-    INCLUDES: $SDL_CFLAGS $BOOST_CPPFLAGS $INCLUDES
+    CPPFLAGS: $SDL_CFLAGS $BOOST_CPPFLAGS $CPPFLAGS
   $builddir/libpeg.a:
     src:
       - $srcdir/peg.cpp
-    INCLUDES: $BOOST_CPPFLAGS $INCLUDES
+    CPPFLAGS: $BOOST_CPPFLAGS $CPPFLAGS
   $builddir/libgtest.a:
     src:
       - $gtestdir/src/gtest-all.cc
       - $gtestdir/src/gtest_main.cc
-    INCLUDES: -I$gtestdir/include -I$gtestdir $INCLUDES
+    CPPFLAGS: -I$gtestdir/include -I$gtestdir $CPPFLAGS
 misc:
   $builddir/build.ninja:
     rule: configure2
