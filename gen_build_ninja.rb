@@ -211,7 +211,7 @@ if __FILE__ == $0
     text = File.read(file)
     loop do
       ext = File.extname(file)
-      base = File.basename(file, ext)
+      base = File.join(File.dirname(file), File.basename(file, ext))
       case ext
       when /\.erb\z/i
         text = ERB.new(text).result(opt.get_binding)
