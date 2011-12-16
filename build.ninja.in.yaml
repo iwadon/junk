@@ -2,7 +2,7 @@ var:
   top_srcdir: "@top_srcdir@"
   srcdir: "@srcdir@"
   builddir: "@builddir@"
-  gtestdir: "$builddir/gtest"
+  gtestdir: $top_srcdir/gtest-1.6.0
   CC: "@CC@"
   CFLAGS: "@CFLAGS@"
   CPP: "@CPP@"
@@ -27,16 +27,16 @@ var:
   AM_LDFLAGS: "$BOOST_LDFLAGS"
 rule:
   cc:
-    depfile: "$out.d"
-    command: "$CC $DEFS -MMD -MF $out.d $DEFAULT_INCLUDES $INCLUDES $AM_CPPFLAGS $CPPFLAGS $AM_CFLAGS $CFLAGS -c $in -o $out"
+    depfile: .deps/$out.d
+    command: "$CC -MMD -MF .deps/$out.d $DEFS $DEFAULT_INCLUDES $INCLUDES $AM_CPPFLAGS $CPPFLAGS $AM_CFLAGS $CFLAGS -c $in -o $out"
     description: "CC $out"
   cxx:
-    depfile: "$out.d"
-    command: "$CXX $DEFS $DEFAULT_INCLUDES $INCLUDES $AM_CPPFLAGS $CPPFLAGS $AM_CXXFLAGS $CXXFLAGS -MMD -MF $out.d -c -o $out $in"
+    depfile: .deps/$out.d
+    command: "$CXX -MMD -MF .deps/$out.d $DEFS $DEFAULT_INCLUDES $INCLUDES $AM_CPPFLAGS $CPPFLAGS $AM_CXXFLAGS $CXXFLAGS -c -o $out $in"
     description: "CXX $out"
   objc:
-    depfile: "$out.d"
-    command: "$OBJC -MMD -MF $out.d $DEFS $DEFUALT_INCLUDES $INCLUDES $AM_CPPFLAGS $CPPFLAGS $AM_OBJCFLAGS $OBJCFLAGS -c $in -o $out"
+    depfile: .deps/$out.d
+    command: "$OBJC -MMD -MF .deps/$out.d $DEFS $DEFUALT_INCLUDES $INCLUDES $AM_CPPFLAGS $CPPFLAGS $AM_OBJCFLAGS $OBJCFLAGS -c $in -o $out"
     description: "OBJC $out"
   link:
     command: "$CXX $AM_LDFLAGS $LDFLAGS -o $out $in $LIBS"
@@ -44,11 +44,148 @@ rule:
   ar:
     command: "ar crs $out $in"
     description: "AR $out"
+  configure2:
+    command: "make $out"
+    generator: 1
 program:
+  $builddir/benchmark_sample:
+    src: [$srcdir/benchmark_sample.cpp]
+  $builddir/boost_program_options_sample:
+    src: [$srcdir/boost_program_options_sample.cpp]
+    LIBS: $BOOST_PROGRAM_OPTIONS_LIB
+  $builddir/c1:
+    src:
+      - $srcdir/c1.cpp
+  $builddir/g1:
+    src:
+      - $srcdir/g1.cpp
+      - $builddir/libsdlapp.a
+      - $builddir/liblogger.a
+    CPPFLAGS: $SDL_CFLAGS $CPPFLAGS
+    LIBS: $SDL_LIBS $LIBS
+#  $builddir/line_segment_2d_benchmark:
+#  $builddir/map_benchmark:
+#  $builddir/oscillator_benchmark:
+#  $builddir/pcap_benchmark:
+#  $builddir/peg_sample:
+#  $builddir/peg_sample2:
+#  $builddir/s1:
+#  $builddir/s2:
+#  $builddir/sdl_event_sample:
+#  $builddir/sdl_event_sample2:
+#  $builddir/smf_play:
+#  $builddir/udp_sample:
+#  $builddir/vector_length_benchmark:
+  $builddir/all_gtests:
+    src:
+      - $srcdir/audio_stream_test.cpp
+      - $srcdir/channel_test.cpp
+      - $srcdir/circle_2d_test.cpp
+      - $srcdir/circular_buffer_test.cpp
+      - $srcdir/filter_test.cpp
+      - $srcdir/font_test.cpp
+      - $srcdir/fps_test.cpp
+      - $srcdir/function_test.cpp
+      - $srcdir/function_test2.cpp
+      - $srcdir/instrument_test.cpp
+      - $srcdir/line_segment_2d_test.cpp
+      - $srcdir/load_time_test.cpp
+      - $srcdir/logger_test.cpp
+      - $srcdir/lot_box_test.cpp
+      - $srcdir/object_test.cpp
+      - $srcdir/object_counter_test.cpp
+      - $srcdir/observer_test.cpp
+      - $srcdir/oscillator_factory_test.cpp
+      - $srcdir/oscillator_stream_test.cpp
+      - $srcdir/oscillator_test.cpp
+      - $srcdir/patch_test.cpp
+      - $srcdir/peg_test.cpp
+      - $srcdir/point_2d_test.cpp
+      - $srcdir/property_test.cpp
+      - $srcdir/pseudo_triangle_wave_oscillator_test.cpp
+      - $srcdir/rect_test.cpp
+      - $srcdir/sampler_test.cpp
+      - $srcdir/sine_wave_oscillator_test.cpp
+      - $srcdir/smf_test.cpp
+      - $srcdir/smf_track_test.cpp
+      - $srcdir/song_test.cpp
+      - $srcdir/sound_test.cpp
+      - $srcdir/sprite_test.cpp
+      - $srcdir/texture_pool_test.cpp
+      - $srcdir/texture_test.cpp
+      - $srcdir/triangle_wave_oscillator_test.cpp
+      - $srcdir/variable_length_value_test.cpp
+      - $srcdir/vector_2d_test.cpp
+      - $srcdir/volume_test.cpp
+      - $srcdir/voice_test.cpp
+      - $builddir/liblogger.a
+      - $builddir/libpeg.a
+      - $builddir/libsdlapp.a
+      - $builddir/libsequencer.a
+      - $builddir/libgtest.a
+    INCLUDES: -I$gtestdir/include $INCLUDES
+    LIBS: $SDL_LIBS $LIBS
+  $builddir/memory_allocator_test:
+    src:
+      - $srcdir/memalloc.c
+      - $srcdir/memalloc_test.cpp
+      - $srcdir/memory_allocator.cpp
+      - $srcdir/memory_allocator_test.cpp
+      - $builddir/libgtest.a
+    INCLUDES: -I$gtestdir/include $INCLUDES
   $builddir/serial_number_test:
     src: [$srcdir/serial_number_test.cpp, $builddir/libgtest.a]
-    CPPFLAGS: -I$gtestdir/include $CPPFLAGS
+    INCLUDES: -I$gtestdir/include $INCLUDES
 library:
+  $builddir/liblogger.a:
+    src:
+      - $srcdir/logger_c.c
+      - $srcdir/logger_cpp.cpp
+  $builddir/libsdlapp.a:
+    src:
+      - $srcdir/controller.cpp
+      - $srcdir/frame_wait_timer.cpp
+      - $srcdir/font.cpp
+      - $srcdir/fps.cpp
+      - $srcdir/load_time.cpp
+      - $srcdir/point_2d.cpp
+      - $srcdir/sdl_app.cpp
+      - $srcdir/sprite.cpp
+      - $srcdir/texture.cpp
+      - $srcdir/texture_pool.cpp
+      - $srcdir/vector_2d.cpp
+    INCLUDES: $SDL_CFLAGS $BOOST_CPPFLAGS $INCLUDES
+  $builddir/libsequencer.a:
+    src:
+      - $srcdir/channel.cpp
+      - $srcdir/filter.cpp
+      - $srcdir/instrument.cpp
+      - $srcdir/oscillator.cpp
+      - $srcdir/oscillator_factory.cpp
+      - $srcdir/oscillator_stream.cpp
+      - $srcdir/patch.cpp
+      - $srcdir/pseudo_triangle_wave_oscillator.cpp
+      - $srcdir/sampler.cpp
+      - $srcdir/sine_wave_oscillator.cpp
+      - $srcdir/song.cpp
+      - $srcdir/sound.cpp
+      - $srcdir/triangle_wave_oscillator.cpp
+      - $srcdir/smf.cpp
+      - $srcdir/smf_track.cpp
+      - $srcdir/variable_length_value.cpp
+      - $srcdir/voice.cpp
+    INCLUDES: $SDL_CFLAGS $BOOST_CPPFLAGS $INCLUDES
+  $builddir/libpeg.a:
+    src:
+      - $srcdir/peg.cpp
+    INCLUDES: $BOOST_CPPFLAGS $INCLUDES
   $builddir/libgtest.a:
-    src: [$gtestdir/src/gtest-all.cc, $gtestdir/src/gtest_main.cc]
-    CPPFLAGS: -I$gtestdir/include -I$gtestdir $CPPFLAGS
+    src:
+      - $gtestdir/src/gtest-all.cc
+      - $gtestdir/src/gtest_main.cc
+    INCLUDES: -I$gtestdir/include -I$gtestdir $INCLUDES
+misc:
+  $builddir/build.ninja:
+    rule: configure2
+    src: [$srcdir/build.ninja.in]
+    implicit: []
