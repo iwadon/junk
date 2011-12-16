@@ -4,6 +4,7 @@
 #include <cstring>
 #include <ostream>
 #include <string>
+#include <SDL.h>
 
 struct Vector2D;
 
@@ -14,7 +15,10 @@ struct Point2D
 
   Point2D();
   Point2D(const float x, const float y);
+  operator SDL_Point();
+  operator const SDL_Point() const;
   Point2D &operator+=(const Vector2D &rhs);
+  Point2D &operator-=(const Vector2D &rhs);
   Point2D operator+(const Vector2D &rhs) const;
   Vector2D operator-(const Point2D &rhs) const;
   bool operator==(const Point2D &rhs) const;
@@ -32,6 +36,18 @@ inline Point2D::Point2D(const float x_, const float y_)
   : x(x_)
   , y(y_)
 {
+}
+
+inline Point2D::operator SDL_Point()
+{
+  SDL_Point p = {x, y};
+  return p;
+}
+
+inline Point2D::operator const SDL_Point() const
+{
+  const SDL_Point p = {x, y};
+  return p;
 }
 
 inline bool Point2D::operator==(const Point2D &rhs) const

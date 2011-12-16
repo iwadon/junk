@@ -32,6 +32,15 @@ TEST(Point2DTest, ADD)
   EXPECT_EQ(p2, p1 + v);
 }
 
+TEST(Point2DTest, SUBEQ)
+{
+  Point2D p(1, 2);
+  Vector2D v(3, 4);
+  p -= v;
+  EXPECT_EQ(-2.0f, p.x);
+  EXPECT_EQ(-2.0f, p.y);
+}
+
 TEST(Point2DTest, SUB)
 {
   Point2D p1(1.0f, 2.0f);
@@ -59,4 +68,13 @@ TEST(Point2DTest, rotate)
   ASSERT_EQ(p, p.rotate(M_PI * 0.5f, Point2D(0.0f, 0.0f)));
   EXPECT_NEAR(0.0f, p.x, FLT_EPSILON);
   EXPECT_NEAR(1.0f, p.y, FLT_EPSILON);
+}
+
+TEST(Point2DTest, SDL_Point)
+{
+  Point2D p(12, 34);
+  SDL_Point a = p;
+  SDL_Point b = {12, 34};
+  EXPECT_EQ(a.x, b.x);
+  EXPECT_EQ(a.y, b.y);
 }
