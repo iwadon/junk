@@ -77,7 +77,7 @@ class NinjaGenerator
 
   def make_obj(prefix, _1)
     dir, base = File.dirname(_1), File.basename(_1)
-    File.join('$builddir', dir, "#{prefix}-#{base}.o").gsub(%r|/./|, '/')
+    File.join('$builddir', "#{prefix}-#{base}.o").gsub(%r|/./|, '/')
   end
 
   def extract_src(value)
