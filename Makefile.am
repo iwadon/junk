@@ -139,7 +139,7 @@ data/sound_data_sample.bin: data/sound_data_sample.s
 check_PROGRAMS = all_gtests memory_allocator_test serial_number_test
 TESTS = $(check_PROGRAMS) peg_test.sh
 
-GTEST_DIR = $(builddir)/gtest
+GTEST_DIR = $(top_srcdir)/gtest-1.6.0
 GTEST_CPPFLAGS = -I$(GTEST_DIR)/include -I$(GTEST_DIR)
 GTEST_LIBS = -L$(builddir) libgtest.a
 
