@@ -10,17 +10,21 @@ aclocal.m4
 autom4te.cache
 build
 build.ninja
+build.ninja.in
+config.guess
 config.h
 config.h.in
 config.log
 config.status
+config.sub
 configure
 data/sample Project
+data/sound_data_sample.bin
 depcomp
+gtest-1.6.0
 install-sh
 missing
 net_test.sh
 peg_test.sh
 stamp-h1
 xcuserdata
-data/sound_data_sample.bin
