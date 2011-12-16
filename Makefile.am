@@ -33,8 +33,8 @@ g1_CPPFLAGS = $(SDL_CFLAGS)
 g1_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS)
 
 line_segment_2d_benchmark_SOURCES = line_segment_2d_benchmark.cpp
-line_segment_2d_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
-line_segment_2d_benchmark_LDADD = libsdlapp.a
+line_segment_2d_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS) $(SDL_CFLAGS)
+line_segment_2d_benchmark_LDADD = libsdlapp.a $(SDL_LIBS)
 
 map_benchmark_SOURCES = map_benchmark.cpp
 map_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
