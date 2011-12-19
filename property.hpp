@@ -2,6 +2,7 @@
 #define PROPERTY_HPP_INCLUDED 1
 
 #include <cassert>
+#include <cstddef>
 
 template <typename T, typename V>
 class Property
