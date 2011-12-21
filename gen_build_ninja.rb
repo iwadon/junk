@@ -3,8 +3,8 @@ require 'yaml'
 
 class NinjaGenerator
   class << self
-    def generate_from_yaml(yaml)
-      b = new
+    def generate_from_yaml(yaml, opt)
+      b = new(opt)
       h = YAML.load(yaml)
       h.each do |k, v|
         (v || []).each do |vk, vv|
@@ -15,10 +15,17 @@ class NinjaGenerator
     end
   end
 
-  def initialize
+  def initialize(opt)
     @vars = {}
     @rules = {}
     @builds = {}
+    add_var 'cc', opt.cc
+    add_var 'cxx', opt.cxx
+    add_var 'cflags', opt.cflags
+    add_var 'cxxflags', opt.cxxflags
+    add_var 'cppflags', opt.cppflags
+    add_var 'ar', 'ar'
+    add_rule 'cc', description: 'CC $out', command: '$cc -MMD -MF $out.d $cflags $cppflags -o $out -c $in', depfile: '$out.d'
     add_rule 'cxx', description: 'CXX $out', command: '$cxx -MMD -MF $out.d $cxxflags $cppflags -o $out -c $in', depfile: '$out.d'
     add_rule 'link', description: 'LINK $out', command: '$cxx $ldflags -o $out $in $libs'
     add_rule 'ar', description: 'AR $out', command: '$ar crs $out $in'
@@ -216,7 +223,7 @@ if __FILE__ == $0
       when /\.erb\z/i
         text = ERB.new(text).result(opt.get_binding)
       when /\.yaml\z/i
-        text = NinjaGenerator.generate_from_yaml(text)
+        text = NinjaGenerator.generate_from_yaml(text, opt)
       else
         File.open(file, 'w') do |f|
           f.flock(File::LOCK_EX)
