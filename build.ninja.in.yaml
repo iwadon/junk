@@ -65,6 +65,9 @@ program:
     LIBS: $SDL_LIBS $LIBS
 #  $builddir/line_segment_2d_benchmark:
 #  $builddir/map_benchmark:
+  $builddir/observer_benchmark:
+    src: 
+      - $srcdir/observer_benchmark.cpp
 #  $builddir/oscillator_benchmark:
 #  $builddir/pcap_benchmark:
 #  $builddir/peg_sample:
