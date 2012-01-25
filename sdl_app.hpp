@@ -47,7 +47,7 @@ private:
   Controller controller_;
   SDL_AudioSpec audio_spec_;
   FrameWaitTimer frame_wait_timer_;
-  SDLMod prev_mod_;
+  SDL_Keymod prev_mod_;
   LoadTime load_time_;
   bool do_initialize(int argc, char *argv[]);
   void do_finalize();

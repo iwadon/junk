@@ -5,15 +5,15 @@
 int main(int argc, char *argv[])
 {
 #pragma unused(argc, argv)
-  SDL_Surface *screen;
+  SDL_Window *window;
+  SDL_Renderer *renderer;
   int done = 0;
   SDL_Event event;
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     SDL_ERROR(SDL_Init);
     return 1;
   }
-  screen = SDL_SetVideoMode(200, 200, 0, 0);
-  if (screen == NULL) {
+  if (SDL_CreateWindowAndRenderer(200, 200, 0, &window, &renderer) == -1) {
     SDL_ERROR(SDL_SetVideoMode);
     SDL_Quit();
     return 1;
@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
   while (!done) {
     while (SDL_PollEvent(&event)) {
       if (event.type == SDL_QUIT ||
-	  (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_q && (event.key.keysym.mod == KMOD_LMETA || event.key.keysym.mod == KMOD_RMETA))) {
+	  (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_q && (event.key.keysym.mod == KMOD_LGUI || event.key.keysym.mod == KMOD_RGUI))) {
 	done = !0;
       }
     }

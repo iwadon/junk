@@ -235,8 +235,8 @@ void SDLApp::set_bg_color(const uint32_t rgba)
 
 void SDLApp::set_fps()
 {
-  SDLMod mod = SDL_GetModState();
-  SDLMod on_mod = static_cast<SDLMod>(mod & ~prev_mod_);
+  SDL_Keymod mod = SDL_GetModState();
+  SDL_Keymod on_mod = static_cast<SDL_Keymod>(mod & ~prev_mod_);
   if (on_mod & KMOD_CTRL) {
     frame_wait_timer_.set_fps(FPS * 2);
   } else if (mod & KMOD_SHIFT) {

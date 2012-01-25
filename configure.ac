@@ -48,8 +48,8 @@ AC_PATH_PROG([NASM],[nasm])
 AC_CHECK_PROGS(DOXYGEN, [doxygen])
 
 # Checks for libraries.
-AM_PATH_SDL(1.3.0)
-SDL_LIBS="$SDL_LIBS -lSDL_image"
+AM_PATH_SDL(2.0.0)
+SDL_LIBS="$SDL_LIBS -lSDL2_image"
 AX_BOOST_BASE
 AX_BOOST_PROGRAM_OPTIONS
 AC_CHECK_LIB([pcap], [pcap_lookupdev])
