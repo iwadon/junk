@@ -3,9 +3,9 @@ build_dir=`pwd`
 top_dir=`dirname $0`
 cd $top_dir
 
-SDL_CONFIG=`which sdl-config`
-if test "x$SDL_CONFIG" != x; then
-  ACDIR="-I `$SDL_CONFIG --prefix`/share/aclocal"
+SDL2_CONFIG=`which sdl2-config`
+if test "x$SDL2_CONFIG" != x; then
+  ACDIR="-I `$SDL2_CONFIG --prefix`/share/aclocal"
 fi
 for d in $HOME/local /opt/local /usr/local; do
     test -d $d/share/aclocal && ACDIR="$ACDIR -I $d/share/aclocal"
