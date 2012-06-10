@@ -7,7 +7,7 @@
 #define ASSERT_TIME(a, b) {						\
     static const double base = LoadTime::TIME_BASE_SEC;			\
     static const double base_ms = LoadTime::TIME_BASE_MILLISEC;		\
-    EXPECT_NEAR(a, b / base, 1.0 / (base / base_ms) * 5);		\
+    EXPECT_NEAR(a, b / base, 1.0 / (base / base_ms) * (1000.0 / 60));	\
   }
 
 TEST(LoadTimeTest, elapsed_time)
