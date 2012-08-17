@@ -40,13 +40,13 @@ inline Point2D::Point2D(const float x_, const float y_)
 
 inline Point2D::operator SDL_Point()
 {
-  SDL_Point p = {x, y};
+  SDL_Point p = {static_cast<int>(x), static_cast<int>(y)};
   return p;
 }
 
 inline Point2D::operator const SDL_Point() const
 {
-  const SDL_Point p = {x, y};
+  const SDL_Point p = {static_cast<int>(x), static_cast<int>(y)};
   return p;
 }
 
