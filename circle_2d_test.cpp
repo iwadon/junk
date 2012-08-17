@@ -31,3 +31,12 @@ TEST(Circle2DTest, is_include)
   Point2D p3(0, 20);
   EXPECT_TRUE(!c.is_include(p3));
 }
+
+TEST(Circle2DTest, is_collide)
+{
+  Circle2D c1(0, 0, 10);
+  Circle2D c2(1, 1, 10);
+  EXPECT_TRUE(c1.is_collide(c2));
+  Circle2D c3(20, 20, 10);
+  EXPECT_FALSE(c1.is_collide(c3));
+}

@@ -36,6 +36,12 @@ struct Circle2D
   {
     return LineSegment2D(center.x, center.y, p.x, p.y).length() <= radius;
   }
+
+  // 円同士が重なり合っているかどうかを返す
+  bool is_collide(const Circle2D &c)
+  {
+    return LineSegment2D(center.x, center.y, c.center.x, c.center.y).length() <= radius + c.radius;
+  }
 };
 
 #endif // !defined(CIRCLE_2D_HPP_INCLUDED)
