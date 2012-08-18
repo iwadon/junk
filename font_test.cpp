@@ -48,6 +48,6 @@ TEST_F(FontTest, draw_strf)
 TEST_F(FontTest, load_file)
 {
   Font font(renderer_);
-  ASSERT_EQ(true, font.load_file("data/font5x5.png"));
-  ASSERT_EQ(false, font.load_file("UNKNOWN FILE"));
+  ASSERT_TRUE(font.load_file("data/font5x5.png"));
+  ASSERT_TRUE(!font.load_file("UNKNOWN FILE"));
 }
