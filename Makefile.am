@@ -30,7 +30,7 @@ c1_SOURCES = c1.cpp
 
 g1_SOURCES = g1.cpp
 g1_CPPFLAGS = $(SDL_CFLAGS)
-g1_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS)
+g1_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 line_segment_2d_benchmark_SOURCES = line_segment_2d_benchmark.cpp
 line_segment_2d_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS) $(SDL_CFLAGS)
@@ -42,7 +42,7 @@ map_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
 oscillator_sample_SOURCES = oscillator_sample.cpp
 oscillator_sample_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 oscillator_sample_LDFLAGS = $(OPENGL_FRAMEWORK)
-oscillator_sample_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS)
+oscillator_sample_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 pcap_sample_SOURCES = pcap_sample.cpp
 
@@ -59,7 +59,7 @@ s1_SOURCES = s1.cpp
 s2_SOURCES = s2.cpp
 s2_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 s2_LDFLAGS = $(OPENGL_FRAMEWORK)
-s2_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS)
+s2_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 sdl_event_sample_SOURCES = sdl_event_sample.c
 sdl_event_sample_CPPFLAGS = $(SDL_CFLAGS)
@@ -77,7 +77,7 @@ sdl_event_sample2_LDADD = $(SDL_LIBS)
 
 smf_play_SOURCES = smf_play.cpp
 smf_play_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
-smf_play_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS)
+smf_play_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 udp_sample_SOURCES = udp_sample.c
 
@@ -134,7 +134,7 @@ vector_length_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
 noinst_DATA = data/sound_data_sample.bin
 
 data/sound_data_sample.bin: data/sound_data_sample.s
-	$(nasm) -o $@ $<
+	$(NASM) -o $@ $<
 
 check_PROGRAMS = all_gtests memory_allocator_test serial_number_test
 TESTS = $(check_PROGRAMS) peg_test.sh
@@ -191,7 +191,7 @@ all_gtests_SOURCES = \
 all_gtests_CXXFLAGS =
 all_gtests_CPPFLAGS = -I$(GTEST_DIR)/include -I$(GMOCK_DIR)/include $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 all_gtests_LDFLAGS =
-all_gtests_LDADD = libpeg.a libsequencer.a libsdlapp.a liblogger.a $(GTEST_LIBS) $(SDL_LIBS)
+all_gtests_LDADD = libpeg.a libsequencer.a libsdlapp.a liblogger.a $(GTEST_LIBS) $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 memory_allocator_test_SOURCES = \
 	memalloc_test.cpp \
