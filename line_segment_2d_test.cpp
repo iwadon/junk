@@ -27,21 +27,21 @@ TEST(LineSegment2DTest, bound)
     LineSegment2D l1(0.0f, 1.0f, 1.0f, 1.0f);
     LineSegment2D l2(0.0f, 0.0f, 0.8f, 1.5f);
     std::vector<Point2D> pa1;
-    EXPECT_EQ(true, l2.bound(pa1, l1));
+    EXPECT_TRUE(l2.bound(pa1, l1));
     EXPECT_EQ(static_cast<size_t>(3), pa1.size());
   }
   {
     LineSegment2D l1(1.0f, 0.0f, 1.0f, 1.0f);
     LineSegment2D l2(0.0f, 0.0f, 1.5f, 0.8f);
     std::vector<Point2D> pa1;
-    EXPECT_EQ(true, l2.bound(pa1, l1));
+    EXPECT_TRUE(l2.bound(pa1, l1));
     EXPECT_EQ(static_cast<size_t>(3), pa1.size());
   }
   {
     LineSegment2D l1(0.0f, 2.0f, 2.0f, 0.0f);
     LineSegment2D l2(1.0f, 0.0f, 1.0f, 2.0f);
     std::vector<Point2D> pa1;
-    EXPECT_EQ(true, l2.bound(pa1, l1));
+    EXPECT_TRUE(l2.bound(pa1, l1));
     EXPECT_EQ(static_cast<size_t>(3), pa1.size());
     EXPECT_EQ(l2.p1, pa1[0]);
     EXPECT_NEAR(0.0f, pa1[2].x, FLT_EPSILON);
@@ -56,7 +56,7 @@ TEST(LineSegment2DTest, cross_point)
   Point2D cp1;
   Point2D cp2(0.5f, 0.5f);
   float t1, t2;
-  EXPECT_EQ(true, l1.cross_point(l2, &cp1, &t1, &t2));
+  EXPECT_TRUE(l1.cross_point(l2, &cp1, &t1, &t2));
   EXPECT_EQ(cp2, cp1);
   EXPECT_EQ(0.5f, t1);
   EXPECT_EQ(0.5f, t2);
@@ -74,17 +74,17 @@ TEST(LineSegment2DTest, intersection_point)
   LineSegment2D l1(1.0f, 0.0f, 0.0f, 1.0f);
   LineSegment2D l2(0.0f, 0.0f, 1.0f, 1.0f);
   Point2D p;
-  EXPECT_EQ(true, l1.intersection_point_with(p, l2));
+  EXPECT_TRUE(l1.intersection_point_with(p, l2));
   CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5f, p.x, 0.01f);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5f, p.y, 0.01f);
 
   LineSegment2D l3(0.0f, 1.0f, 1.0f, 0.0f);
-  EXPECT_EQ(true, l3.intersection_point_with(p, l2));
+  EXPECT_TRUE(l3.intersection_point_with(p, l2));
   CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5f, p.x, 0.01f);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5f, p.y, 0.01f);
 
   LineSegment2D l4(1.0f, 1.0f, 0.0f, 0.0f);
-  EXPECT_EQ(true, l3.intersection_point_with(p, l4));
+  EXPECT_TRUE(l3.intersection_point_with(p, l4));
   CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5f, p.x, 0.01f);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5f, p.y, 0.01f);
 #else
@@ -92,7 +92,7 @@ TEST(LineSegment2DTest, intersection_point)
   LineSegment2D l2(1.0f, 0.0f, 0.0f, 1.0f);
   Point2D cp1;
   Point2D cp2(0.5f, 0.5f);
-  EXPECT_EQ(true, l1.intersection_point_with(cp1, l2));
+  EXPECT_TRUE(l1.intersection_point_with(cp1, l2));
   EXPECT_EQ(cp2, cp1);
 #endif
 }
@@ -105,11 +105,11 @@ TEST(LineSegment2DTest, is_crossed)
   LineSegment2D l4(2.0f, 3.0f, 4.0f, 5.0f);
   LineSegment2D l5(1.0f, 0.0f, 0.6f, 0.4f);
   LineSegment2D l6(2.0f, 1.0f, 1.0f, 2.0f);
-  EXPECT_EQ(true,  l1.is_crossed(l2));
-  EXPECT_EQ(true,  l1.is_crossed(l3));
-  EXPECT_EQ(false, l1.is_crossed(l4));
-  EXPECT_EQ(false, l1.is_crossed(l5));
-  EXPECT_EQ(false, l1.is_crossed(l6));
+  EXPECT_TRUE( l1.is_crossed(l2));
+  EXPECT_TRUE( l1.is_crossed(l3));
+  EXPECT_TRUE(!l1.is_crossed(l4));
+  EXPECT_TRUE(!l1.is_crossed(l5));
+  EXPECT_TRUE(!l1.is_crossed(l6));
 }
 
 TEST(LineSegment2DTest, length)
