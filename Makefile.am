@@ -14,6 +14,7 @@ noinst_PROGRAMS = benchmark_sample \
 	s2 \
 	sdl_event_sample \
 	sdl_event_sample2 \
+	sdl_opengl_sample \
 	smf_play \
 	udp_sample \
 	vector_length_benchmark
@@ -30,6 +31,7 @@ c1_SOURCES = c1.cpp
 
 g1_SOURCES = g1.cpp
 g1_CPPFLAGS = $(SDL_CFLAGS)
+g1_LDFLAGS = $(OPENGL_FRAMEWORK)
 g1_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 line_segment_2d_benchmark_SOURCES = line_segment_2d_benchmark.cpp
@@ -70,6 +72,11 @@ sdl_event_sample2_SOURCES = sdl_event_sample2.m
 sdl_event_sample2_CPPFLAGS = $(SDL_CFLAGS)
 sdl_event_sample2_LDFLAGS = $(COCOA_FRAMEWORK)
 sdl_event_sample2_LDADD = $(SDL_LIBS)
+
+sdl_opengl_sample_SOURCES = sdl_opengl_sample.cc
+sdl_opengl_sample_CPPFLAGS = $(SDL_CFLAGS)
+sdl_opengl_sample_LDFLAGS = $(OPENGL_FRAMEWORK)
+sdl_opengl_sample_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 #smf_dump_SOURCES = smf_dump.cpp
 #smf_dump_CPPFLAGS = $(BOOST_CPPFLAGS)
@@ -190,7 +197,7 @@ all_gtests_SOURCES = \
 	voice_test.cpp
 all_gtests_CXXFLAGS =
 all_gtests_CPPFLAGS = -I$(GTEST_DIR)/include -I$(GMOCK_DIR)/include $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
-all_gtests_LDFLAGS =
+all_gtests_LDFLAGS = $(OPENGL_FRAMEWORK)
 all_gtests_LDADD = libpeg.a libsequencer.a libsdlapp.a liblogger.a $(GTEST_LIBS) $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 memory_allocator_test_SOURCES = \

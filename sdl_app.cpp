@@ -97,7 +97,7 @@ bool SDLApp::do_initialize(int argc, char *argv[])
     return false;
   }
 
-  window_ = SDL_CreateWindow(app_name_.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+  window_ = SDL_CreateWindow(app_name_.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL);
   if (window_ == NULL) {
     SDL_ERROR(SDL_CreateWindow);
     return false;
@@ -108,11 +108,6 @@ bool SDLApp::do_initialize(int argc, char *argv[])
     return false;
   }
 
-  font_ = new Font(renderer_);
-  if (!load_font_file("data/font5x5.png")) {
-    return false;
-  }
-
 #ifdef ENABLE_OPENGL
   glcontext_ = SDL_GL_CreateContext(window_);
   if (glcontext_ == NULL) {
@@ -120,6 +115,7 @@ bool SDLApp::do_initialize(int argc, char *argv[])
     return false;
   }
   SDL_GL_SetSwapInterval(0);
+  LOG_INFO("Created an OpenGL context.");
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -127,6 +123,7 @@ bool SDLApp::do_initialize(int argc, char *argv[])
   glDisable(GL_DEPTH_TEST);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
+  LOG_INFO("Initialized OpenGL.");
 #endif
 
 #ifdef SDLAPP_ENABLE_AUDIO
@@ -164,6 +161,11 @@ bool SDLApp::do_initialize(int argc, char *argv[])
   LOG_INFO("  padding: %u", audio_spec_.padding);
   LOG_INFO("  size: %u", audio_spec_.size);
 #endif // defined(SDLAPP_ENABLE_AUDIO)
+
+  font_ = new Font(renderer_);
+  if (!load_font_file("data/font5x5.png")) {
+    return false;
+  }
   
   initialize(argc, argv);
 

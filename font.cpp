@@ -63,7 +63,7 @@ void Font::draw_chr(const int x, const int y, const int chr)
   srcrect.y = 8 * ((c & 0xf0) >> 4);
   srcrect.w = 8;
   srcrect.h = 8;
-  static SDL_Rect dstrect;
+  SDL_Rect dstrect;
   dstrect.x = x;
   dstrect.y = y;
   dstrect.w = 8;
