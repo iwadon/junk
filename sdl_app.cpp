@@ -236,8 +236,8 @@ void SDLApp::do_draw()
   SDL_SetRenderDrawColor(renderer_, bg_color_[0], bg_color_[1], bg_color_[2], bg_color_[3]);
   SDL_RenderClear(renderer_);
   draw();
-  font_->draw_strf(8, 8, "%3dfps", fps_.latest_frames);
-  load_time_.draw(font_, 0, 80);
+  font_->draw_strf(WINDOW_WIDTH - 8 * 6, 0, "%3dfps", fps_.latest_frames);
+  load_time_.draw(font_, 0, 0);
   SDL_RenderPresent(renderer_);
 }
 
