@@ -207,10 +207,6 @@ namespace game
 
   bool App::initialize(int /*argc*/, char */*argv*/[])
   {
-    if (!load_font_file("data/font5x5.png")) {
-      return false;
-    }
-
     for (size_t i = 0; i < OBJ_NUM; ++i) {
       Object *obj = new DemoBox(renderer());
       obj->initialize();

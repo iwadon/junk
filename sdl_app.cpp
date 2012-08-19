@@ -109,6 +109,9 @@ bool SDLApp::do_initialize(int argc, char *argv[])
   }
 
   font_ = new Font(renderer_);
+  if (!load_font_file("data/font5x5.png")) {
+    return false;
+  }
 
 #ifdef ENABLE_OPENGL
   glcontext_ = SDL_GL_CreateContext(window_);

@@ -31,10 +31,6 @@ App::App()
 
 bool App::initialize(int argc, char *argv[])
 {
-  if (!load_font_file("data/font5x5.png")) {
-    return false;
-  }
-
   set_bg_color(0xffffffff);
 
   return true;

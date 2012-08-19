@@ -24,9 +24,6 @@ OscillatorSampleApp::OscillatorSampleApp()
 
 bool OscillatorSampleApp::initialize(int /*argc*/, char */*argv*/[])
 {
-  if (!load_font_file("data/font5x5.png")) {
-    return false;
-  }
   return true;
 }
 
