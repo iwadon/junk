@@ -48,5 +48,7 @@ Point2D &Point2D::rotate(const float rad, const Point2D &center)
   float c = cosf(rad);
   x = dx * c - dy * s;
   y = dx * s + dy * c;
+  x += center.x;
+  y += center.y;
   return *this;
 }
