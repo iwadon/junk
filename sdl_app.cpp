@@ -126,6 +126,7 @@ bool SDLApp::do_initialize(int argc, char *argv[])
   glLoadIdentity();
 #endif
 
+#ifdef SDLAPP_ENABLE_AUDIO
   SDL_AudioSpec spec;
   memset(&spec, 0, sizeof spec);
   spec.freq = 48000;
@@ -159,25 +160,35 @@ bool SDLApp::do_initialize(int argc, char *argv[])
   LOG_INFO("  samples: %u", audio_spec_.samples);
   LOG_INFO("  padding: %u", audio_spec_.padding);
   LOG_INFO("  size: %u", audio_spec_.size);
+#endif // defined(SDLAPP_ENABLE_AUDIO)
   
   initialize(argc, argv);
 
+#ifdef SDLAPP_ENABLE_AUDIO
   SDL_PauseAudio(0);
+#endif
+
   return true;
 }
 
 void SDLApp::do_finalize()
 {
+#ifdef SDLAPP_ENABLE_AUDIO
   SDL_PauseAudio(1);
+#endif
   finalize();
+#ifdef SDLAPP_ENABLE_AUDIO
   SDL_CloseAudio();
+#endif
 
   delete font_;
   font_ = NULL;
 
+#ifdef ENABLE_OPENGL
   SDL_GL_DeleteContext(glcontext_);
   glcontext_ = NULL;
   LOG_INFO("Deleted an OpenGL context.");
+#endif
   SDL_DestroyRenderer(renderer_);
   LOG_INFO("Destroy the rendering context.");
   renderer_ = NULL;
@@ -274,6 +285,7 @@ void SDLApp::draw_strf(int x, int y, const char *format, ...)
   va_end(args);
 }
 
+#ifdef SDLAPP_ENABLE_AUDIO
 /**
  * @param [in]    userdata 任意のデータへのポインタ。ここではSDLAppクラスへのポインタが渡されている。
  * @param [inout] stream   オーディオの出力データを格納するメモリの先頭アドレス。
@@ -284,3 +296,4 @@ void SDLApp::audio_callback(void *userdata, Uint8 *stream, int len)
   SDLApp *app = reinterpret_cast<SDLApp *>(userdata);
   app->mix_audio(stream, len);
 }
+#endif

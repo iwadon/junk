@@ -9,6 +9,8 @@
 #include "load_time.hpp"
 #include "sp.hpp"
 
+//#define SDLAPP_ENABLE_AUDIO
+
 struct SDL_Window;
 class Font;
 
@@ -27,7 +29,9 @@ protected:
   virtual void move() {}
   virtual void update() {}
   virtual void draw() {}
+#ifdef SDLAPP_ENABLE_AUDIO
   virtual void mix_audio(uint8_t */*buf*/, size_t /*len*/) {}
+#endif
   void set_bg_color(const uint32_t rgba);
   bool load_font_file(const SP &filename);
   void draw_chr(int x, int y, int chr);
@@ -45,7 +49,9 @@ private:
   FPS fps_;
   SDL_GLContext glcontext_;
   Controller controller_;
+#ifdef SDLAPP_ENABLE_AUDIO
   SDL_AudioSpec audio_spec_;
+#endif
   FrameWaitTimer frame_wait_timer_;
   SDL_Keymod prev_mod_;
   LoadTime load_time_;
@@ -56,7 +62,9 @@ private:
   void do_update();
   void do_draw();
   void set_fps();
+#ifdef SDLAPP_ENABLE_AUDIO
   static void audio_callback(void *userdata, Uint8 *stream, int len);
+#endif
 };
 
 #endif // !defined(SDL_APP_HPP_INCLUDED)
