@@ -40,6 +40,7 @@ void SDLOpenGLSampleApp::draw()
 
 void SDLOpenGLSampleApp::draw_polygon(const Point2D &center, float size, float rad, int poly)
 {
+#ifdef ENABLE_OPENGL
   Point2D points[poly];
   setup_points_polygon(points, center, size, rad, poly);
   glBegin(GL_LINE_LOOP);
@@ -47,10 +48,12 @@ void SDLOpenGLSampleApp::draw_polygon(const Point2D &center, float size, float r
     glVertex2f(points[i].x, points[i].y);
   }
   glEnd();
+#endif
 }
 
 void SDLOpenGLSampleApp::fill_polygon(const Point2D &center, float size, float rad, int poly)
 {
+#ifdef ENABLE_OPENGL
   Point2D points[poly];
   setup_points_polygon(points, center, size, rad, poly);
   glBegin(GL_TRIANGLE_FAN);
@@ -58,6 +61,7 @@ void SDLOpenGLSampleApp::fill_polygon(const Point2D &center, float size, float r
     glVertex2f(points[i].x, points[i].y);
   }
   glEnd();
+#endif
 }
 
 void SDLOpenGLSampleApp::setup_points_polygon(Point2D *points, const Point2D &center, float size, float rad, int poly)
