@@ -32,7 +32,6 @@ enum {
 SDLApp::SDLApp(const SP &app_name)
   : app_name_(app_name.c_str())
   , frame_wait_timer_(FPS, MAX_SKIP_FRAMES)
-  , prev_mod_(KMOD_NONE)
   , pad_(new HumanPad)
 {
   set_bg_color(0x00a000ff);
@@ -214,11 +213,10 @@ void SDLApp::do_input()
 	(event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE) ||
 	(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_q && (event.key.keysym.mod == KMOD_LGUI || event.key.keysym.mod == KMOD_RGUI))) {
       done_ = true;
-    } else {
-      set_fps();
     }
   }
   pad_->update();
+  set_fps();
   input();
 }
 
@@ -252,16 +250,13 @@ void SDLApp::set_bg_color(const uint32_t rgba)
 
 void SDLApp::set_fps()
 {
-  SDL_Keymod mod = SDL_GetModState();
-  SDL_Keymod on_mod = static_cast<SDL_Keymod>(mod & ~prev_mod_);
-  if (on_mod & KMOD_CTRL) {
+  if (pad_->button & PAD_BUTTON_FAST) {
     frame_wait_timer_.set_fps(FPS * 2);
-  } else if (mod & KMOD_SHIFT) {
+  } else if (pad_->button & PAD_BUTTON_SLOW) {
     frame_wait_timer_.set_fps(FPS / 10);
   } else {
     frame_wait_timer_.set_fps(FPS);
   }
-  prev_mod_ = mod;
 }
 
 bool SDLApp::load_font_file(const SP &filename)

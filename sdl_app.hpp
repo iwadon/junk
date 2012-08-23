@@ -54,7 +54,6 @@ private:
   SDL_AudioSpec audio_spec_;
 #endif
   FrameWaitTimer frame_wait_timer_;
-  SDL_Keymod prev_mod_;
   LoadTime load_time_;
   PadBase *pad_;
   bool do_initialize(int argc, char *argv[]);
