@@ -17,6 +17,7 @@ public:
   ~OscillatorSampleApp();
 protected:
   bool initialize(int argc, char *argv[]);
+  void input();
   void draw();
   void mix_audio(uint8_t *buf, size_t len);
 private:
@@ -24,6 +25,7 @@ private:
   uint8_t *mix_buf_;
   size_t mix_buf_len_;
   int wf_y_;
+  bool output_;
   void draw_wave_form(int x, int y, int w, int h);
 };
 
@@ -32,6 +34,7 @@ OscillatorSampleApp::OscillatorSampleApp()
   , mix_buf_(NULL)
   , mix_buf_len_(0)
   , wf_y_(0)
+  , output_(true)
 {
   os_.set_sample_rate(48000);
 }
@@ -46,10 +49,17 @@ bool OscillatorSampleApp::initialize(int /*argc*/, char */*argv*/[])
   return true;
 }
 
+void OscillatorSampleApp::input()
+{
+  if (controller().latest_data().key.on) {
+    output_ = !output_;
+  }
+}
+
 void OscillatorSampleApp::draw()
 {
-  draw_wave_form(0, 0, width(), height());
-  draw_strf(0, 0, "mix_buf_len_=%zu", mix_buf_len_);
+  //draw_wave_form(0, 0, width(), height());
+  //draw_strf(0, 0, "mix_buf_len_=%zu", mix_buf_len_);
 }
 
 void OscillatorSampleApp::mix_audio(uint8_t *buf, size_t len)
@@ -59,9 +69,11 @@ void OscillatorSampleApp::mix_audio(uint8_t *buf, size_t len)
     delete mix_buf_;
     mix_buf_ = reinterpret_cast<uint8_t *>(malloc(len));
   }
-  os_.set_volume(1.0f);
-  os_.read(mix_buf_, mix_buf_len_, 440);
-  SDL_MixAudio(buf, mix_buf_, len, SDL_MIX_MAXVOLUME);
+  if (output_) {
+    os_.set_volume(1.0f);
+    os_.read(mix_buf_, mix_buf_len_, 440);
+    SDL_MixAudio(buf, mix_buf_, len, SDL_MIX_MAXVOLUME);
+  }
 }
 
 void OscillatorSampleApp::draw_wave_form(int x, int y, int w, int h)
