@@ -22,6 +22,8 @@ public:
   int run(int argc, char *argv[]);
   Controller controller() const { return controller_; }
   SDL_Renderer *renderer() { return renderer_; }
+  int width() const;
+  int height() const;
 protected:
   virtual bool initialize(int /*argc*/, char */*argv*/[]) { return true; }
   virtual void finalize() {}

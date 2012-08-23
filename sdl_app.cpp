@@ -290,6 +290,16 @@ void SDLApp::draw_strf(int x, int y, const char *format, ...)
   va_end(args);
 }
 
+int SDLApp::width() const
+{
+  return WINDOW_WIDTH;
+}
+
+int SDLApp::height() const
+{
+  return WINDOW_HEIGHT;
+}
+
 #ifdef SDLAPP_ENABLE_AUDIO
 /**
  * @param [in]    userdata 任意のデータへのポインタ。ここではSDLAppクラスへのポインタが渡されている。
