@@ -237,7 +237,7 @@ void SDLApp::do_draw()
   SDL_RenderClear(renderer_);
   draw();
   font_->draw_strf(WINDOW_WIDTH - 8 * 6, 0, "%3dfps", fps_.latest_frames);
-  load_time_.draw(font_, 0, 0);
+  load_time_.draw(font_, 0, WINDOW_HEIGHT - 8 * 8);
   SDL_RenderPresent(renderer_);
 }
 
