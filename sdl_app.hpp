@@ -9,7 +9,7 @@
 #include "load_time.hpp"
 #include "sp.hpp"
 
-//#define SDLAPP_ENABLE_AUDIO
+#define SDLAPP_ENABLE_AUDIO
 
 struct SDL_Window;
 class Font;
@@ -30,7 +30,7 @@ protected:
   virtual void update() {}
   virtual void draw() {}
 #ifdef SDLAPP_ENABLE_AUDIO
-  virtual void mix_audio(uint8_t */*buf*/, size_t /*len*/) {}
+  virtual void mix_audio(uint8_t *buf, size_t len);
 #endif
   void set_bg_color(const uint32_t rgba);
   bool load_font_file(const SP &filename);

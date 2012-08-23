@@ -301,4 +301,16 @@ void SDLApp::audio_callback(void *userdata, Uint8 *stream, int len)
   SDLApp *app = reinterpret_cast<SDLApp *>(userdata);
   app->mix_audio(stream, len);
 }
+
+/**
+ * @brief オーディオのミックス
+ *
+ * @param [inout] buf オーディオバッファ。
+ * @param [in]    len オーディオバッファの長さ(バイト単位)。
+ */
+void SDLApp::mix_audio(uint8_t *buf, size_t len)
+{
+  // 無音で埋める
+  memset(buf, 0, len);
+}
 #endif
