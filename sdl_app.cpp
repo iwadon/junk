@@ -130,7 +130,7 @@ bool SDLApp::do_initialize(int argc, char *argv[])
   SDL_AudioSpec spec;
   memset(&spec, 0, sizeof spec);
   spec.freq = 48000;
-  spec.format = AUDIO_S16MSB;
+  spec.format = AUDIO_S16LSB;
   spec.channels = 1;
   spec.samples = 512;
   spec.callback = SDLApp::audio_callback;
@@ -299,6 +299,7 @@ void SDLApp::draw_strf(int x, int y, const char *format, ...)
 void SDLApp::audio_callback(void *userdata, Uint8 *stream, int len)
 {
   SDLApp *app = reinterpret_cast<SDLApp *>(userdata);
+  memset(stream, 0, len);
   app->mix_audio(stream, len);
 }
 
