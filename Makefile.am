@@ -30,7 +30,7 @@ boost_program_options_sample_LDADD = $(BOOST_PROGRAM_OPTIONS_LIB)
 c1_SOURCES = c1.cpp
 
 g1_SOURCES = g1.cpp
-g1_CPPFLAGS = $(SDL_CFLAGS)
+g1_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 g1_LDFLAGS = $(OPENGL_FRAMEWORK)
 g1_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
@@ -74,7 +74,7 @@ sdl_event_sample2_LDFLAGS = $(COCOA_FRAMEWORK)
 sdl_event_sample2_LDADD = $(SDL_LIBS)
 
 sdl_opengl_sample_SOURCES = sdl_opengl_sample.cc
-sdl_opengl_sample_CPPFLAGS = $(SDL_CFLAGS)
+sdl_opengl_sample_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 sdl_opengl_sample_LDFLAGS = $(OPENGL_FRAMEWORK)
 sdl_opengl_sample_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
@@ -101,6 +101,7 @@ libsdlapp_a_SOURCES = controller.cpp controller.hpp \
 		      font.cpp font.hpp \
 		      fps.cpp fps.hpp \
 		      load_time.cpp load_time.hpp \
+		      pad.cpp pad.hpp \
 		      point_2d.cpp point_2d.hpp \
 		      sdl_app.cpp sdl_app.hpp \
 		      sprite.cpp sprite.hpp \
@@ -177,6 +178,7 @@ all_gtests_SOURCES = \
 	oscillator_stream_test.cpp \
 	oscillator_test.cpp \
 	patch_test.cpp \
+	pad_test.cpp \
 	peg_test.cpp \
 	point_2d_test.cpp \
 	property_test.cpp \

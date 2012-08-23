@@ -3,10 +3,10 @@
 
 #include <string>
 #include <SDL.h>
-#include "controller.hpp"
 #include "fps.hpp"
 #include "frame_wait_timer.hpp"
 #include "load_time.hpp"
+#include "pad.hpp"
 #include "sp.hpp"
 
 #define SDLAPP_ENABLE_AUDIO
@@ -20,7 +20,7 @@ public:
   SDLApp(const SP &app_name);
   virtual ~SDLApp();
   int run(int argc, char *argv[]);
-  Controller controller() const { return controller_; }
+  PadBase *pad() { return pad_; }
   SDL_Renderer *renderer() { return renderer_; }
   int width() const;
   int height() const;
@@ -50,13 +50,13 @@ private:
   Font *font_;
   FPS fps_;
   SDL_GLContext glcontext_;
-  Controller controller_;
 #ifdef SDLAPP_ENABLE_AUDIO
   SDL_AudioSpec audio_spec_;
 #endif
   FrameWaitTimer frame_wait_timer_;
   SDL_Keymod prev_mod_;
   LoadTime load_time_;
+  PadBase *pad_;
   bool do_initialize(int argc, char *argv[]);
   void do_finalize();
   void do_input();

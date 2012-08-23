@@ -33,6 +33,7 @@ SDLApp::SDLApp(const SP &app_name)
   : app_name_(app_name.c_str())
   , frame_wait_timer_(FPS, MAX_SKIP_FRAMES)
   , prev_mod_(KMOD_NONE)
+  , pad_(new HumanPad)
 {
   set_bg_color(0x00a000ff);
   load_time_.set_color(LOAD_TIME_INPUT, 0xff, 0x00, 0x00, 0xc0);
@@ -215,9 +216,9 @@ void SDLApp::do_input()
       done_ = true;
     } else {
       set_fps();
-      controller_.update(event);
     }
   }
+  pad_->update();
   input();
 }
 

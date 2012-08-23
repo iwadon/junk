@@ -51,15 +51,15 @@ bool OscillatorSampleApp::initialize(int /*argc*/, char */*argv*/[])
 
 void OscillatorSampleApp::input()
 {
-  if (controller().latest_data().key.on) {
+  if (pad()->button_on) {
     output_ = !output_;
   }
 }
 
 void OscillatorSampleApp::draw()
 {
-  //draw_wave_form(0, 0, width(), height());
-  //draw_strf(0, 0, "mix_buf_len_=%zu", mix_buf_len_);
+  draw_wave_form(0, 0, width(), height());
+  draw_strf(0, 0, "mix_buf_len_=%zu", mix_buf_len_);
 }
 
 void OscillatorSampleApp::mix_audio(uint8_t *buf, size_t len)

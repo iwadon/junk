@@ -161,19 +161,18 @@ namespace game
 
   void MyShip::input(SDLApp &app)
   {
-    const Controller::Data &data = app.controller().latest_data();
     acc_.x = 0;
     acc_.y = 0;
-    if (data.key.status & 0x01) {
+    if (app.pad()->button & PAD_BUTTON_U) {
       acc_.y = -0.1;
     }
-    if (data.key.status & 0x02) {
+    if (app.pad()->button & PAD_BUTTON_D) {
       acc_.y = 0.1;
     }
-    if (data.key.status & 0x04) {
+    if (app.pad()->button & PAD_BUTTON_L) {
       acc_.x = -0.1;
     }
-    if (data.key.status & 0x08) {
+    if (app.pad()->button & PAD_BUTTON_R) {
       acc_.x = 0.1;
     }
   }
