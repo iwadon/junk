@@ -4,6 +4,12 @@
 #include "oscillator_stream.hpp"
 #include "sdl_app.hpp"
 
+struct SDLAudioAutoLocker
+{
+  SDLAudioAutoLocker() { SDL_LockAudio(); }
+  ~SDLAudioAutoLocker() { SDL_UnlockAudio(); }
+};
+
 class OscillatorSampleApp : public SDLApp
 {
 public:
@@ -17,15 +23,15 @@ private:
   OscillatorStream os_;
   uint8_t *mix_buf_;
   size_t mix_buf_len_;
-  int y_;
-  void draw_wave_form();
+  int wf_y_;
+  void draw_wave_form(int x, int y, int w, int h);
 };
 
 OscillatorSampleApp::OscillatorSampleApp()
   : SDLApp("oscillator_sample")
   , mix_buf_(NULL)
   , mix_buf_len_(0)
-  , y_(height() / 2)
+  , wf_y_(0)
 {
   os_.set_sample_rate(48000);
 }
@@ -42,9 +48,7 @@ bool OscillatorSampleApp::initialize(int /*argc*/, char */*argv*/[])
 
 void OscillatorSampleApp::draw()
 {
-  SDL_LockAudio();
-  draw_wave_form();
-  SDL_UnlockAudio();
+  draw_wave_form(0, 0, width(), height());
   draw_strf(0, 0, "mix_buf_len_=%zu", mix_buf_len_);
 }
 
@@ -60,19 +64,21 @@ void OscillatorSampleApp::mix_audio(uint8_t *buf, size_t len)
   SDL_MixAudio(buf, mix_buf_, len, SDL_MIX_MAXVOLUME);
 }
 
-void OscillatorSampleApp::draw_wave_form()
+void OscillatorSampleApp::draw_wave_form(int x, int y, int w, int h)
 {
-  if (mix_buf_ != NULL) {
-    int16_t *buf = reinterpret_cast<int16_t *>(mix_buf_);
-    int x_ = 0;
-    int y_ = (height() / 2) + buf[0] * (height() / 2) / 32768;
-    SDL_SetRenderDrawColor(renderer(), 255, 255, 255, 255);
-    for (int x = 1; x < width(); ++x) {
-      int y = (height() / 2) + buf[x * (mix_buf_len_ / 2) / width()] * (height() / 2) / 32768;
-      SDL_RenderDrawLine(renderer(), x_, y_, x, y);
-      x_ = x;
-      y_ = y;
-    }
+  SDLAudioAutoLocker lock;
+  if (mix_buf_ == NULL) {
+    return;
+  }
+  const int16_t *buf = reinterpret_cast<const int16_t *>(mix_buf_);
+  int x1 = 0;
+  wf_y_ = (h / 2) + buf[0] * (h / 2) / 32768;
+  SDL_SetRenderDrawColor(renderer(), 255, 255, 255, 255);
+  for (int x2 = 1; x2 < w; ++x2) {
+    int y2 = (h / 2) + buf[x2 * (mix_buf_len_ / 2) / w] * (h / 2) / 32768;
+    SDL_RenderDrawLine(renderer(), x + x1, y + wf_y_, x + x2, y + y2);
+    x1 = x2;
+    wf_y_ = y2;
   }
 }
 
