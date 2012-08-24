@@ -17,7 +17,9 @@ noinst_PROGRAMS = benchmark_sample \
 	sdl_opengl_sample \
 	smf_play \
 	udp_sample \
-	vector_length_benchmark
+	vector_length_benchmark \
+	wx_sample \
+	wx_sample.app
 
 benchmark_sample_SOURCES = benchmark_sample.cpp
 benchmark_sample_CPPFLAGS = $(BOOST_CPPFLAGS)
@@ -87,6 +89,23 @@ smf_play_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 smf_play_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 udp_sample_SOURCES = udp_sample.c
+
+.PHONY: wx_sample.app
+wx_sample.app: wx_sample wx_sample.icns $(srcdir)/wx_sample.PkgInfo $(srcdir)/wx_sample.Info.plist
+	mkdir -p "$@/Contents/MacOS"
+	mkdir -p "$@/Contents/Resources"
+	cp -p wx_sample "$@/Contents/MacOS/"
+	cp -p wx_sample.icns "$@/Contents/Resources/"
+	cp -p $(srcdir)/wx_sample.PkgInfo "$@/Contents/PkgInfo"
+	cp -p $(srcdir)/wx_sample.Info.plist "$@/Contents/Info.plist"
+
+wx_sample.icns: $(wildcard $(srcdir)/wx_sample.iconset/*.png)
+	iconutil -c icns --output $@ $(srcdir)/wx_sample.iconset
+
+wx_sample_SOURCES = wx_sample.cc
+wx_sample_CXXFLAGS = $(WX_CXXFLAGS)
+wx_sample_CPPFLAGS = $(WX_CPPFLAGS)
+wx_sample_LDADD = $(WX_LIBS)
 
 noinst_LIBRARIES = liblogger.a libpeg.a libsdlapp.a libsequencer.a libtest_main.a libgtest.a
 

@@ -55,6 +55,24 @@ AX_BOOST_PROGRAM_OPTIONS
 AX_BOOST_SYSTEM
 AC_CHECK_LIB([pcap], [pcap_lookupdev])
 
+WX_CONFIG_OPTIONS
+WX_CONFIG_CHECK([2.6.0], [wxWin=1])
+if test "$wxWin" != 1; then
+  AC_MSG_ERROR([
+    wxWidgets must be installed on your system
+    but wx-config script couldn't be found.
+
+    Please check that wx-config is in path, the directory
+    where wxWidgets libraries are installed (returned by
+    'wx-config --libs' command) is in LD_LIBRARY_PATH or
+    equivalent variable and wxWidgets version is 2.3.4 or above.
+  ])
+fi
+#CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
+#CXXFLAGS="$CXXFLAGS $WX_CPPFLAGS"
+#CFLAGS="$CFLAGS $WX_CFLAGS"
+#LIBS="$LIBS $WX_LIBS"
+
 case "$SYSTEMNAME" in
   Darwin)
     COCOA_FRAMEWORK="-framework Cocoa"
