@@ -50,6 +50,7 @@ oscillator_sample_LDFLAGS = $(OPENGL_FRAMEWORK)
 oscillator_sample_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 pcap_sample_SOURCES = pcap_sample.cpp
+pcap_sample_LDADD = $(PCAP_LIBS)
 
 peg_sample_SOURCES = peg_sample.cpp
 peg_sample_CPPFLAGS = $(GTEST_CPPFLAGS) $(BOOST_CPPFLAGS)
@@ -71,7 +72,6 @@ sdl_event_sample_CPPFLAGS = $(SDL_CFLAGS)
 sdl_event_sample_LDADD = liblogger.a $(SDL_LIBS)
 
 sdl_event_sample2_SOURCES = sdl_event_sample2.m
-#sdl_event_sample2_OBJCFLAGS = $(COCOA_FRAMEWORK)
 sdl_event_sample2_CPPFLAGS = $(SDL_CFLAGS)
 sdl_event_sample2_LDFLAGS = $(COCOA_FRAMEWORK)
 sdl_event_sample2_LDADD = $(SDL_LIBS)
@@ -91,7 +91,9 @@ smf_play_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYST
 
 udp_sample_SOURCES = udp_sample.c
 
-wx_sample.app.time: wx_sample.app/Contents/MacOS wx_sample.app/Contents/Resources wx_sample.app/Contents/MacOS/wx_sample wx_sample.app/Contents/Resources/wx_sample.icns wx_sample.app/Contents/PkgInfo $(srcdir)/wx_sample.Info.plist
+wx_sample.app.time: wx_sample.app/Contents/MacOS wx_sample.app/Contents/Resources \
+		    wx_sample.app/Contents/MacOS/wx_sample wx_sample.app/Contents/Resources/wx_sample.icns \
+		    wx_sample.app/Contents/PkgInfo $(srcdir)/wx_sample.Info.plist
 	touch wx_sample.app.time
 wx_sample.app/Contents/MacOS:
 	mkdir -p $@
@@ -105,7 +107,6 @@ wx_sample.app/Contents/PkgInfo: $(srcdir)/wx_sample.PkgInfo
 	cp -p $< $@
 wx_sample.app/Contents/Info.plist: $(srcdir)/wx_sample.Info.plist
 	cp -p $< $@
-
 wx_sample.icns: $(wildcard $(srcdir)/wx_sample.iconset/*.png)
 	iconutil -c icns --output $@ $(srcdir)/wx_sample.iconset
 
@@ -294,9 +295,6 @@ lcov:
 
 all-local:
 	test -d $(builddir)/data || ln -s $(top_srcdir)/data $(builddir)/
-
-clean-local:
-	rm -rf wx_sample.app
 
 distclean-local:
 	test ! -L $(builddir)/data || rm $(builddir)/data

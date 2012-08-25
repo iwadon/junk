@@ -46,6 +46,7 @@ AC_PATH_PROG([RUBY],[ruby])
 AC_PATH_PROG([NASM],[nasm])
 
 AC_CHECK_PROGS(DOXYGEN, [doxygen])
+AC_CHECK_PROGS(PCAP_CONFIG, [pcap-config])
 
 # Checks for libraries.
 AM_PATH_SDL2(2.0.0)
@@ -53,7 +54,13 @@ SDL_LIBS="$SDL_LIBS -lSDL2_image"
 AX_BOOST_BASE
 AX_BOOST_PROGRAM_OPTIONS
 AX_BOOST_SYSTEM
-AC_CHECK_LIB([pcap], [pcap_lookupdev])
+#AC_CHECK_LIB([pcap], [pcap_lookupdev])
+if test x$PCAP_CONFIG != x; then
+    PCAP_LIBS=`$PCAP_CONFIG --libs`
+else
+    PCAP_LIBS=-lpcap
+fi
+AC_SUBST(PCAP_LIBS)
 
 WX_CONFIG_OPTIONS
 WX_CONFIG_CHECK([2.6.0], [wxWin=1])
@@ -106,7 +113,7 @@ AC_CXX_HEADER_STDCXX_98
 AC_FUNC_MEMCMP
 AC_CHECK_FUNCS([memset socket])
 
-AC_CONFIG_FILES([Doxyfile Makefile])
+AC_CONFIG_FILES([Doxyfile Makefile build.ninja.yaml.erb])
 AC_CONFIG_FILES([net_test.sh], [chmod +x net_test.sh])
 AC_CONFIG_FILES([peg_test.sh], [chmod +x peg_test.sh])
 AC_OUTPUT
