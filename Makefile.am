@@ -19,7 +19,8 @@ noinst_PROGRAMS = benchmark_sample \
 	udp_sample \
 	vector_length_benchmark \
 	wx_sample \
-	wx_sample.app
+	wx_sample.icns \
+	wx_sample.app.time
 
 benchmark_sample_SOURCES = benchmark_sample.cpp
 benchmark_sample_CPPFLAGS = $(BOOST_CPPFLAGS)
@@ -90,14 +91,20 @@ smf_play_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYST
 
 udp_sample_SOURCES = udp_sample.c
 
-.PHONY: wx_sample.app
-wx_sample.app: wx_sample wx_sample.icns $(srcdir)/wx_sample.PkgInfo $(srcdir)/wx_sample.Info.plist
-	mkdir -p "$@/Contents/MacOS"
-	mkdir -p "$@/Contents/Resources"
-	cp -p wx_sample "$@/Contents/MacOS/"
-	cp -p wx_sample.icns "$@/Contents/Resources/"
-	cp -p $(srcdir)/wx_sample.PkgInfo "$@/Contents/PkgInfo"
-	cp -p $(srcdir)/wx_sample.Info.plist "$@/Contents/Info.plist"
+wx_sample.app.time: wx_sample.app/Contents/MacOS wx_sample.app/Contents/Resources wx_sample.app/Contents/MacOS/wx_sample wx_sample.app/Contents/Resources/wx_sample.icns wx_sample.app/Contents/PkgInfo $(srcdir)/wx_sample.Info.plist
+	touch wx_sample.app.time
+wx_sample.app/Contents/MacOS:
+	mkdir -p $@
+wx_sample.app/Contents/Resources:
+	mkdir -p $@
+wx_sample.app/Contents/MacOS/wx_sample: wx_sample
+	cp -p $< $@
+wx_sample.app/Contents/Resources/wx_sample.icns: wx_sample.icns
+	cp -p $< $@
+wx_sample.app/Contents/PkgInfo: $(srcdir)/wx_sample.PkgInfo
+	cp -p $< $@
+wx_sample.app/Contents/Info.plist: $(srcdir)/wx_sample.Info.plist
+	cp -p $< $@
 
 wx_sample.icns: $(wildcard $(srcdir)/wx_sample.iconset/*.png)
 	iconutil -c icns --output $@ $(srcdir)/wx_sample.iconset
@@ -287,6 +294,9 @@ lcov:
 
 all-local:
 	test -d $(builddir)/data || ln -s $(top_srcdir)/data $(builddir)/
+
+clean-local:
+	rm -rf wx_sample.app
 
 distclean-local:
 	test ! -L $(builddir)/data || rm $(builddir)/data
