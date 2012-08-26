@@ -29,7 +29,6 @@ var:
   opengl_framework: @OPENGL_FRAMEWORK@
   pcap_libs: @PCAP_LIBS@
   iconutil: iconutil
-  touch: touch
   cp: cp
   shell: @SHELL@
   ln_s: @LN_S@
@@ -55,9 +54,6 @@ rule:
   icns:
     description: ICNS $out
     command: $iconutil -c icns --output $out $iconsetdir
-  touch:
-    description: TOUCH $out
-    command: $touch $out
   cp:
     description: CP $out
     command: $cp -p $in $out
@@ -157,6 +153,12 @@ program:
     cppflags: $sdl_cflags $boost_cppflags $cppflags
     ldflags: $opengl_framework $ldflags
     libs: $sdl_libs $boost_system_lib $libs
+  SoundClient.app/Contents/MacOS/sound_client:
+    src:
+      - $srcdir/sound_client.cc
+    cxxflags: $wx_cxxflags $cxxflags
+    cppflags: $wx_cppflags $cppflags
+    libs: $wx_libs $libs
   smf_play:
     src:
       - $srcdir/smf_play.cpp
@@ -165,6 +167,9 @@ program:
       - $builddir/libsequencer.a
     cppflags: $sdl_cflags $boost_cppflags $cppflags
     libs: $sdl_libs $boost_system_lib $libs
+  sound_server:
+    src:
+      - $srcdir/sound_server.cc
   udp_sample:
     src:
       - $srcdir/udp_sample.c
@@ -298,13 +303,21 @@ misc:
     rule: ln_s
     src:
       - $srcdir/data
-  wx_sample.app.time:
-    rule: touch
+  SoundClient.app/Coutents/Resources/sound_client.icns:
+    rule: icns
     implicit:
-      - wx_sample.app/Contents/MacOS/wx_sample
-      - wx_sample.app/Contents/Resources/wx_sample.icns
-      - wx_sample.app/Contents/PkgInfo
-      - wx_sample.app/Contents/Info.plist
+<% Dir.glob("@srcdir@/wx_sample.iconset/*.png").each do |file| %>
+      - <%= file %>
+<% end %>
+    iconsetdir: $srcdir/wx_sample.iconset
+  SoundClient.app/Contents/PkgInfo:
+    rule: cp
+    src:
+      - $srcdir/wx_sample.PkgInfo
+  SoundClient.app/Contents/Info.plist:
+    rule: cp
+    src:
+      - $srcdir/sound_client.Info.plist
   wx_sample.app/Contents/Resources/wx_sample.icns:
     rule: icns
     implicit:
