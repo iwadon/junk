@@ -6,6 +6,7 @@ noinst_PROGRAMS = benchmark_sample \
 	g1 \
 	line_segment_2d_benchmark \
 	map_benchmark \
+	observer_benchmark \
 	oscillator_sample \
 	pcap_sample \
 	peg_sample \
@@ -43,6 +44,9 @@ line_segment_2d_benchmark_LDADD = libsdlapp.a $(SDL_LIBS)
 
 map_benchmark_SOURCES = map_benchmark.cpp
 map_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
+
+observer_benchmark_SOURCES = observer_benchmark.cpp
+observer_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
 
 oscillator_sample_SOURCES = oscillator_sample.cpp
 oscillator_sample_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
