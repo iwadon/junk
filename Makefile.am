@@ -32,7 +32,7 @@ c1_SOURCES = c1.cpp
 
 g1_SOURCES = g1.cpp
 g1_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
-g1_LDFLAGS = $(OPENGL_FRAMEWORK)
+g1_LDFLAGS = $(OPENGL_FRAMEWORK) $(BOOST_LDFLAGS)
 g1_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 line_segment_2d_benchmark_SOURCES = line_segment_2d_benchmark.cpp
@@ -47,7 +47,7 @@ observer_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
 
 oscillator_sample_SOURCES = oscillator_sample.cpp
 oscillator_sample_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
-oscillator_sample_LDFLAGS = $(OPENGL_FRAMEWORK)
+oscillator_sample_LDFLAGS = $(OPENGL_FRAMEWORK) $(BOOST_LDFLAGS)
 oscillator_sample_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 pcap_sample_SOURCES = pcap_sample.cpp
@@ -65,7 +65,7 @@ s1_SOURCES = s1.cpp
 
 s2_SOURCES = s2.cpp
 s2_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
-s2_LDFLAGS = $(OPENGL_FRAMEWORK)
+s2_LDFLAGS = $(OPENGL_FRAMEWORK) $(BOOST_LDFLAGS)
 s2_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 sdl_event_sample_SOURCES = sdl_event_sample.c
@@ -79,7 +79,7 @@ sdl_event_sample2_LDADD = $(SDL_LIBS)
 
 sdl_opengl_sample_SOURCES = sdl_opengl_sample.cc
 sdl_opengl_sample_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
-sdl_opengl_sample_LDFLAGS = $(OPENGL_FRAMEWORK)
+sdl_opengl_sample_LDFLAGS = $(OPENGL_FRAMEWORK) $(BOOST_LDFLAGS)
 sdl_opengl_sample_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 #smf_dump_SOURCES = smf_dump.cpp
@@ -88,6 +88,7 @@ sdl_opengl_sample_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB
 
 smf_play_SOURCES = smf_play.cpp
 smf_play_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
+smf_play_LDFLAGS = $(BOOST_LDFLAGS)
 smf_play_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 udp_sample_SOURCES = udp_sample.c
@@ -203,7 +204,7 @@ all_gtests_SOURCES = \
 	voice_test.cpp
 all_gtests_CXXFLAGS =
 all_gtests_CPPFLAGS = -I$(GTEST_DIR)/include -I$(GMOCK_DIR)/include $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
-all_gtests_LDFLAGS = $(OPENGL_FRAMEWORK)
+all_gtests_LDFLAGS = $(OPENGL_FRAMEWORK) $(BOOST_LDFLAGS)
 all_gtests_LDADD = libpeg.a libsequencer.a libsdlapp.a liblogger.a $(GTEST_LIBS) $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 memory_allocator_test_SOURCES = \
