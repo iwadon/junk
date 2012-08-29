@@ -31,6 +31,8 @@ var:
   cp: cp
   shell: @SHELL@
   ln_s: @LN_S@
+  nasm: nasm
+  nasmflags: 
 rule:
   cc:
     description: CC $out
@@ -62,6 +64,9 @@ rule:
   ln_s:
     description: LN_S $out
     command: $ln_s $in $out
+  nasm:
+    description: NASM $out
+    command: $nasm $nasmflags -o $out $in
 program:
   benchmark_sample:
     src:
@@ -219,6 +224,7 @@ program:
       - $srcdir/smf_test.cpp
       - $srcdir/smf_track_test.cpp
       - $srcdir/song_test.cpp
+      - $srcdir/sound_test.cpp
       - $srcdir/sprite_test.cpp
       - $srcdir/texture_pool_test.cpp
       - $srcdir/texture_test.cpp
@@ -321,6 +327,10 @@ misc:
     rule: cp
     src:
       - $srcdir/sound_client.Info.plist
+  data/sound_data_sample.bin:
+    rule: nasm
+    src:
+      - data/sound_data_sample.s
   wx_sample.app/Contents/Resources/wx_sample.icns:
     rule: icns
     implicit:

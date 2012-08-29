@@ -117,41 +117,53 @@ void Sound::MixAudio(void *buf, int len)
 {
 }
 
-static const char HEADER_ID[4] = {'S', 'N', 'D', 0};
+static const char SND_ID[4] = {'S', 'N', 'D', 0};
+
+struct SND_V0_HEADER
+{
+  char format_id[4];
+  uint32_t format_version;
+  uint32_t file_size;
+  uint32_t file_id;
+  uint32_t offsets[1];
+};
+
+struct SND_V0_MATERIALS
+{
+  uint32_t num;
+  uint32_t offsets[0];
+};
 
 static bool ReadFile(void *&buf, size_t &size, const SP &filename)
 {
-  void *p;
-  size_t len;
   SDL_RWops *f = SDL_RWFromFile(filename.c_str(), "rb");
   if (f == NULL) {
     SDL_ERROR(SDL_RWFromFile);
-    goto error;
+    return false;
   }
-  len = SDL_RWseek(f, 0, RW_SEEK_END);
+
+  size_t len = SDL_RWseek(f, 0, RW_SEEK_END);
   SDL_RWseek(f, 0, RW_SEEK_SET);
-  p = SDL_malloc(len);
+
+  void *p = SDL_malloc(len);
   if (p == NULL) {
     SDL_ERROR(SDL_malloc);
-    goto error;
+    SDL_RWclose(f);
+    return false;
   }
+
   if (SDL_RWread(f, p, len, 1) != 1) {
     SDL_ERROR(SDL_RWread);
-    goto error;
+    SDL_free(p);
+    SDL_RWclose(f);
+    return false;
   }
-  if (SDL_RWclose(f) == -1) {
-    SDL_ERROR(SDL_RWclose);
-  }
+
+  SDL_RWclose(f);
+
   buf = p;
   size = size;
   return true;
- error:
-  if (f != NULL) {
-    if (SDL_RWclose(f) == -1) {
-      SDL_ERROR(SDL_RWclose);
-    }
-  }
-  return false;
 }
 
 bool Sound::LoadSndFile(const SP &filename)
@@ -161,11 +173,22 @@ bool Sound::LoadSndFile(const SP &filename)
   if (!ReadFile(buf, size, filename)) {
     return false;
   }
+
   const char *p = reinterpret_cast<const char *>(buf);
-  if (memcmp(p, HEADER_ID, sizeof HEADER_ID) != 0) {
-    LOG_ERROR("SNDファイルではありません: %s", filename.c_str());
+  if (memcmp(p, SND_ID, sizeof SND_ID) != 0) {
+    LOG_ERROR("not SND format: %s", filename.c_str());
     return false;
   }
+
+  const SND_V0_HEADER *header = reinterpret_cast<SND_V0_HEADER *>(buf);
+  LOG_INFO("Loaded SND file: %s", filename.c_str());
+  LOG_INFO("  Format Version: %u", header->format_version);
+  LOG_INFO("  File Size: %u", header->file_size);
+  LOG_INFO("  File ID: 0x%08x", header->file_id);
+  LOG_INFO("  Materials:");
+  const SND_V0_MATERIALS *materials = reinterpret_cast<const SND_V0_MATERIALS *>(reinterpret_cast<const char *>(buf) + header->offsets[0]);
+  LOG_INFO("    Num: %u", materials->num);
+
   SDL_free(buf);
   return true;
 }
