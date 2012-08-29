@@ -1,12 +1,45 @@
 #ifndef SOUND_HPP_INCLUDED
 #define SOUND_HPP_INCLUDED 1
 
+#include <SDL.h>
 #include "sp.hpp"
 
 class Sound
 {
 public:
-  bool load_file(const SP &filename);
+  typedef int32_t Handle;
+  static const Handle INVALID_HANDLE = -1;
+
+  static const int RESULT_OK = 0;
+  static const int RESULT_ERROR = -1;
+
+  Sound();
+  ~Sound();
+  int Initialize();
+  void Finalize();
+  void Update();
+
+  void StartAudio();
+  void StopAudio();
+
+  int StartServer();
+  int StopServer();
+
+  bool LoadSndFile(const SP &filename);
+
+  int Play(int label);
+
+protected:
+  static void AudioCallback(void *userdata, uint8_t *stream, int len);
+  void MixAudio(void *buf, int len);
+
+private:
+  SDL_AudioSpec audio_spec_;
+
+  bool InitializeAudio();
+  void FinalizeAudio();
+  void LogAudioDrivers();
+  void LogAudioSpec();
 };
 
 #endif // !defined(SOUND_HPP_INCLUDED)

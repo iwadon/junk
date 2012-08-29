@@ -194,6 +194,7 @@ all_gtests_SOURCES = \
 	smf_test.cpp \
 	smf_track_test.cpp \
 	song_test.cpp \
+	sound_test.cpp \
 	sprite_test.cpp \
 	texture_pool_test.cpp \
 	texture_test.cpp \

@@ -22,9 +22,8 @@ var:
   gtest_cppflags: -I$gtestdir/include
   sdl_cflags: @SDL_CFLAGS@
   sdl_libs: @SDL_LIBS@
-  wx_cxxflags: @WX_CXXFLAGS@
-  wx_cppflags: @WX_CPPFLAGS@
-  wx_libs: @WX_LIBS@
+  wx_cppflags: <%= wx_cppflags %>
+  wx_libs: <%= wx_libs %>
   cocoa_framework: @COCOA_FRAMEWORK@
   opengl_framework: @OPENGL_FRAMEWORK@
   pcap_libs: @PCAP_LIBS@
@@ -156,7 +155,6 @@ program:
   SoundClient.app/Contents/MacOS/sound_client:
     src:
       - $srcdir/sound_client.cc
-    cxxflags: $wx_cxxflags $cxxflags
     cppflags: $wx_cppflags $cppflags
     libs: $wx_libs $libs
   smf_play:
@@ -170,13 +168,17 @@ program:
   sound_server:
     src:
       - $srcdir/sound_server.cc
+      - $builddir/liblogger.a
+      - $builddir/libsdlapp.a
+      - $builddir/libsequencer.a
+    cppflags: $sdl_cflags $boost_cppflags $cppflags
+    libs: $sdl_libs $libs
   udp_sample:
     src:
       - $srcdir/udp_sample.c
   wx_sample.app/Contents/MacOS/wx_sample:
     src:
       - $srcdir/wx_sample.cc
-    cxxflags: $wx_cxxflags $cxxflags
     cppflags: $wx_cppflags $cppflags
     libs: $wx_libs $libs
   vector_length_benchmark:
@@ -288,6 +290,7 @@ library:
       - $srcdir/sampler.cpp
       - $srcdir/sine_wave_oscillator.cpp
       - $srcdir/song.cpp
+      - $srcdir/sound.cpp
       - $srcdir/triangle_wave_oscillator.cpp
       - $srcdir/smf.cpp
       - $srcdir/smf_track.cpp

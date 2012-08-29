@@ -284,6 +284,11 @@ if __FILE__ == $0
         options.boost_libs += " -lboost_#{lib}"
       end
     end
+
+    def check_wx
+      options.wx_cppflags = `wx-config --cppflags`
+      options.wx_libs = `wx-config --libs`
+    end
   end
 
   NinjaFileBuilder.build do
@@ -343,6 +348,9 @@ if __FILE__ == $0
     add_option '--with-sdl2[=LIBS]', 'compile with SDL 2' do |v|
       libs = (v || '').split(/,/)
       check_sdl2 *libs
+    end
+    add_option '--with-wx', 'compile with wxWidgets' do
+      check_wx
     end
     parse_args
     save_ninja_file
