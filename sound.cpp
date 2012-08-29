@@ -109,6 +109,7 @@ void Sound::LogAudioSpec()
 void Sound::AudioCallback(void *userdata, uint8_t *stream, int len)
 {
   Sound *sound = reinterpret_cast<Sound *>(userdata);
+  memset(stream, 0, len);
   sound->MixAudio(stream, len);
 }
 
