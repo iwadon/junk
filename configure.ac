@@ -10,8 +10,8 @@ AM_INIT_AUTOMAKE
 
 SYSTEMNAME=`uname -s`
 
-AC_ARG_ENABLE([opengl], [AS_HELP_STRING([--enable-opengl], [use OpenGL (default is no)])], [use_opengl=$withval], [use_opengl=no])
-if test "x$use_opengl" != xno; then
+AC_ARG_ENABLE([opengl], [AS_HELP_STRING([--enable-opengl], [Enable OpenGL feature @<:@default=no@:>@])], [enable_opengl=$enableval], [enable_opengl=no])
+if test "x$enable_opengl" != xno; then
   AC_DEFINE([ENABLE_OPENGL], [1], [Define 1 to you use OpenGL])
   case "$SYSTEMNAME" in
     Darwin)
