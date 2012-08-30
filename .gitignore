@@ -1,3 +1,5 @@
+*.a
+*.o
 *~
 .DS_Store
 .deps
@@ -35,6 +37,7 @@ map_benchmark
 memory_allocator_test
 missing
 net_test.sh
+observer_benchmark
 oscillator_sample
 pcap_sample
 peg_sample
