@@ -1,17 +1,22 @@
-header:
-	db	"SND",0		; Format ID
+%macro	wav	4
+	db	0		; Type
+	db	%1		; Category
+	db	%2		; File ID
+	db	%3		; Group ID
+	incbin	%4		; WAV Filename
+	align	4		; (alignment)
+%endmacro
+
+;;; Header
+	db	"SND",0		; Format Signature
 	dd	0		; Format Version
-	dd	file_end	; File Size
+	dd	data_end	; File Size
 	dd	0		; File ID
+;;; Labels
+	dd	1		; Number of Labels
+	dd	SE_SIN440_00
 
-toc:
-	dd	materials	; Materials
+SE_SIN440_00:
+	wav	12,34,56,"data/sin440.wav"
 
-materials:
-	dd	1		; Number of Materials
-	dd	material_0
-
-material_0:
-	incbin	"data/sin440.wav"
-
-file_end:
+data_end:

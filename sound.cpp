@@ -119,19 +119,29 @@ void Sound::MixAudio(void *buf, int len)
 
 static const char SND_ID[4] = {'S', 'N', 'D', 0};
 
-struct SND_V0_HEADER
+struct SND_V0_BASE
 {
-  char format_id[4];
+  // Header
+  char format_signature[4];
   uint32_t format_version;
   uint32_t file_size;
   uint32_t file_id;
-  uint32_t offsets[1];
+  // Labels
+  uint32_t num_labels;
+  uint32_t label_offsets[0];
 };
 
-struct SND_V0_MATERIALS
+struct SND_V0_LABEL_BASE
 {
-  uint32_t num;
-  uint32_t offsets[0];
+  uint8_t type;
+  uint8_t category;
+  uint8_t file_id;
+  uint8_t group_id;
+};
+
+struct SND_V0_LABEL_WAV : public SND_V0_LABEL_BASE
+{
+  uint8_t data[0];
 };
 
 static bool ReadFile(void *&buf, size_t &size, const SP &filename)
@@ -180,14 +190,19 @@ bool Sound::LoadSndFile(const SP &filename)
     return false;
   }
 
-  const SND_V0_HEADER *header = reinterpret_cast<SND_V0_HEADER *>(buf);
+  const SND_V0_BASE *base = reinterpret_cast<SND_V0_BASE *>(buf);
   LOG_INFO("Loaded SND file: %s", filename.c_str());
-  LOG_INFO("  Format Version: %u", header->format_version);
-  LOG_INFO("  File Size: %u", header->file_size);
-  LOG_INFO("  File ID: 0x%08x", header->file_id);
-  LOG_INFO("  Materials:");
-  const SND_V0_MATERIALS *materials = reinterpret_cast<const SND_V0_MATERIALS *>(reinterpret_cast<const char *>(buf) + header->offsets[0]);
-  LOG_INFO("    Num: %u", materials->num);
+  LOG_INFO("  Format Version: %u", base->format_version);
+  LOG_INFO("  File Size: %u", base->file_size);
+  LOG_INFO("  File ID: 0x%08x", base->file_id);
+  for (uint32_t i = 0; i < base->num_labels; ++i) {
+    const SND_V0_LABEL_BASE *label = reinterpret_cast<const SND_V0_LABEL_BASE *>(reinterpret_cast<const char *>(buf) + base->label_offsets[i]);
+    LOG_INFO("  Label 0x%08x:", i);
+    LOG_INFO("    Type: %u", label->type);
+    LOG_INFO("    Category: %u", label->category);
+    LOG_INFO("    File ID: %u", label->file_id);
+    LOG_INFO("    Group ID: %u", label->group_id);
+  }
 
   SDL_free(buf);
   return true;
