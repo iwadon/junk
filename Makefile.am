@@ -101,8 +101,7 @@ liblogger_a_CPPFLAGS = $(BOOST_CPPFLAGS)
 libpeg_a_SOURCES = peg.cpp peg.hpp
 libpeg_a_CPPFLAGS = $(BOOST_CPPFLAGS)
 
-libsdlapp_a_SOURCES = controller.cpp controller.hpp \
-		      frame_wait_timer.cpp frame_wait_timer.hpp \
+libsdlapp_a_SOURCES = frame_wait_timer.cpp frame_wait_timer.hpp \
 		      font.cpp font.hpp \
 		      fps.cpp fps.hpp \
 		      load_time.cpp load_time.hpp \
