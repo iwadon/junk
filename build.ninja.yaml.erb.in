@@ -1,7 +1,7 @@
 var:
   prefix: @prefix@
   srcdir: @srcdir@
-  builddir: @builddir@
+  builddir: @builddir@/build
   top_srcdir: @top_srcdir@
   top_builddir: @top_builddir@
   gtestdir: $top_srcdir/gtest-1.6.0
@@ -36,16 +36,16 @@ var:
 rule:
   cc:
     description: CC $out
-    depfile: .deps/$out.d
-    command: $cc -MMD -MF .deps/$out.d $cflags $cppflags -o $out -c $in
+    depfile: $out.d
+    command: $cc -MMD -MF $out.d $cflags $cppflags -o $out -c $in
   cxx:
     description: CXX $out
-    depfile: .deps/$out.d
-    command: $cxx -MMD -MF .deps/$out.d $cxxflags $cppflags -o $out -c $in
+    depfile: $out.d
+    command: $cxx -MMD -MF $out.d $cxxflags $cppflags -o $out -c $in
   objc:
     description: OBJC $out
-    depfile: .deps/$out.d
-    command: $objc -MMD -MF .deps/$out.d $objcflags $cppflags -o $out -c $in
+    depfile: $out.d
+    command: $objc -MMD -MF $out.d $objcflags $cppflags -o $out -c $in
   ar:
     description: AR $out
     command: $ar crs $out $in
@@ -308,10 +308,12 @@ misc:
     rule: regenerate
     src:
       - $srcdir/build.ninja.yaml.erb.in
+<% unless File.directory?('data') %>
   data:
     rule: ln_s
     src:
       - $srcdir/data
+<% end %>
   SoundClient.app/Coutents/Resources/sound_client.icns:
     rule: icns
     implicit:
