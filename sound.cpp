@@ -3,6 +3,7 @@
 #endif
 #include "sound.hpp"
 #include <SDL.h>
+#include <boost/foreach.hpp>
 #include "sdl_logger.hpp"
 
 Sound::Sound()
@@ -118,6 +119,9 @@ void Sound::AudioCallback(void *userdata, uint8_t *stream, int len)
 
 void Sound::MixAudio(void *buf, int len)
 {
+  BOOST_FOREACH(VoiceBase *voice, voices_) {
+    voice->MixAudio(buf, len);
+  }
 }
 
 static const char SND_ID[4] = {'S', 'N', 'D', 0};
