@@ -32,6 +32,11 @@ void Sound::Update()
 {
 }
 
+int Sound::Play(int label)
+{
+  return RESULT_OK;
+}
+
 int Sound::StartServer()
 {
   return RESULT_OK;
@@ -70,13 +75,11 @@ void Sound::FinalizeAudio()
 void Sound::StartAudio()
 {
   SDL_PauseAudio(0);
-  LOG_INFO("Start audio");
 }
 
 void Sound::StopAudio()
 {
   SDL_PauseAudio(1);
-  LOG_INFO("Stop audio");
 }
 
 void Sound::LogAudioDrivers()

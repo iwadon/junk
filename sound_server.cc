@@ -23,29 +23,16 @@ public:
   ~App();
   int run(int argc, char *argv[]);
 protected:
-  enum STEP {
-    STEP_NONE,
-    STEP_INITIALIZE,
-    STEP_INITIALIZING,
-    STEP_INITIALIZED,
-    NUM_STEPS
-  };
   bool initialize(int argc, char *argv[]);
   void finalize();
-  void step_none();
-  void step_initialize();
-  void step_initializing();
-  void step_initialized();
 private:
   Sound *sound_;
   FrameWaitTimer fwt_;
-  STEP step_;
 };
 
 App::App()
   : sound_(new Sound)
   , fwt_(60, 2)
-  , step_(STEP_NONE)
 {
   if (signal(SIGINT, sigint_handler) == SIG_ERR) {
     perror("signal() failed");
@@ -60,20 +47,11 @@ App::~App()
 
 int App::run(int argc, char *argv[])
 {
-  void (App::*step_funcs[])() = {
-    &App::step_none,
-    &App::step_initialize,
-    &App::step_initializing,
-    &App::step_initialized,
-  };
-  BOOST_STATIC_ASSERT((sizeof step_funcs / sizeof step_funcs[0]) == NUM_STEPS);
-
   if (!initialize(argc, argv)) {
     return 1;
   }
 
   fwt_.reset();
-  step_ = STEP_INITIALIZE;
   while (!quit) {
     sound_->Update();
     fwt_.wait();
@@ -94,8 +72,10 @@ bool App::initialize(int argc, char *argv[])
     LOG_ERROR("Sound::initialize() failed");
     return false;
   }
-
   sound_->StartAudio();
+  sound_->Play(0);		// XXX
+
+  LOG_INFO("Sound Initialized");
   return true;
 }
 
@@ -104,6 +84,8 @@ void App::finalize()
   sound_->StopServer();
   sound_->StopAudio();
   sound_->Finalize();
+  LOG_INFO("Sound finalized");
+
   SDL_Quit();
 }
 
