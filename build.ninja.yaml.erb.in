@@ -233,6 +233,7 @@ program:
       - $srcdir/vector_2d_test.cpp
       - $srcdir/volume_test.cpp
       - $srcdir/voice_test.cpp
+      - $srcdir/wav_test.cc
       - $builddir/libgtest.a
       - $builddir/liblogger.a
       - $builddir/libpeg.a
@@ -298,10 +299,12 @@ library:
       - $srcdir/song.cpp
       - $srcdir/sound.cpp
       - $srcdir/triangle_wave_oscillator.cpp
+      - $srcdir/sample_voice.cpp
       - $srcdir/smf.cpp
       - $srcdir/smf_track.cpp
       - $srcdir/variable_length_value.cpp
       - $srcdir/voice.cpp
+      - $srcdir/wav.cpp
     cppflags: $sdl_cflags $boost_cppflags $cppflags
 misc:
   build.ninja.yaml.erb:

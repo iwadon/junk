@@ -4,7 +4,9 @@
 #include "sound.hpp"
 #include <SDL.h>
 #include <boost/foreach.hpp>
+#include "sample_voice.hpp"
 #include "sdl_logger.hpp"
+#include "snd_v0.hpp"
 
 Sound::Sound()
 {
@@ -31,10 +33,22 @@ void Sound::Finalize()
 
 void Sound::Update()
 {
+  BOOST_FOREACH(VoiceBase *voice, voices_) {
+    voice->Update();
+  }
 }
 
 int Sound::Play(int label)
 {
+  void *buf = snd_files_.front();
+  SND_V0_BASE *snd = static_cast<SND_V0_BASE *>(buf);
+  SND_V0_LABEL_WAV *wav = reinterpret_cast<SND_V0_LABEL_WAV *>(static_cast<char *>(buf) + snd->label_offsets[label]);
+
+  WavVoice *voice = new WavVoice;
+  voice->SetData(wav->data);
+
+  voices_.push_back(voice);
+
   return RESULT_OK;
 }
 
@@ -69,6 +83,9 @@ bool Sound::InitializeAudio()
 
 void Sound::FinalizeAudio()
 {
+  BOOST_FOREACH(void *buf, snd_files_) {
+    SDL_free(buf);
+  }
   StopAudio();
   SDL_CloseAudio();
 }
@@ -124,34 +141,11 @@ void Sound::MixAudio(void *buf, int len)
   }
 }
 
-static const char SND_ID[4] = {'S', 'N', 'D', 0};
+namespace {
 
-struct SND_V0_BASE
-{
-  // Header
-  char format_signature[4];
-  uint32_t format_version;
-  uint32_t file_size;
-  uint32_t file_id;
-  // Labels
-  uint32_t num_labels;
-  uint32_t label_offsets[0];
-};
+const char SND_ID[4] = {'S', 'N', 'D', 0};
 
-struct SND_V0_LABEL_BASE
-{
-  uint8_t type;
-  uint8_t category;
-  uint8_t file_id;
-  uint8_t group_id;
-};
-
-struct SND_V0_LABEL_WAV : public SND_V0_LABEL_BASE
-{
-  uint8_t data[0];
-};
-
-static bool ReadFile(void *&buf, size_t &size, const SP &filename)
+bool ReadFile(void *&buf, size_t &size, const SP &filename)
 {
   SDL_RWops *f = SDL_RWFromFile(filename.c_str(), "rb");
   if (f == NULL) {
@@ -183,6 +177,8 @@ static bool ReadFile(void *&buf, size_t &size, const SP &filename)
   return true;
 }
 
+} // unnamed namespace
+
 bool Sound::LoadSndFile(const SP &filename)
 {
   void *buf;
@@ -197,6 +193,7 @@ bool Sound::LoadSndFile(const SP &filename)
     return false;
   }
 
+#if 0
   const SND_V0_BASE *base = reinterpret_cast<SND_V0_BASE *>(buf);
   LOG_INFO("Loaded SND file: %s", filename.c_str());
   LOG_INFO("  Format Version: %u", base->format_version);
@@ -210,7 +207,11 @@ bool Sound::LoadSndFile(const SP &filename)
     LOG_INFO("    File ID: %u", label->file_id);
     LOG_INFO("    Group ID: %u", label->group_id);
   }
+#endif
 
-  SDL_free(buf);
+  //SDL_free(buf);
+
+  snd_files_.push_back(buf);
+
   return true;
 }

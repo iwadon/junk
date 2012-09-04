@@ -5,11 +5,7 @@
 #include <SDL.h>
 #include "sp.hpp"
 
-class VoiceBase
-{
-public:
-  void MixAudio(void *buf, int len) {}
-};
+class VoiceBase;
 
 class Sound
 {
@@ -42,6 +38,7 @@ protected:
 
 private:
   SDL_AudioSpec audio_spec_;
+  std::list<void *> snd_files_;
   std::list<VoiceBase *> voices_;
 
   bool InitializeAudio();
