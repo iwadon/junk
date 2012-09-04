@@ -125,6 +125,7 @@ libsequencer_a_SOURCES = audio_stream.hpp \
 			 patch.cpp patch.hpp \
 			 pseudo_triangle_wave_oscillator.cpp pseudo_triangle_wave_oscillator.hpp \
 			 sampler.cpp sampler.hpp \
+			 sample_voice.cpp sample_voice.hpp \
 			 sine_wave_oscillator.cpp sine_wave_oscillator.hpp \
 			 song.cpp song.hpp \
 			 sound.cpp sound.hpp \
@@ -133,7 +134,9 @@ libsequencer_a_SOURCES = audio_stream.hpp \
 			 smf_track.cpp smf_track.hpp \
 			 variable_length_value.cpp variable_length_value.hpp \
 			 voice.cpp voice.hpp \
-			 volume.hpp
+			 volume.hpp \
+			 voice_base.hpp \
+			 wav.cpp
 libsequencer_a_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 
 libtest_main_a_SOURCES = test_main.cpp
