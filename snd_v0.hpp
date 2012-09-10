@@ -19,6 +19,7 @@ struct SND_V0_LABEL_BASE
 
 struct SND_V0_LABEL_WAV : public SND_V0_LABEL_BASE
 {
+  uint32_t len;
   uint8_t data[0];
 };
 

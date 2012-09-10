@@ -23,6 +23,8 @@ int Sound::Initialize()
     return RESULT_ERROR;
   }
 
+  SDL_PauseAudio(0);
+
   return RESULT_OK;
 }
 
@@ -45,7 +47,7 @@ int Sound::Play(int label)
   SND_V0_LABEL_WAV *wav = reinterpret_cast<SND_V0_LABEL_WAV *>(static_cast<char *>(buf) + snd->label_offsets[label]);
 
   WavVoice *voice = new WavVoice;
-  voice->SetData(wav->data);
+  voice->SetData(wav->data, wav->len);
 
   voices_.push_back(voice);
 
@@ -86,18 +88,8 @@ void Sound::FinalizeAudio()
   BOOST_FOREACH(void *buf, snd_files_) {
     SDL_free(buf);
   }
-  StopAudio();
-  SDL_CloseAudio();
-}
-
-void Sound::StartAudio()
-{
-  SDL_PauseAudio(0);
-}
-
-void Sound::StopAudio()
-{
   SDL_PauseAudio(1);
+  SDL_CloseAudio();
 }
 
 void Sound::LogAudioDrivers()

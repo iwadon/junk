@@ -4,7 +4,8 @@
 class VoiceBase
 {
 public:
-  ~VoiceBase();
+  VoiceBase() {}
+  virtual ~VoiceBase() {}
   virtual void Update() = 0;
   virtual void MixAudio(void *buf, int len) = 0;
 };

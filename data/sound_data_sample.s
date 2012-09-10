@@ -3,7 +3,10 @@
 	db	%1		; Category
 	db	%2		; File ID
 	db	%3		; Group ID
-	incbin	%4		; WAV Filename
+	dd	.wav_end-.wav_start ; Data Size
+.wav_start:
+	incbin	%4		; Data Body
+.wav_end:
 	align	4		; (alignment)
 %endmacro
 

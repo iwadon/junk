@@ -22,9 +22,6 @@ public:
   void Finalize();
   void Update();
 
-  void StartAudio();
-  void StopAudio();
-
   int StartServer();
   int StopServer();
 

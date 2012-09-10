@@ -72,7 +72,6 @@ bool App::initialize(int argc, char *argv[])
     LOG_ERROR("Sound::initialize() failed");
     return false;
   }
-  sound_->StartAudio();
   sound_->Play(0);		// XXX
 
   LOG_INFO("Sound Initialized");
@@ -82,7 +81,6 @@ bool App::initialize(int argc, char *argv[])
 void App::finalize()
 {
   sound_->StopServer();
-  sound_->StopAudio();
   sound_->Finalize();
   LOG_INFO("Sound finalized");
 

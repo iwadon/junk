@@ -36,6 +36,17 @@ struct Fmt
 
 } // unnamed namespace
 
+Wav::Wav()
+  : data(NULL)
+  , len(0)
+{
+}
+
+Wav::~Wav()
+{
+  free(data);
+}
+
 bool Wav::LoadFile(const SP &filename)
 {
   uint32_t len;
@@ -46,22 +57,46 @@ bool Wav::LoadFile(const SP &filename)
     return false;
   }
 
+  bool ret = ParseData(f);
+
+  SDL_RWclose(f);
+
+  return ret;
+}
+
+bool Wav::ParseData(const void *data, size_t size)
+{
+  SDL_RWops *f = SDL_RWFromConstMem(data, size);
+  if (f == NULL) {
+    SDL_ERROR("SDL_RWFromConstMem failed");
+    return false;
+  }
+
+  bool ret = ParseData(f);
+
+  SDL_RWclose(f);
+
+  return false;
+}
+
+bool Wav::ParseData(SDL_RWops *f)
+{
   Header header;
   if (SDL_RWread(f, &header, sizeof header, 1) != 1) {
-    LOG_ERROR("WAV header not found in %s", filename.c_str());
-    goto error;
+    //LOG_ERROR("WAV header not found in %s", filename.c_str());
+    return false;
   }
   if (memcmp(header.riff, RIFF, 4) != 0 || memcmp(header.wave, WAVE, 4) != 0) {
-    LOG_ERROR("%s is not WAV format", filename.c_str());
-    goto error;
+    //LOG_ERROR("%s is not WAV format", filename.c_str());
+    return false;
   }
 
   len = header.len - sizeof WAVE;
   while (len > 0) {
     Chunk chunk;
     if (SDL_RWread(f, &chunk, sizeof chunk, 1) != 1) {
-      LOG_ERROR("Chunk header not found in %s", filename.c_str());
-      goto error;
+      //LOG_ERROR("Chunk header not found in %s", filename.c_str());
+      return false;
     }
     len -= sizeof chunk;
     switch (chunk.id) {
@@ -69,8 +104,8 @@ bool Wav::LoadFile(const SP &filename)
       {
 	Fmt fmt;
 	if (SDL_RWread(f, &fmt, sizeof fmt, 1) != 1) {
-	  LOG_ERROR("Fmt chunk not found in %s", filename.c_str());
-	  goto error;
+	  //LOG_ERROR("Fmt chunk not found in %s", filename.c_str());
+	  return false;
 	}
 #if 0
 	LOG_INFO("Fmt chunk:");
@@ -82,14 +117,14 @@ bool Wav::LoadFile(const SP &filename)
 	LOG_INFO("  bits_per_sample: %u", fmt.bits_per_sample);
 #endif
 	if (fmt.format_id != 1) {
-	  LOG_ERROR("%s is unsupported id %d, but supported Raw PCM format only", filename.c_str(), fmt.format_id);
-	  goto error;
+	  //LOG_ERROR("%s is unsupported id %d, but supported Raw PCM format only", filename.c_str(), fmt.format_id);
+	  return false;
 	}
 	if (chunk.len > sizeof fmt) {
 	  uint16_t ex_len;
 	  if (SDL_RWread(f, &ex_len, sizeof ex_len, 1) != 1) {
-	    LOG_ERROR("Extra part not found in %s", filename.c_str());
-	    goto error;
+	    //LOG_ERROR("Extra part not found in %s", filename.c_str());
+	    return false;
 	  }
 	  if (ex_len > 0) {
 	    SDL_RWseek(f, ex_len, RW_SEEK_CUR);
@@ -98,7 +133,10 @@ bool Wav::LoadFile(const SP &filename)
       }
       break;
     case 0x61746164:		// "data"
-      SDL_RWseek(f, chunk.len, RW_SEEK_CUR);
+      len = chunk.len;
+      data = malloc(len);
+      //SDL_RWseek(f, chunk.len, RW_SEEK_CUR);
+      SDL_RWread(f, data, len, 1);
       break;
     default:
       SDL_RWseek(f, chunk.len, RW_SEEK_CUR);
@@ -111,10 +149,5 @@ bool Wav::LoadFile(const SP &filename)
     }
   }
 
-  SDL_RWclose(f);
   return true;
-
- error:
-  SDL_RWclose(f);
-  return false;
 }
