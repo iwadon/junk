@@ -135,7 +135,7 @@ libsequencer_a_SOURCES = audio_stream.hpp \
 			 variable_length_value.cpp variable_length_value.hpp \
 			 voice.cpp voice.hpp \
 			 volume.hpp \
-			 voice_base.hpp \
+			 voice_base.cpp voice_base.hpp \
 			 wav.cpp
 libsequencer_a_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 
