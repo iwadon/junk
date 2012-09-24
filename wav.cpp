@@ -5,6 +5,7 @@
 #include <SDL.h>
 #include "logger.hpp"
 #include "sdl_logger.hpp"
+#include <iostream>
 
 namespace {
 
@@ -39,6 +40,7 @@ struct Fmt
 Wav::Wav()
   : data(NULL)
   , len(0)
+  , pos(0)
 {
 }
 
@@ -49,8 +51,6 @@ Wav::~Wav()
 
 bool Wav::LoadFile(const SP &filename)
 {
-  uint32_t len;
-
   SDL_RWops *f = SDL_RWFromFile(filename.c_str(), "rb");
   if (f == NULL) {
     SDL_ERROR("SDL_RWFromFile failed");
@@ -91,14 +91,14 @@ bool Wav::ParseData(SDL_RWops *f)
     return false;
   }
 
-  len = header.len - sizeof WAVE;
-  while (len > 0) {
+  ssize_t rest = header.len - sizeof WAVE;
+  while (rest > 0) {
     Chunk chunk;
     if (SDL_RWread(f, &chunk, sizeof chunk, 1) != 1) {
       //LOG_ERROR("Chunk header not found in %s", filename.c_str());
       return false;
     }
-    len -= sizeof chunk;
+    rest -= sizeof chunk;
     switch (chunk.id) {
     case 0x20746d66:		// "fmt "
       {
@@ -135,19 +135,33 @@ bool Wav::ParseData(SDL_RWops *f)
     case 0x61746164:		// "data"
       len = chunk.len;
       data = malloc(len);
-      //SDL_RWseek(f, chunk.len, RW_SEEK_CUR);
       SDL_RWread(f, data, len, 1);
       break;
     default:
       SDL_RWseek(f, chunk.len, RW_SEEK_CUR);
       break;
     }
-    len -= chunk.len;
+    rest -= chunk.len;
     if (chunk.len & 1) {
       SDL_RWseek(f, 1, RW_SEEK_CUR);
-      --len;
+      --rest;
     }
   }
 
   return true;
+}
+
+size_t Wav::ReadSamples(void *buf, size_t samples)
+{
+  //std::cout << "samples=" << samples << ", pos=" << pos << std::endl;
+  size_t rest = len / sizeof (int16_t) - pos;	      // 残りサンプル数
+  size_t n = std::min(rest, samples); // 読み出そうとするサンプル数
+  const uint8_t *src_addr = reinterpret_cast<uint8_t *>(data) + pos * sizeof (int16_t); // 読み出すデータの先頭アドレス
+  const size_t src_len = n * sizeof (int16_t);	// 読みだすデータの長さ(バイト単位)
+  memcpy(buf, src_addr, src_len);
+  pos += n;
+  if (n < samples) {
+    memset(reinterpret_cast<uint8_t *>(buf) + src_len * sizeof (int16_t), 0, (samples - n) * sizeof (int16_t));
+  }
+  return n;
 }

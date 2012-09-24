@@ -72,6 +72,8 @@ bool App::initialize(int argc, char *argv[])
     LOG_ERROR("Sound::initialize() failed");
     return false;
   }
+
+  sound_->LoadSndFile("data/sound_data_sample.bin");
   sound_->Play(0);		// XXX
 
   LOG_INFO("Sound Initialized");

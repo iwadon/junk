@@ -34,6 +34,7 @@ protected:
   void MixAudio(void *buf, int len);
 
 private:
+  bool activated_;
   SDL_AudioSpec audio_spec_;
   std::list<void *> snd_files_;
   std::list<VoiceBase *> voices_;

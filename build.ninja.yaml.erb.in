@@ -304,6 +304,7 @@ library:
       - $srcdir/smf_track.cpp
       - $srcdir/variable_length_value.cpp
       - $srcdir/voice.cpp
+      - $srcdir/voice_base.cpp
       - $srcdir/wav.cpp
     cppflags: $sdl_cflags $boost_cppflags $cppflags
 misc:

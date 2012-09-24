@@ -9,6 +9,7 @@
 #include "snd_v0.hpp"
 
 Sound::Sound()
+  : activated_(false)
 {
 }
 
@@ -19,18 +20,28 @@ Sound::~Sound()
 
 int Sound::Initialize()
 {
+  if (activated_) {
+    return RESULT_ERROR;
+  }
+
   if (!InitializeAudio()) {
     return RESULT_ERROR;
   }
 
   SDL_PauseAudio(0);
 
+  activated_ = true;
   return RESULT_OK;
 }
 
 void Sound::Finalize()
 {
+  if (!activated_) {
+    return;
+  }
+
   FinalizeAudio();
+  activated_ = false;
 }
 
 void Sound::Update()
@@ -85,6 +96,9 @@ bool Sound::InitializeAudio()
 
 void Sound::FinalizeAudio()
 {
+  BOOST_FOREACH(VoiceBase *voice, voices_) {
+    delete voice;
+  }
   BOOST_FOREACH(void *buf, snd_files_) {
     SDL_free(buf);
   }
@@ -200,8 +214,6 @@ bool Sound::LoadSndFile(const SP &filename)
     LOG_INFO("    Group ID: %u", label->group_id);
   }
 #endif
-
-  //SDL_free(buf);
 
   snd_files_.push_back(buf);
 
