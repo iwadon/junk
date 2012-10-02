@@ -256,6 +256,15 @@ program:
       - $srcdir/serial_number_test.cpp
       - $builddir/libgtest.a
     cppflags: $gtest_cppflags $cppflags
+  net_test:
+    src:
+      - $srcdir/addrinfo_test.cpp
+      - $srcdir/socket_test.cpp
+      - $builddir/libnet.a
+      - $builddir/libgtest.a
+    cppflags: $gtest_cppflags $boost_cppflags $cppflags
+    ldflags: -L $prefix/lib
+    libs: -lre2 $libs
 library:
   $builddir/libgtest.a:
     src:
@@ -308,6 +317,10 @@ library:
       - $srcdir/voice_base.cpp
       - $srcdir/wav.cpp
     cppflags: $sdl_cflags $boost_cppflags $cppflags
+  $builddir/libnet.a:
+    src:
+      - $srcdir/addrinfo.cpp
+      - $srcdir/socket.cpp
 misc:
   build.ninja.yaml.erb:
     rule: regenerate

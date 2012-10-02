@@ -36,6 +36,7 @@ line_segment_2d_benchmark
 map_benchmark
 memory_allocator_test
 missing
+net_test
 net_test.sh
 observer_benchmark
 oscillator_sample
