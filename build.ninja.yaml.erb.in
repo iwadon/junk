@@ -173,6 +173,7 @@ program:
   sound_server:
     src:
       - $srcdir/sound_server.cc
+      - $srcdir/sdl_console_app.cpp
       - $builddir/liblogger.a
       - $builddir/libsdlapp.a
       - $builddir/libsequencer.a
