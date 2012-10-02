@@ -86,6 +86,7 @@ int App::run(int argc, char *argv[])
 void App::sdl_audio_callback(void *userdata, Uint8 *stream, int len)
 {
   App *app = reinterpret_cast<App *>(userdata);
+  memset(stream, 0, len);
   app->song_.mix_audio(stream, len);
 }
 

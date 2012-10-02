@@ -66,7 +66,19 @@ inline void Subject<T>::notify()
 template <typename T>
 inline void Subject<T>::detach_observer(observer_type *o)
 {
+#if 0
   observers_.remove(o);
+#else
+  typename observer_list_type::iterator i = std::find(observers_.begin(), observers_.end(), o);
+  if (i != observers_.end()) {
+    observers_.erase(i);
+  }
+#endif
 }
 
 #endif // !defined(OBSERVER_3_HPP_INCLUDED)
+
+
+
+
+

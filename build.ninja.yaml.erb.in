@@ -1,0 +1,355 @@
+var:
+  prefix: @prefix@
+  srcdir: @srcdir@
+  builddir: @builddir@/build
+  top_srcdir: @top_srcdir@
+  top_builddir: @top_builddir@
+  gtestdir: $top_srcdir/gtest-1.6.0
+  cc: @CC@
+  cflags: @CFLAGS@
+  cxx: @CXX@
+  cxxflags: @CXXFLAGS@
+  objc: @OBJC@
+  objcflags: @OBJCFLAGS@
+  cppflags: -I. @CPPFLAGS@ @DEFS@
+  ar: ar
+  ldflags: @LDFLAGS@
+  libs: @LIBS@
+  boost_cppflags: @BOOST_CPPFLAGS@
+  boost_ldflags: @BOOST_LDFLAGS@
+  boost_program_options_lib: @BOOST_PROGRAM_OPTIONS_LIB@
+  boost_system_lib: @BOOST_SYSTEM_LIB@
+  gtest_cppflags: -I$gtestdir/include
+  sdl_cflags: @SDL_CFLAGS@
+  sdl_libs: @SDL_LIBS@
+  wx_cppflags: <%= wx_cppflags %>
+  wx_libs: <%= wx_libs %>
+  cocoa_framework: @COCOA_FRAMEWORK@
+  opengl_framework: @OPENGL_FRAMEWORK@
+  pcap_libs: @PCAP_LIBS@
+  iconutil: iconutil
+  cp: cp
+  shell: @SHELL@
+  ln_s: @LN_S@
+  nasm: nasm
+  nasmflags: 
+rule:
+  cc:
+    description: CC $out
+    depfile: $out.d
+    command: $cc -MMD -MF $out.d $cflags $cppflags -o $out -c $in
+  cxx:
+    description: CXX $out
+    depfile: $out.d
+    command: $cxx -MMD -MF $out.d $cxxflags $cppflags -o $out -c $in
+  objc:
+    description: OBJC $out
+    depfile: $out.d
+    command: $objc -MMD -MF $out.d $objcflags $cppflags -o $out -c $in
+  ar:
+    description: AR $out
+    command: $ar crs $out $in
+  link:
+    description: LINK $out
+    command: $cxx $ldflags -o $out $in $libs
+  icns:
+    description: ICNS $out
+    command: $iconutil -c icns --output $out $iconsetdir
+  cp:
+    description: CP $out
+    command: $cp -p $in $out
+  regenerate:
+    description: REGENERATE $out
+    command: cd $top_builddir && $shell ./config.status $out
+  ln_s:
+    description: LN_S $out
+    command: $ln_s $in $out
+  nasm:
+    description: NASM $out
+    command: $nasm $nasmflags -o $out $in
+program:
+  benchmark_sample:
+    src:
+      - $srcdir/benchmark_sample.cpp
+    cppflags: $boost_cppflags $cppflags
+  boost_program_options_sample:
+    src:
+      - $srcdir/boost_program_options_sample.cpp
+    cppflags: $boost_cppflags $cppflags
+    ldflags: $boost_ldflags $ldflags
+    libs: $boost_program_options_lib $libs
+  c1:
+    src:
+      - $srcdir/c1.cpp
+  g1:
+    src:
+      - $srcdir/g1.cpp
+      - $builddir/libsdlapp.a
+      - $builddir/liblogger.a
+    cppflags: $sdl_cflags $boost_cppflags $cppflags
+    ldflags: $opengl_framework
+    libs: $sdl_libs $boost_system_lib $libs
+  line_segment_2d_benchmark:
+    src:
+      - $srcdir/line_segment_2d_benchmark.cpp
+      - $builddir/libsdlapp.a
+    cppflags: $boost_cppflags $sdl_cflags $cppflags
+    libs: $sdl_libs $libs
+  map_benchmark:
+    src:
+      - $srcdir/map_benchmark.cpp
+    cppflags: $boost_cppflags $cppflags
+  oscillator_sample:
+    src:
+      - $srcdir/oscillator_sample.cpp
+      - $builddir/liblogger.a
+      - $builddir/libsdlapp.a
+      - $builddir/libsequencer.a
+    cppflags: $sdl_cflags $boost_cppflags $cppflags
+    ldflags: $opengl_framework $ldflags
+    libs: $sdl_libs $boost_system_lib $libs
+  pcap_sample:
+    src:
+      - $srcdir/pcap_sample.cpp
+    libs: $pcap_libs $libs
+  peg_sample:
+    src:
+      - $srcdir/peg_sample.cpp
+      - $builddir/libgtest.a
+      - $builddir/liblogger.a
+      - $builddir/libpeg.a
+    cppflags: $gtest_cppflags $boost_cppflags $cppflags
+  peg_sample2:
+    src:
+      - $srcdir/peg_sample2.cpp
+      - $builddir/libgtest.a
+      - $builddir/liblogger.a
+      - $builddir/libpeg.a
+    cppflags: $gtest_cppflags $boost_cppflags $cppflags
+  s1:
+    src:
+      - $srcdir/s1.cpp
+  s2:
+    src:
+      - $srcdir/s2.cpp
+      - $builddir/liblogger.a
+      - $builddir/libsdlapp.a
+    cppflags: $sdl_cflags $boost_cppflags $cppflags
+    ldflags: $opengl_framework $ldflags
+    libs: $sdl_libs $boost_system_lib $libs
+  sdl_event_sample:
+    src:
+      - $srcdir/sdl_event_sample.c
+      - $builddir/liblogger.a
+    cppflags: $sdl_cflags $cppflags
+    libs: $sdl_libs $libs
+  sdl_event_sample2:
+    src:
+      - $srcdir/sdl_event_sample2.m
+    cppflags: $sdl_cflags $cppflags
+    ldflags: $cocoa_framework $ldflags
+    libs: $sdl_libs $libs
+  sdl_opengl_sample:
+    src:
+      - $srcdir/sdl_opengl_sample.cc
+      - $builddir/liblogger.a
+      - $builddir/libsdlapp.a
+    cppflags: $sdl_cflags $boost_cppflags $cppflags
+    ldflags: $opengl_framework $ldflags
+    libs: $sdl_libs $boost_system_lib $libs
+  SoundClient.app/Contents/MacOS/sound_client:
+    src:
+      - $srcdir/sound_client.cc
+    cppflags: $wx_cppflags $cppflags
+    libs: $wx_libs $libs
+  smf_play:
+    src:
+      - $srcdir/smf_play.cpp
+      - $builddir/liblogger.a
+      - $builddir/libsdlapp.a
+      - $builddir/libsequencer.a
+    cppflags: $sdl_cflags $boost_cppflags $cppflags
+    libs: $sdl_libs $boost_system_lib $libs
+  sound_server:
+    src:
+      - $srcdir/sound_server.cc
+      - $srcdir/sdl_console_app.cpp
+      - $builddir/liblogger.a
+      - $builddir/libsdlapp.a
+      - $builddir/libsequencer.a
+    cppflags: $sdl_cflags $boost_cppflags $cppflags
+    libs: $sdl_libs $libs
+  udp_sample:
+    src:
+      - $srcdir/udp_sample.c
+  wx_sample.app/Contents/MacOS/wx_sample:
+    src:
+      - $srcdir/wx_sample.cc
+    cppflags: $wx_cppflags $cppflags
+    libs: $wx_libs $libs
+  vector_length_benchmark:
+    src:
+      - $srcdir/vector_length_benchmark.cpp
+    cppflags: $boost_cppflags $cppflags
+  all_gtests:
+    src:
+      - $srcdir/audio_stream_test.cpp
+      - $srcdir/channel_test.cpp
+      - $srcdir/circle_2d_test.cpp
+      - $srcdir/circular_buffer_test.cpp
+      - $srcdir/filter_test.cpp
+      - $srcdir/font_test.cpp
+      - $srcdir/fps_test.cpp
+      - $srcdir/function_test.cpp
+      - $srcdir/function_test2.cpp
+      - $srcdir/instrument_test.cpp
+      - $srcdir/line_segment_2d_test.cpp
+      - $srcdir/load_time_test.cpp
+      - $srcdir/logger_test.cpp
+      - $srcdir/lot_box_test.cpp
+      - $srcdir/object_test.cpp
+      - $srcdir/object_counter_test.cpp
+      - $srcdir/observer_test.cpp
+      - $srcdir/oscillator_factory_test.cpp
+      - $srcdir/oscillator_stream_test.cpp
+      - $srcdir/oscillator_test.cpp
+      - $srcdir/patch_test.cpp
+      - $srcdir/pad_test.cpp
+      - $srcdir/peg_test.cpp
+      - $srcdir/point_2d_test.cpp
+      - $srcdir/property_test.cpp
+      - $srcdir/pseudo_triangle_wave_oscillator_test.cpp
+      - $srcdir/rect_test.cpp
+      - $srcdir/sampler_test.cpp
+      - $srcdir/sine_wave_oscillator_test.cpp
+      - $srcdir/smf_test.cpp
+      - $srcdir/smf_track_test.cpp
+      - $srcdir/song_test.cpp
+      - $srcdir/sound_test.cpp
+      - $srcdir/sprite_test.cpp
+      - $srcdir/texture_pool_test.cpp
+      - $srcdir/texture_test.cpp
+      - $srcdir/triangle_wave_oscillator_test.cpp
+      - $srcdir/variable_length_value_test.cpp
+      - $srcdir/vector_2d_test.cpp
+      - $srcdir/volume_test.cpp
+      - $srcdir/voice_test.cpp
+      - $srcdir/wav_test.cc
+      - $builddir/libgtest.a
+      - $builddir/liblogger.a
+      - $builddir/libpeg.a
+      - $builddir/libsdlapp.a
+      - $builddir/libsequencer.a
+    cppflags: $gtest_cppflags $sdl_cflags $boost_cppflags $cppflags
+    ldflags: $opengl_framework $ldflags
+    libs: $sdl_libs $boost_system_lib $libs
+  memory_allocator_test:
+    src:
+      - $srcdir/memalloc.c
+      - $srcdir/memalloc_test.cpp
+      - $srcdir/memory_allocator.cpp
+      - $srcdir/memory_allocator_test.cpp
+      - $builddir/libgtest.a
+    cppflags: $gtest_cppflags $cppflags
+  serial_number_test:
+    src:
+      - $srcdir/serial_number_test.cpp
+      - $builddir/libgtest.a
+    cppflags: $gtest_cppflags $cppflags
+library:
+  $builddir/libgtest.a:
+    src:
+      - $gtestdir/src/gtest-all.cc
+      - $gtestdir/src/gtest_main.cc
+    cppflags: -I$gtestdir $gtest_cppflags $cppflags
+  $builddir/liblogger.a:
+    src:
+      - $srcdir/logger_c.c
+      - $srcdir/logger_cpp.cpp
+    cppflags: $boost_cppflags $cppflags
+  $builddir/libpeg.a:
+    src:
+      - $srcdir/peg.cpp
+    cppflags: $boost_cppflags $cppflags
+  $builddir/libsdlapp.a:
+    src:
+      - $srcdir/frame_wait_timer.cpp
+      - $srcdir/font.cpp
+      - $srcdir/fps.cpp
+      - $srcdir/load_time.cpp
+      - $srcdir/pad.cpp
+      - $srcdir/point_2d.cpp
+      - $srcdir/sdl_app.cpp
+      - $srcdir/sprite.cpp
+      - $srcdir/texture.cpp
+      - $srcdir/texture_pool.cpp
+      - $srcdir/vector_2d.cpp
+    cppflags: $sdl_cflags $boost_cppflags $cppflags
+  $builddir/libsequencer.a:
+    src:
+      - $srcdir/channel.cpp
+      - $srcdir/filter.cpp
+      - $srcdir/instrument.cpp
+      - $srcdir/oscillator.cpp
+      - $srcdir/oscillator_factory.cpp
+      - $srcdir/oscillator_stream.cpp
+      - $srcdir/patch.cpp
+      - $srcdir/pseudo_triangle_wave_oscillator.cpp
+      - $srcdir/sampler.cpp
+      - $srcdir/sine_wave_oscillator.cpp
+      - $srcdir/song.cpp
+      - $srcdir/sound.cpp
+      - $srcdir/triangle_wave_oscillator.cpp
+      - $srcdir/sample_voice.cpp
+      - $srcdir/smf.cpp
+      - $srcdir/smf_track.cpp
+      - $srcdir/variable_length_value.cpp
+      - $srcdir/voice.cpp
+      - $srcdir/voice_base.cpp
+      - $srcdir/wav.cpp
+    cppflags: $sdl_cflags $boost_cppflags $cppflags
+misc:
+  build.ninja.yaml.erb:
+    rule: regenerate
+    src:
+      - $srcdir/build.ninja.yaml.erb.in
+<% unless File.directory?('data') %>
+  data:
+    rule: ln_s
+    src:
+      - $srcdir/data
+<% end %>
+  SoundClient.app/Coutents/Resources/sound_client.icns:
+    rule: icns
+    implicit:
+<% Dir.glob("@srcdir@/wx_sample.iconset/*.png").each do |file| %>
+      - <%= file %>
+<% end %>
+    iconsetdir: $srcdir/wx_sample.iconset
+  SoundClient.app/Contents/PkgInfo:
+    rule: cp
+    src:
+      - $srcdir/wx_sample.PkgInfo
+  SoundClient.app/Contents/Info.plist:
+    rule: cp
+    src:
+      - $srcdir/sound_client.Info.plist
+  data/sound_data_sample.bin:
+    rule: nasm
+    src:
+      - data/sound_data_sample.s
+  wx_sample.app/Contents/Resources/wx_sample.icns:
+    rule: icns
+    implicit:
+<% Dir.glob("@srcdir@/wx_sample.iconset/*.png").each do |file| %>
+      - <%= file %>
+<% end %>
+    iconsetdir: $srcdir/wx_sample.iconset
+  wx_sample.app/Contents/PkgInfo:
+    rule: cp
+    src:
+      - $srcdir/wx_sample.PkgInfo
+  wx_sample.app/Contents/Info.plist:
+    rule: cp
+    src:
+      - $srcdir/wx_sample.Info.plist

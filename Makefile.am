@@ -6,6 +6,7 @@ noinst_PROGRAMS = benchmark_sample \
 	g1 \
 	line_segment_2d_benchmark \
 	map_benchmark \
+	observer_benchmark \
 	oscillator_sample \
 	pcap_sample \
 	peg_sample \
@@ -31,7 +32,7 @@ c1_SOURCES = c1.cpp
 
 g1_SOURCES = g1.cpp
 g1_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
-g1_LDFLAGS = $(OPENGL_FRAMEWORK)
+g1_LDFLAGS = $(OPENGL_FRAMEWORK) $(BOOST_LDFLAGS)
 g1_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 line_segment_2d_benchmark_SOURCES = line_segment_2d_benchmark.cpp
@@ -41,12 +42,16 @@ line_segment_2d_benchmark_LDADD = libsdlapp.a $(SDL_LIBS)
 map_benchmark_SOURCES = map_benchmark.cpp
 map_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
 
+observer_benchmark_SOURCES = observer_benchmark.cpp
+observer_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
+
 oscillator_sample_SOURCES = oscillator_sample.cpp
 oscillator_sample_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
-oscillator_sample_LDFLAGS = $(OPENGL_FRAMEWORK)
+oscillator_sample_LDFLAGS = $(OPENGL_FRAMEWORK) $(BOOST_LDFLAGS)
 oscillator_sample_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 pcap_sample_SOURCES = pcap_sample.cpp
+pcap_sample_LDADD = $(PCAP_LIBS)
 
 peg_sample_SOURCES = peg_sample.cpp
 peg_sample_CPPFLAGS = $(GTEST_CPPFLAGS) $(BOOST_CPPFLAGS)
@@ -60,7 +65,7 @@ s1_SOURCES = s1.cpp
 
 s2_SOURCES = s2.cpp
 s2_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
-s2_LDFLAGS = $(OPENGL_FRAMEWORK)
+s2_LDFLAGS = $(OPENGL_FRAMEWORK) $(BOOST_LDFLAGS)
 s2_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 sdl_event_sample_SOURCES = sdl_event_sample.c
@@ -68,14 +73,13 @@ sdl_event_sample_CPPFLAGS = $(SDL_CFLAGS)
 sdl_event_sample_LDADD = liblogger.a $(SDL_LIBS)
 
 sdl_event_sample2_SOURCES = sdl_event_sample2.m
-#sdl_event_sample2_OBJCFLAGS = $(COCOA_FRAMEWORK)
 sdl_event_sample2_CPPFLAGS = $(SDL_CFLAGS)
 sdl_event_sample2_LDFLAGS = $(COCOA_FRAMEWORK)
 sdl_event_sample2_LDADD = $(SDL_LIBS)
 
 sdl_opengl_sample_SOURCES = sdl_opengl_sample.cc
 sdl_opengl_sample_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
-sdl_opengl_sample_LDFLAGS = $(OPENGL_FRAMEWORK)
+sdl_opengl_sample_LDFLAGS = $(OPENGL_FRAMEWORK) $(BOOST_LDFLAGS)
 sdl_opengl_sample_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 #smf_dump_SOURCES = smf_dump.cpp
@@ -84,6 +88,7 @@ sdl_opengl_sample_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB
 
 smf_play_SOURCES = smf_play.cpp
 smf_play_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
+smf_play_LDFLAGS = $(BOOST_LDFLAGS)
 smf_play_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 udp_sample_SOURCES = udp_sample.c
@@ -96,8 +101,7 @@ liblogger_a_CPPFLAGS = $(BOOST_CPPFLAGS)
 libpeg_a_SOURCES = peg.cpp peg.hpp
 libpeg_a_CPPFLAGS = $(BOOST_CPPFLAGS)
 
-libsdlapp_a_SOURCES = controller.cpp controller.hpp \
-		      frame_wait_timer.cpp frame_wait_timer.hpp \
+libsdlapp_a_SOURCES = frame_wait_timer.cpp frame_wait_timer.hpp \
 		      font.cpp font.hpp \
 		      fps.cpp fps.hpp \
 		      load_time.cpp load_time.hpp \
@@ -121,6 +125,7 @@ libsequencer_a_SOURCES = audio_stream.hpp \
 			 patch.cpp patch.hpp \
 			 pseudo_triangle_wave_oscillator.cpp pseudo_triangle_wave_oscillator.hpp \
 			 sampler.cpp sampler.hpp \
+			 sample_voice.cpp sample_voice.hpp \
 			 sine_wave_oscillator.cpp sine_wave_oscillator.hpp \
 			 song.cpp song.hpp \
 			 sound.cpp sound.hpp \
@@ -129,7 +134,9 @@ libsequencer_a_SOURCES = audio_stream.hpp \
 			 smf_track.cpp smf_track.hpp \
 			 variable_length_value.cpp variable_length_value.hpp \
 			 voice.cpp voice.hpp \
-			 volume.hpp
+			 volume.hpp \
+			 voice_base.cpp voice_base.hpp \
+			 wav.cpp
 libsequencer_a_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 
 libtest_main_a_SOURCES = test_main.cpp
@@ -142,7 +149,7 @@ vector_length_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
 noinst_DATA = data/sound_data_sample.bin
 
 data/sound_data_sample.bin: data/sound_data_sample.s
-	$(NASM) -o $@ $<
+	$(NASM) -o data/sound_data_sample.bin data/sound_data_sample.s
 
 check_PROGRAMS = all_gtests memory_allocator_test serial_number_test
 TESTS = $(check_PROGRAMS) peg_test.sh
@@ -189,6 +196,7 @@ all_gtests_SOURCES = \
 	smf_test.cpp \
 	smf_track_test.cpp \
 	song_test.cpp \
+	sound_test.cpp \
 	sprite_test.cpp \
 	texture_pool_test.cpp \
 	texture_test.cpp \
@@ -199,7 +207,7 @@ all_gtests_SOURCES = \
 	voice_test.cpp
 all_gtests_CXXFLAGS =
 all_gtests_CPPFLAGS = -I$(GTEST_DIR)/include -I$(GMOCK_DIR)/include $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
-all_gtests_LDFLAGS = $(OPENGL_FRAMEWORK)
+all_gtests_LDFLAGS = $(OPENGL_FRAMEWORK) $(BOOST_LDFLAGS)
 all_gtests_LDADD = libpeg.a libsequencer.a libsdlapp.a liblogger.a $(GTEST_LIBS) $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
 
 memory_allocator_test_SOURCES = \

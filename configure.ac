@@ -10,8 +10,8 @@ AM_INIT_AUTOMAKE
 
 SYSTEMNAME=`uname -s`
 
-AC_ARG_ENABLE([opengl], [AS_HELP_STRING([--enable-opengl], [use OpenGL (default is no)])], [use_opengl=$withval], [use_opengl=no])
-if test "x$use_opengl" != xno; then
+AC_ARG_ENABLE([opengl], [AS_HELP_STRING([--enable-opengl], [Enable OpenGL feature @<:@default=no@:>@])], [enable_opengl=$enableval], [enable_opengl=no])
+if test "x$enable_opengl" != xno; then
   AC_DEFINE([ENABLE_OPENGL], [1], [Define 1 to you use OpenGL])
   case "$SYSTEMNAME" in
     Darwin)
@@ -46,6 +46,7 @@ AC_PATH_PROG([RUBY],[ruby])
 AC_PATH_PROG([NASM],[nasm])
 
 AC_CHECK_PROGS(DOXYGEN, [doxygen])
+AC_CHECK_PROGS(PCAP_CONFIG, [pcap-config])
 
 # Checks for libraries.
 AM_PATH_SDL2(2.0.0)
@@ -53,7 +54,13 @@ SDL_LIBS="$SDL_LIBS -lSDL2_image"
 AX_BOOST_BASE
 AX_BOOST_PROGRAM_OPTIONS
 AX_BOOST_SYSTEM
-AC_CHECK_LIB([pcap], [pcap_lookupdev])
+#AC_CHECK_LIB([pcap], [pcap_lookupdev])
+if test x$PCAP_CONFIG != x; then
+    PCAP_LIBS=`$PCAP_CONFIG --libs`
+else
+    PCAP_LIBS=-lpcap
+fi
+AC_SUBST(PCAP_LIBS)
 
 case "$SYSTEMNAME" in
   Darwin)
@@ -88,7 +95,7 @@ AC_CXX_HEADER_STDCXX_98
 AC_FUNC_MEMCMP
 AC_CHECK_FUNCS([memset socket])
 
-AC_CONFIG_FILES([Doxyfile Makefile])
+AC_CONFIG_FILES([Doxyfile Makefile build.ninja.yaml.erb])
 AC_CONFIG_FILES([net_test.sh], [chmod +x net_test.sh])
 AC_CONFIG_FILES([peg_test.sh], [chmod +x peg_test.sh])
 AC_OUTPUT

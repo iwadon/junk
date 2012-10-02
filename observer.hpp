@@ -6,6 +6,8 @@
 #include <list>
 #include <boost/foreach.hpp>
 
+#define TEST_IMPL
+
 template <typename T> class Subject;
 
 template <typename T>
@@ -24,7 +26,10 @@ public:
   typedef std::list<observer_type *> observer_list_type;
 
   Subject()
+#ifdef TEST_IMPL
+#else
     : notifying_(false)
+#endif
   {
   }
 

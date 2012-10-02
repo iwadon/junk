@@ -2,7 +2,9 @@
 #include "config.h"
 #endif
 #include "sdl_app.hpp"
+#ifdef ENABLE_OPENGL
 #include <SDL_opengl.h>
+#endif
 #include "point_2d.hpp"
 #include "vector_2d.hpp"
 #include <cstdio>
