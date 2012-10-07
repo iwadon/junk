@@ -1,9 +1,12 @@
+/// @file  sdl_console_app.hpp
+/// @brief SDLConsoleAppクラスを定義します。
+
 #ifndef SDL_CONSOLE_APP_HPP_INCLUDED
 #define SDL_CONSOLE_APP_HPP_INCLUDED 1
 
 #include "frame_wait_timer.hpp"
 
-/// SDLを使ったコンソールアプリのベースとなるクラスです。
+/// @brief SDLを使ったコンソールアプリのベースとなるクラスです。
 ///
 /// ウィンドウは使わないがメインループは必要なアプリを簡単に実装するのが目的です。
 ///
@@ -11,10 +14,10 @@
 class SDLConsoleApp
 {
 public:
-  /// コンストラクタです。
+  /// @brief コンストラクタです。
   SDLConsoleApp();
 
-  /// デストラクタです。
+  /// @brief デストラクタです。
   virtual ~SDLConsoleApp();
 
   /// @brief アプリを実行します。
@@ -26,7 +29,7 @@ public:
   ///
   /// @retval 0 正常に終了しました。
   /// @retval 1 エラーが起きました。
-  virtual int Run(int argc, char *argv[]);
+  int Run(int argc, char *argv[]);
 
 protected:
   /// @brief 初期化時に呼び出される関数です。
@@ -38,13 +41,13 @@ protected:
   /// @retval false 初期化中にエラーが起きました。
   virtual bool OnInitialize(int argc, char *argv[]) = 0;
 
-  /// 終了時に呼び出される関数です。
+  /// @brief 終了時に呼び出される関数です。
   virtual void OnFinalize() = 0;
 
-  /// 更新時に呼び出される関数です。
+  /// @brief 更新時に呼び出される関数です。
   virtual void OnUpdate() = 0;
 
-  /// メインループを終了します。
+  /// @brief メインループを終了します。
   ///
   /// この関数を呼び出したループが終了するとメインループを抜けて、終了処理へ移行します。
   void QuitMainLoop();

@@ -1,3 +1,6 @@
+/// @file  sdl_console_app.cpp
+/// @brief SDLConsoleAppクラスを実装します。
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
