@@ -50,3 +50,8 @@ int SDLConsoleApp::Run(int argc, char *argv[])
 
   return 0;
 }
+
+void SDLConsoleApp::QuitMainLoop()
+{
+  quit = 1;
+}
