@@ -106,8 +106,6 @@ INPUT                  = "@srcdir@/audio_stream.hpp" \
                          "@srcdir@/channel.hpp" \
                          "@srcdir@/circle_2d.hpp" \
                          "@srcdir@/circular_buffer.hpp" \
-                         "@srcdir@/controller.cpp" \
-                         "@srcdir@/controller.hpp" \
                          "@srcdir@/font.cpp" \
                          "@srcdir@/font.hpp" \
                          "@srcdir@/fps.cpp" \
@@ -120,7 +118,9 @@ INPUT                  = "@srcdir@/audio_stream.hpp" \
                          "@srcdir@/line_segment_2d.hpp" \
                          "@srcdir@/load_time.cpp" \
                          "@srcdir@/load_time.hpp" \
-                         "@srcdir@/logger.cpp" \
+                         "@srcdir@/logger_c.c" \
+                         "@srcdir@/logger.h" \
+                         "@srcdir@/logger_cpp.cpp" \
                          "@srcdir@/logger.hpp" \
                          "@srcdir@/lot_box.hpp" \
                          "@srcdir@/map_benchmark.cpp" \
@@ -136,12 +136,12 @@ INPUT                  = "@srcdir@/audio_stream.hpp" \
                          "@srcdir@/point_2d.hpp" \
                          "@srcdir@/pseudo_triangle_wave_oscillator.cpp" \
                          "@srcdir@/pseudo_triangle_wave_oscillator.hpp" \
-                         "@srcdir@/pulse_wave_oscillator.cpp" \
-                         "@srcdir@/pulse_wave_oscillator.hpp" \
                          "@srcdir@/rect.hpp" \
                          "@srcdir@/sdl_allocator.hpp" \
                          "@srcdir@/sdl_app.cpp" \
                          "@srcdir@/sdl_app.hpp" \
+                         "@srcdir@/sdl_console_app.cpp" \
+                         "@srcdir@/sdl_console_app.hpp" \
                          "@srcdir@/sdl_event_sample.c" \
                          "@srcdir@/sdl_event_sample2.m" \
                          "@srcdir@/sdl_logger.hpp" \
