@@ -2,57 +2,72 @@
 #define CIRCULAR_BUFFER_HPP_INCLUDED 1
 
 #include <cstddef>
-#include <cstring>
 
-/// 循環バッファ
-template <size_t N>
+/// @brief 循環バッファです。
+///
+/// @tparam T 要素の型です。
+/// @tparam N 要素の個数です。
+template <class T, size_t N>
 class CircularBuffer
 {
 public:
-  CircularBuffer(const size_t size)
+  /// @brief コンストラクタです。
+  CircularBuffer()
+    : size_(0)
+    , read_pos_(0)
+    , write_pos_(0)
   {
-    set_size(size);
   }
-  float get() const
+
+  /// @brief バッファからデータを読み出します。
+  ///
+  /// @param[out] values 読み出したデータを格納するバッファです。
+  /// @param[in] len     読み出すデータの個数です。
+  ///
+  /// @return 実際に読み出したデータの個数です。
+  size_t Read(T *values, size_t len)
   {
-    return buf_[r_];
-  }
-  void set(const float value)
-  {
-    buf_[w_] = value;
-  }
-  void next()
-  {
-    ++r_;
-    r_ %= size_ + 1;
-    ++w_;
-    w_ %= size_ + 1;
-  }
-  size_t size() const
-  {
-    return size_;
-  }
-  size_t capacity() const
-  {
-    return N;
-  }
-  void set_size(size_t new_size)
-  {
-    size_ = new_size;
-    if (size_ < 1) {
-      size_ = 1;
-    } else if (size_ > N) {
-      size_ = N;
+    if (len > size_) {
+      len = size_;
     }
-    memset(buf_, 0, sizeof (float) * (size_ + 1));
-    r_ = 1;
-    w_ = 0;
+    for (size_t i = 0; i < len; ++i) {
+      values[i] = buf_[read_pos_];
+      ++read_pos_;
+      if (read_pos_ >= N) {
+	read_pos_ -= N;
+      }
+    }
+    size_ -= len;
+    return len;
   }
+
+  /// @brief バッファへデータを書き込みます。
+  ///
+  /// @param[in] values バッファへ書き込むデータの先頭アドレスです。
+  /// @param[in] len    書き込むデータの個数です。
+  ///
+  /// @return 実際に書き込めたデータの個数です。
+  size_t Write(const T *values, size_t len)
+  {
+    if (len > (N - size_)) {
+      len = N - size_;
+    }
+    for (size_t i = 0; i < len; ++i) {
+      buf_[write_pos_] = values[i];
+      ++write_pos_;
+      if (write_pos_ >= N) {
+	write_pos_ -= N;
+      }
+    }
+    size_ += len;
+    return len;
+  }
+
 private:
-  float buf_[N + 1];
+  T buf_[N];
   size_t size_;
-  size_t r_;
-  size_t w_;
+  size_t read_pos_;
+  size_t write_pos_;
 };
 
 #endif // !defined(CIRCULAR_BUFFER_HPP_INCLUDED)
