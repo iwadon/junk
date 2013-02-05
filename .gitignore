@@ -61,3 +61,5 @@ xcuserdata
 /junk_msvc11/Debug
 /junk_msvc11/Release
 /junk_msvc11/junk/*.filters
+/junk_msvc11/junk/Release
+/junk_msvc11/junk/Debug
