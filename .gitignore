@@ -57,3 +57,4 @@ udp_sample
 vector_length_benchmark
 wx_sample.app
 xcuserdata
+/junk_msvc11/*.suo
