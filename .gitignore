@@ -63,3 +63,8 @@ xcuserdata
 /junk_msvc11/junk/*.filters
 /junk_msvc11/junk/Release
 /junk_msvc11/junk/Debug
+/junk_msvc11/junk_test/*.filters
+/junk_msvc11/Win32
+/junk_msvc11/x64
+/junk_msvc11/*.opensdf
+/junk_msvc11/*.sdf
