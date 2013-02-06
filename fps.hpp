@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file  fps.hpp
  * @brief FPSクラスの定義
  */
