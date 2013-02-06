@@ -102,7 +102,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;HAVE_BOOST;BOOST_SYSTEM_NO_DEPRECATED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\SDL\include;$(SolutionDir)..\..\SDL_image;$(SolutionDir)..\..\boost_1_53_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -138,7 +138,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;HAVE_BOOST;BOOST_SYSTEM_NO_DEPRECATED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\SDL\include;$(SolutionDir)..\..\SDL_image;$(SolutionDir)..\..\boost_1_53_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -155,10 +155,18 @@
   <ItemGroup>
     <ClCompile Include="..\..\fps.cpp" />
     <ClCompile Include="..\..\frame_wait_timer.cpp" />
+    <ClCompile Include="..\..\logger_c.c" />
+    <ClCompile Include="..\..\logger_cpp.cpp" />
+    <ClCompile Include="..\..\texture.cpp" />
+    <ClCompile Include="..\..\texture_pool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\fps.hpp" />
     <ClInclude Include="..\..\frame_wait_timer.hpp" />
+    <ClInclude Include="..\..\logger.h" />
+    <ClInclude Include="..\..\logger.hpp" />
+    <ClInclude Include="..\..\texture.hpp" />
+    <ClInclude Include="..\..\texture_pool.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
