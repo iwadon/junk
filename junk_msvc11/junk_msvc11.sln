@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "junk", "junk\junk.vcxproj", "{77EFD22A-66C7-4BE1-A306-9EE16C79B73F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "junk_test", "junk_test\junk_test.vcxproj", "{E50238A7-3FEA-4263-8026-C1BEB7EA0176}"
+	ProjectSection(ProjectDependencies) = postProject
+		{77EFD22A-66C7-4BE1-A306-9EE16C79B73F} = {77EFD22A-66C7-4BE1-A306-9EE16C79B73F}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
