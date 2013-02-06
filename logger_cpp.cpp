@@ -63,7 +63,11 @@ void Logger::vlog(const Logger::LEVEL level, const char *format, va_list args)
 {
   if (level >= level_) {
     char buf[128];
+#ifdef _MSC_VER
+	vsnprintf_s(buf, sizeof buf, format, args);
+#else
     vsnprintf(buf, sizeof buf, format, args);
+#endif
     output_prefix(os_, level);
     os_ << buf << std::endl;
   }
