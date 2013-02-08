@@ -68,3 +68,4 @@ xcuserdata
 /junk_msvc11/x64
 /junk_msvc11/*.opensdf
 /junk_msvc11/*.sdf
+/junk_msvc11/junk_test/*.user
