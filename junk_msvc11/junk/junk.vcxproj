@@ -153,6 +153,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\font.cpp" />
     <ClCompile Include="..\..\fps.cpp" />
     <ClCompile Include="..\..\frame_wait_timer.cpp" />
     <ClCompile Include="..\..\logger_c.c" />
@@ -162,6 +163,7 @@
     <ClCompile Include="..\..\vector_2d.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\font.hpp" />
     <ClInclude Include="..\..\fps.hpp" />
     <ClInclude Include="..\..\frame_wait_timer.hpp" />
     <ClInclude Include="..\..\logger.h" />

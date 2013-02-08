@@ -170,6 +170,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\font_test.cpp" />
     <ClCompile Include="..\..\fps_test.cpp" />
     <ClCompile Include="..\..\logger_test.cpp" />
     <ClCompile Include="..\..\texture_pool_test.cpp" />
