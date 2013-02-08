@@ -1,10 +1,13 @@
 #ifndef POINT_2D_HPP_INCLUDED
 #define POINT_2D_HPP_INCLUDED 1
 
-#include <cstring>
 #include <ostream>
 #include <string>
 #include <SDL.h>
+
+#ifdef _MSC_VER
+#define snprintf _snprintf_s
+#endif
 
 struct Vector2D;
 
@@ -68,5 +71,9 @@ static inline std::ostream &operator<<(std::ostream &os, const Point2D &p)
   os << p.inspect();
   return os;
 }
+
+#ifdef _MSC_VER
+#undef snprintf
+#endif
 
 #endif // !defined(POINT_2D_HPP_INCLUDED)
