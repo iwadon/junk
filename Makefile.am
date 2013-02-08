@@ -31,26 +31,27 @@ boost_program_options_sample_LDADD = $(BOOST_PROGRAM_OPTIONS_LIB)
 c1_SOURCES = c1.cpp
 
 g1_SOURCES = g1.cpp
-g1_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
+g1_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS) -DBOOST_SYSTEM_NO_DEPRECATED
 g1_LDFLAGS = $(OPENGL_FRAMEWORK) $(BOOST_LDFLAGS)
-g1_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
+g1_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS)
 
 line_segment_2d_benchmark_SOURCES = line_segment_2d_benchmark.cpp
-line_segment_2d_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS) $(SDL_CFLAGS)
+line_segment_2d_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS) -DBOOST_SYSTEM_NO_DEPRECATED $(SDL_CFLAGS)
 line_segment_2d_benchmark_LDADD = libsdlapp.a $(SDL_LIBS)
 
 map_benchmark_SOURCES = map_benchmark.cpp
 map_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
 
 observer_benchmark_SOURCES = observer_benchmark.cpp
-observer_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS)
+observer_benchmark_CPPFLAGS = $(BOOST_CPPFLAGS) -DBOOST_SYSTEM_NO_DEPRECATED
 
 oscillator_sample_SOURCES = oscillator_sample.cpp
-oscillator_sample_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
+oscillator_sample_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS) -DBOOST_SYSTEM_NO_DEPRECATED
 oscillator_sample_LDFLAGS = $(OPENGL_FRAMEWORK) $(BOOST_LDFLAGS)
-oscillator_sample_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
+oscillator_sample_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS)
 
 pcap_sample_SOURCES = pcap_sample.cpp
+pcap_sample_CPPFLAGS = $(BOOST_CPPFLAGS) -DBOOST_SYSTEM_NO_DEPRECATED
 pcap_sample_LDADD = $(PCAP_LIBS)
 
 peg_sample_SOURCES = peg_sample.cpp
@@ -64,9 +65,9 @@ peg_sample2_LDADD = libpeg.a liblogger.a $(GTEST_LIBS)
 s1_SOURCES = s1.cpp
 
 s2_SOURCES = s2.cpp
-s2_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
+s2_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS) -DBOOST_SYSTEM_NO_DEPRECATED
 s2_LDFLAGS = $(OPENGL_FRAMEWORK) $(BOOST_LDFLAGS)
-s2_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
+s2_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS)
 
 sdl_event_sample_SOURCES = sdl_event_sample.c
 sdl_event_sample_CPPFLAGS = $(SDL_CFLAGS)
@@ -80,16 +81,16 @@ sdl_event_sample2_LDADD = $(SDL_LIBS)
 sdl_opengl_sample_SOURCES = sdl_opengl_sample.cc
 sdl_opengl_sample_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
 sdl_opengl_sample_LDFLAGS = $(OPENGL_FRAMEWORK) $(BOOST_LDFLAGS)
-sdl_opengl_sample_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
+sdl_opengl_sample_LDADD = libsdlapp.a liblogger.a $(SDL_LIBS)
 
 #smf_dump_SOURCES = smf_dump.cpp
 #smf_dump_CPPFLAGS = $(BOOST_CPPFLAGS)
 #smf_dump_LDADD = libsequencer.a liblogger.a
 
 smf_play_SOURCES = smf_play.cpp
-smf_play_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
+smf_play_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS) -DBOOST_SYSTEM_NO_DEPRECATED
 smf_play_LDFLAGS = $(BOOST_LDFLAGS)
-smf_play_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
+smf_play_LDADD = libsequencer.a libsdlapp.a liblogger.a $(SDL_LIBS)
 
 udp_sample_SOURCES = udp_sample.c
 
@@ -112,7 +113,7 @@ libsdlapp_a_SOURCES = frame_wait_timer.cpp frame_wait_timer.hpp \
 		      texture.cpp texture.hpp \
 		      texture_pool.cpp texture_pool.hpp \
 		      vector_2d.cpp vector_2d.hpp
-libsdlapp_a_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
+libsdlapp_a_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS) -DBOOST_SYSTEM_NO_DEPRECATED
 
 libsequencer_a_SOURCES = audio_stream.hpp \
 			 channel.cpp channel.hpp \
@@ -137,7 +138,7 @@ libsequencer_a_SOURCES = audio_stream.hpp \
 			 volume.hpp \
 			 voice_base.cpp voice_base.hpp \
 			 wav.cpp
-libsequencer_a_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
+libsequencer_a_CPPFLAGS = $(SDL_CFLAGS) $(BOOST_CPPFLAGS) -DBOOST_SYSTEM_NO_DEPRECATED
 
 libtest_main_a_SOURCES = test_main.cpp
 libtest_main_a_CPPFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CPPFLAGS)
@@ -206,9 +207,9 @@ all_gtests_SOURCES = \
 	volume_test.cpp \
 	voice_test.cpp
 all_gtests_CXXFLAGS =
-all_gtests_CPPFLAGS = -I$(GTEST_DIR)/include -I$(GMOCK_DIR)/include $(SDL_CFLAGS) $(BOOST_CPPFLAGS)
+all_gtests_CPPFLAGS = -I$(GTEST_DIR)/include -I$(GMOCK_DIR)/include $(SDL_CFLAGS) $(BOOST_CPPFLAGS) -DBOOST_SYSTEM_NO_DEPRECATED
 all_gtests_LDFLAGS = $(OPENGL_FRAMEWORK) $(BOOST_LDFLAGS)
-all_gtests_LDADD = libpeg.a libsequencer.a libsdlapp.a liblogger.a $(GTEST_LIBS) $(SDL_LIBS) $(BOOST_SYSTEM_LIB)
+all_gtests_LDADD = libpeg.a libsequencer.a libsdlapp.a liblogger.a $(GTEST_LIBS) $(SDL_LIBS)
 
 memory_allocator_test_SOURCES = \
 	memalloc_test.cpp \
