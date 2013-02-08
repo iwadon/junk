@@ -53,6 +53,7 @@ serial_number_test
 smf_play
 sound_server
 stamp-h1
+test-driver
 udp_sample
 vector_length_benchmark
 wx_sample.app
