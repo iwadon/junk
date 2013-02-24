@@ -10,7 +10,7 @@ class Font;
 class LoadTime
 {
 public:
-#ifdef HAVE_MACH_MACH_TIME_H
+#if defined(__APPLE__)
   typedef uint64_t time_type;
   static const time_type TIME_BASE_SEC = 1000 * 1000 * 1000;
   static const time_type TIME_BASE_MILLISEC = 1000 * 1000;

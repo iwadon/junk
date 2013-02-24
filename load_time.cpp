@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <cassert>
 #include <SDL.h>
-#ifdef HAVE_MACH_MACH_TIME_H
+#if defined(__APPLE__)
 #include <mach/mach_time.h>
 #endif
 #include "font.hpp"
@@ -15,7 +15,7 @@ static const size_t BAR_WIDTH = ITEMS_WIDTH / 2;
 
 static LoadTime::time_type get_time()
 {
-#ifdef HAVE_MACH_MACH_TIME_H
+#if defined(__APPLE__)
   return mach_absolute_time();
 #else
   return SDL_GetTicks();
@@ -24,7 +24,7 @@ static LoadTime::time_type get_time()
 
 static LoadTime::time_type get_elapsed_time(LoadTime::time_type end, LoadTime::time_type start)
 {
-#ifdef HAVE_MACH_MACH_TIME_H
+#if defined(__APPLE__)
   uint64_t elapsed = end - start;
   static mach_timebase_info_data_t info = {0, 0};
   if (info.denom == 0) {
