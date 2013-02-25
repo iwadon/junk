@@ -21,11 +21,11 @@ static LoadTime::time_type get_time()
 #if defined(__APPLE__)
   return mach_absolute_time();
 #else
-  return SDL_GetTicks();
+  return SDL_GetPerformanceCounter();
 #endif
 }
 
-static LoadTime::time_type get_elapsed_time(LoadTime::time_type end, LoadTime::time_type start)
+LoadTime::time_type LoadTime::get_elapsed_time(LoadTime::time_type end, LoadTime::time_type start) const
 {
 #if defined(__APPLE__)
   uint64_t elapsed = end - start;
@@ -35,7 +35,8 @@ static LoadTime::time_type get_elapsed_time(LoadTime::time_type end, LoadTime::t
   }
   return elapsed * info.numer / info.denom;
 #else
-  return end - start;
+	time_type elapsed = end - start;
+	return elapsed * TIME_BASE_SEC / freq_;
 #endif
 }
 
@@ -50,6 +51,9 @@ LoadTime::LoadTime()
     item->color[3] = 0xff;
     item->name = strdup("UNKNOWN");
   }
+#ifndef __APPLE__
+  freq_ = SDL_GetPerformanceFrequency();
+#endif
 }
 
 LoadTime::~LoadTime()
