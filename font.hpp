@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file  font.hpp
  * @brief Fontクラスの定義
  */

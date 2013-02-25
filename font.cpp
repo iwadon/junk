@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file  font.cpp
  * @brief Fontクラスの実装
  */
@@ -13,6 +13,9 @@
 #include "sdl_logger.hpp"
 #include "texture.hpp"
 #include "texture_pool.hpp"
+#ifdef _MSC_VER
+#define vsnprintf vsnprintf_s
+#endif
 
 /// コンストラクタ
 Font::Font(SDL_Renderer *renderer)

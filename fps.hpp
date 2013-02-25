@@ -6,7 +6,11 @@
 #ifndef FPS_HPP_INCLUDED
 #define FPS_HPP_INCLUDED 1
 
+#ifdef _MSC_VER
+#include <cstdint>
+#else
 #include <tr1/cstdint>
+#endif
 
 /// fpsを測る
 struct FPS

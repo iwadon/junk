@@ -3,7 +3,11 @@
 
 #include <cstddef>
 #include <list>
+#ifdef _MSC_VER
+#include <cstdint>
+#else
 #include <tr1/cstdint>
+#endif
 
 class Font;
 

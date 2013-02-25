@@ -7,6 +7,9 @@
 #include <SDL.h>
 #if defined(__APPLE__)
 #include <mach/mach_time.h>
+#elif defined(_MSC_VER)
+#define strdup _strdup
+#define vsnprintf vsnprintf_s
 #endif
 #include "font.hpp"
 
