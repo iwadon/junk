@@ -6,9 +6,12 @@
 #ifndef FPS_HPP_INCLUDED
 #define FPS_HPP_INCLUDED 1
 
-#ifdef _MSC_VER
+#include <ciso646>
+#if defined(_LIBCPP_VERSION) || defined(_MSC_VER)
+// using libc++ or msvc
 #include <cstdint>
 #else
+// using libstdc++ or other
 #include <tr1/cstdint>
 #endif
 
