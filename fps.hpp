@@ -23,7 +23,7 @@ struct FPS
   uint32_t latest_frames;	///< 直前のfps
 
   FPS();
-  void update();
+  void update(int32_t n = 1);
 };
 
 #endif // !defined(FPS_HPP_INCLUDED)
