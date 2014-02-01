@@ -1,13 +1,8 @@
+#include "memory_pool.hpp"
 #include <gtest/gtest.h>
-
-class MemoryPool
-{
-public:
-  void *Allocate();
-};
 
 TEST(MemoryPoolTest, Allocate)
 {
-  MemoryPool pool;
+  MemoryPool<16> pool;
   auto ptr = pool.Allocate();
 }

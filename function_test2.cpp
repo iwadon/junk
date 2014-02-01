@@ -4,9 +4,7 @@
 #include "config.h"
 #endif
 #include <gtest/gtest.h>
-#include <boost/function.hpp>
-#include <boost/lambda/lambda.hpp>
-#include <boost/bind.hpp>
+#include <functional>
 
 // Actionクラスを直接使うのが面倒なので…
 class ActionBase
@@ -100,7 +98,7 @@ TEST(FunctionTest2, FuncObj)
 // staticなメンバー関数を使った実装例。
 TEST(FunctionTest2, StaticMemFunc)
 {
-  ActionBase *a = new_action(boost::bind(&StaticMemFunc::add_static, _1, _2));
+  ActionBase *a = new_action(std::bind(StaticMemFunc::add_static, std::placeholders::_1, std::placeholders::_2));
   EXPECT_EQ(5, a->invoke(2, 3));
 }
 
@@ -108,14 +106,14 @@ TEST(FunctionTest2, StaticMemFunc)
 TEST(FunctionTest2, MemFunc)
 {
   MemFunc ta;
-  ActionBase *a = new_action(boost::bind(&MemFunc::add, &ta, _1, _2));
+  ActionBase *a = new_action(std::bind(&MemFunc::add, &ta, std::placeholders::_1, std::placeholders::_2));
   EXPECT_EQ(5, a->invoke(2, 3));
 }
 
-// boost::lambdaでの実装例。
+// lambdaでの実装例。
 TEST(FunctionTest2, BoostLambda)
 {
-  ActionBase *a = new_action(boost::lambda::_1 + boost::lambda::_2);
+  auto a = new_action([](int x, int y){ return x + y; });
   EXPECT_EQ(5, a->invoke(2, 3));
 }
 

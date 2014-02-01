@@ -188,7 +188,6 @@ all_gtests_SOURCES = \
 	vector_2d_test.cpp \
 	volume_test.cpp \
 	voice_test.cpp
-all_gtests_CXXFLAGS =
 all_gtests_CPPFLAGS = -I$(GTEST_DIR)/include -I$(GMOCK_DIR)/include $(SDL_CFLAGS)
 all_gtests_LDFLAGS = $(OPENGL_FRAMEWORK)
 all_gtests_LDADD = libpeg.a libsequencer.a libsdlapp.a liblogger.a $(GTEST_LIBS) $(SDL_LIBS)

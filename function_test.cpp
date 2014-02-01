@@ -4,7 +4,6 @@
 #include "function.hpp"
 #include <gtest/gtest.h>
 #include <functional>
-#include <boost/function.hpp>
 
 static int func1()
 {
@@ -104,7 +103,8 @@ TEST(FunctionTest, value)
 
   A a(3);
   //Function<int(int)> f8 = std::bind1st(std::mem_fun(&A::func8), &a);
-  boost::function<int(int)> f8 = std::bind1st(std::mem_fun(&A::func8), &a);
+  //boost::function<int(int)> f8 = std::bind1st(std::mem_fun(&A::func8), &a);
+  std::function<int(int)> f8 = std::bind1st(std::mem_fun(&A::func8), &a);
   EXPECT_EQ(5, f8(2));
   Function<int(A &, int)> f9(&A::func9);
   EXPECT_EQ(5, f9(a, 2));

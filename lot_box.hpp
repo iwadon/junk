@@ -5,10 +5,8 @@
 #ifndef LOT_BOX_HPP_INCLUDED
 #define LOT_BOX_HPP_INCLUDED 1
 
-#ifdef HAVE_BOOST
-#include <boost/array.hpp>
-#include <boost/random.hpp>
-#endif
+#include <array>
+#include <random>
 
 /**
  * @brief 抽選箱
@@ -24,10 +22,9 @@ public:
    * @brief コンストラクタ
    * @param [in] seed 乱数の種。
    */
-  LotBox(boost::mt19937::result_type seed)
+  LotBox(std::mt19937::result_type seed)
     : rng_(seed)
-    , dst_(1, N)
-    , rand_(rng_, dst_)
+    , dist_(1, N)
     , n_(0)
   {
     reset();
@@ -52,14 +49,13 @@ public:
   void reset()
   {
     for (size_t i = 0; i < M; ++i) {
-      winning_numbers_[i] = rand_();
+      winning_numbers_[i] = dist_(rng_);
     }
   }
 private:
-  boost::mt19937 rng_;
-  boost::uniform_int<> dst_;
-  boost::variate_generator<boost::mt19937 &, boost::uniform_int<> > rand_;
-  boost::array<size_t, M> winning_numbers_;
+  std::mt19937 rng_;
+  std::uniform_int_distribution<> dist_;
+  std::array<size_t, M> winning_numbers_;
   size_t n_;
 };
 
