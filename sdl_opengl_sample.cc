@@ -8,6 +8,7 @@
 #include "point_2d.hpp"
 #include "vector_2d.hpp"
 #include <cstdio>
+#include <memory>
 
 class SDLOpenGLSampleApp : public SDLApp
 {
@@ -43,8 +44,9 @@ void SDLOpenGLSampleApp::draw()
 void SDLOpenGLSampleApp::draw_polygon(const Point2D &center, float size, float rad, int poly)
 {
 #ifdef ENABLE_OPENGL
-  Point2D points[poly];
-  setup_points_polygon(points, center, size, rad, poly);
+  //Point2D points[poly];
+  std::unique_ptr<Point2D[]> points(new Point2D[poly]);
+  setup_points_polygon(points.get(), center, size, rad, poly);
   glBegin(GL_LINE_LOOP);
   for (int i = 0; i < poly; ++i) {
     glVertex2f(points[i].x, points[i].y);
@@ -56,8 +58,9 @@ void SDLOpenGLSampleApp::draw_polygon(const Point2D &center, float size, float r
 void SDLOpenGLSampleApp::fill_polygon(const Point2D &center, float size, float rad, int poly)
 {
 #ifdef ENABLE_OPENGL
-  Point2D points[poly];
-  setup_points_polygon(points, center, size, rad, poly);
+  //Point2D points[poly];
+  std::unique_ptr<Point2D[]> points(new Point2D[poly]);
+  setup_points_polygon(points.get(), center, size, rad, poly);
   glBegin(GL_TRIANGLE_FAN);
   for (int i = 0; i < poly; ++i) {
     glVertex2f(points[i].x, points[i].y);

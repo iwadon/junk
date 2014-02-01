@@ -2,15 +2,9 @@
 #include "config.h"
 #endif
 #include "peg.hpp"
-#ifdef STDCXX_98_HEADERS
 #include <cctype>
 #include <cstring>
 #include <iostream>
-#endif
-#ifdef HAVE_BOOST
-#include <boost/format.hpp>
-#include <boost/utility.hpp>
-#endif
 
 namespace peg
 {
@@ -177,7 +171,11 @@ namespace peg
       str = "[1 byte]";
       break;
     default:
-      str = (boost::format("[%uB]") % bytes_).str();
+      {
+	char buf[256];
+	snprintf(buf, sizeof buf, "[%zuB]", bytes_);
+	str = buf;
+      }
       break;
     }
     return str;
@@ -569,7 +567,7 @@ namespace peg
   }
 
   Rule::Rule(ParsingExpression &pe)
-    : pe_(boost::addressof(pe))
+    : pe_(std::addressof(pe))
     , in_str_(false)
     , in_inspect_(false)
   {

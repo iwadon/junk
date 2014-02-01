@@ -1,8 +1,8 @@
 #ifndef TEXTURE_HPP_INCLUDED
 #define TEXTURE_HPP_INCLUDED 1
 
-#include <boost/cstdint.hpp>
 #include "sp.hpp"
+#include <cstdint>
 
 struct SDL_Renderer;
 struct SDL_Texture;

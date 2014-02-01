@@ -1,10 +1,10 @@
 #include "addrinfo.hpp"
+#include "socket.hpp"
 #include "gtest/gtest.h"
 #include <arpa/inet.h>
 #include <iostream>
+#include <shared_ptr.hpp>
 #include <sys/socket.h>
-#include <boost/shared_ptr.hpp>
-#include "socket.hpp"
 
 TEST(AddrinfoTest, getaddrinfo) {
   std::vector<Addrinfo *> v = Addrinfo::getaddrinfo("moonrock.jp", "http");

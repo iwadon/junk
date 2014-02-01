@@ -1,6 +1,5 @@
 #include "pad.hpp"
 #include <cstring>
-#include <boost/foreach.hpp>
 #include <SDL_keyboard.h>
 #include <SDL_scancode.h>
 
@@ -47,8 +46,8 @@ namespace {
 void HumanPad::on_update()
 {
   button = 0;
-  uint8_t *key_states = SDL_GetKeyboardState(NULL);
-  BOOST_FOREACH(const KEY_ASSIGN &ka, key_assigns) {
+  const uint8_t *key_states = SDL_GetKeyboardState(NULL);
+  for (auto &ka: key_assigns) {
     if (key_states[ka.scancode]) {
       button |= ka.button;
     }

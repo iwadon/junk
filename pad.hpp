@@ -1,9 +1,9 @@
 #ifndef PAD_HPP_INCLUDED
 #define PAD_HPP_INCLUDED 1
 
-#include <string>		// std::string
-#include <boost/cstdint.hpp>	// uint32_t
 #include "callback.hpp"
+#include <cstdint>
+#include <string>		// std::string
 
 /// 種別
 enum PAD_TYPE {

@@ -5,14 +5,12 @@
 #include <gtest/gtest.h>
 #include <string>
 #include <stack>
-#include <boost/bind.hpp>
-#include <boost/lexical_cast.hpp>
 
 namespace {
   std::stack<int> stack;
   void INT(const char *beg, const char *end) {
     std::string s(beg, end);
-    int i = boost::lexical_cast<int>(s);
+    int i = std::stoi(s);
     stack.push(i);
   }
   void ADD(const char *, const char *) {

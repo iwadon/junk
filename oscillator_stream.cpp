@@ -2,14 +2,8 @@
 #include "config.h"
 #endif
 #include "oscillator_stream.hpp"
-#if defined(HAVE_TR1_CSTDINT)
-#include <tr1/cstdint>
-#elif defined(HAVE_BOOST)
-#include <boost/cstdint.hpp>
-#elif defined(HAVE_STDINT_H)
-#include <stdint.h>
-#endif
 #include "oscillator_factory.hpp"
+#include <cstdint>
 
 OscillatorStream::OscillatorStream()
   : osc_(OscillatorFactory::get_instance().create("sin"))
@@ -41,7 +35,7 @@ void OscillatorStream::set_volume(const float volume)
 void OscillatorStream::set_oscillator_type(const SP &type)
 {
   oscillator_ptr_type prev_osc = osc_;
-  osc_ = boost::shared_ptr<Oscillator>(OscillatorFactory::get_instance().create(type.c_str()));
+  osc_ = std::shared_ptr<Oscillator>(OscillatorFactory::get_instance().create(type.c_str()));
   osc_->set_sample_rate(prev_osc->sample_rate());
   osc_->set_frequency(prev_osc->frequency());
 }

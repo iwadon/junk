@@ -1,24 +1,14 @@
 #ifndef INSTRUMENT_HPP_INCLUDED
 #define INSTRUMENT_HPP_INCLUDED 1
 
-#ifdef STDCXX_98_HEADERS
+#include "channel.hpp"
+#include "instance_pool.hpp"
+#include "voice.hpp"
+#include <array>
 #include <cstddef>
 #include <list>
 #include <map>
-#endif
-#if defined(HAVE_TR1_CSTDINT)
-#include <tr1/cstdint>
-#elif defined(HAVE_BOOST)
-#include <boost/cstdint.hpp>
-#elif defined(HAVE_STDINT_H)
-#include <stdint.h>
-#endif
-#ifdef HAVE_BOOST
-#include <boost/array.hpp>
-#include <boost/pool/object_pool.hpp>
-#endif
-#include "channel.hpp"
-#include "voice.hpp"
+#include <cstdint>
 
 class Patch;
 
@@ -38,8 +28,8 @@ public:
   bool set_patch(const int no, Patch *patch);
   std::string inspect() const;
 private:
-  boost::array<Channel *, NUM_CHANNELS> channels_;
-  boost::object_pool<Voice> voice_pool_;
+  std::array<Channel *, NUM_CHANNELS> channels_;
+  InstancePool<Voice> voice_pool_;
   std::list<Voice *> active_voices_;
   struct MixBuffer
   {

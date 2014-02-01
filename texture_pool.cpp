@@ -2,10 +2,7 @@
 #include "config.h"
 #endif
 #include "texture_pool.hpp"
-#ifdef STDCXX_98_HEADERS
 #include <cassert>
-#endif
-#include "texture.hpp"
 
 TexturePool &TexturePool::get_instance()
 {
@@ -20,7 +17,7 @@ Texture *TexturePool::load_file(SDL_Renderer *renderer, const SP &filename)
   if (i != texture_map_.end()) {
     tex = (*i).second;
   } else {
-    tex = texture_pool_.construct(renderer);
+    tex = texture_pool_.Construct(renderer);
     if (!tex->load_file(filename)) {
       return NULL;
     }
@@ -37,6 +34,6 @@ void TexturePool::destroy(Texture *tex)
       texture_map_.erase(i);
     }
     assert(texture_map_.find(tex->filename) == texture_map_.end());
-    texture_pool_.destroy(tex);
+    texture_pool_.Destroy(tex);
   }
 }

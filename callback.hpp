@@ -1,6 +1,7 @@
 #ifndef CALLBACK_HPP_INCLUDED
 #define CALLBACK_HPP_INCLUDED 1
 
+#include <cstdint>
 #include <cstring>
 
 /**

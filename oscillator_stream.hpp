@@ -1,15 +1,11 @@
 #ifndef OSCILLATOR_STREAM_HPP_INCLUDED
 #define OSCILLATOR_STREAM_HPP_INCLUDED 1
 
-#ifdef STDCXX_98_HEADERS
-#include <cstddef>
-#endif
-#ifdef HAVE_BOOST
-#include <boost/shared_ptr.hpp>
-#endif
 #include "audio_stream.hpp"
 #include "oscillator.hpp"
 #include "sp.hpp"
+#include <cstddef>
+#include <memory>
 
 class OscillatorStream : public AudioStream
 {
@@ -21,7 +17,7 @@ public:
   virtual void set_volume(const float volume);
   virtual void set_oscillator_type(const SP &type);
 private:
-  typedef boost::shared_ptr<Oscillator> oscillator_ptr_type;
+  typedef std::shared_ptr<Oscillator> oscillator_ptr_type;
   oscillator_ptr_type osc_;
   float volume_;
 };

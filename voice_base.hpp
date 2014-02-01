@@ -1,7 +1,8 @@
 #ifndef VOICE_BASE_HPP_INCLUDED
 #define VOICE_BASE_HPP_INCLUDED 1
 
-#include <boost/cstdint.hpp>
+#include <cstddef>
+#include <cstdint>
 
 class VoiceBase
 {

@@ -1,10 +1,9 @@
 #ifndef OBSERVER_2_HPP_INCLUDED
 #define OBSERVER_2_HPP_INCLUDED 1
 
-#include <cassert>
 #include <algorithm>
+#include <cassert>
 #include <list>
-#include <boost/foreach.hpp>
 
 template <typename T> class Subject;
 
@@ -53,7 +52,7 @@ template <typename T>
 inline void Subject<T>::notify()
 {
   observer_list_type l(observers_.begin(), observers_.end());
-  BOOST_FOREACH(observer_type *o, l) {
+  for (auto o: l) {
     o->update(this);
   }
 }
