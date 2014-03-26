@@ -3,22 +3,24 @@
 
 #include <cstddef>
 #include <list>
+
+#include <ciso646>
+#if defined(_LIBCPP_VERSION) || defined(_MSC_VER)
+// using libc++ or msvc
+#include <cstdint>
+#else
+// using libstdc++ or other
 #include <tr1/cstdint>
+#endif
 
 class Font;
 
 class LoadTime
 {
 public:
-#ifdef HAVE_MACH_MACH_TIME_H
   typedef uint64_t time_type;
   static const time_type TIME_BASE_SEC = 1000 * 1000 * 1000;
   static const time_type TIME_BASE_MILLISEC = 1000 * 1000;
-#else
-  typedef uint32_t time_type;
-  static const time_type TIME_BASE_SEC = 1000;
-  static const time_type TIME_BASE_MILLISEC = 1;
-#endif
   static const size_t NUM_ITEMS = 10;
   LoadTime();
   ~LoadTime();
@@ -47,6 +49,8 @@ private:
   };
   Item items_[NUM_ITEMS];
   std::list <Item *> active_items_;
+  uint64_t freq_;
+  time_type get_elapsed_time(time_type end, time_type start) const;
 };
 
 #endif // !defined(LOAD_TIME_HPP_INCLUDED)

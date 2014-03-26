@@ -5,8 +5,11 @@
 #include <algorithm>
 #include <cassert>
 #include <SDL.h>
-#ifdef HAVE_MACH_MACH_TIME_H
+#if defined(__APPLE__)
 #include <mach/mach_time.h>
+#elif defined(_MSC_VER)
+#define strdup _strdup
+#define vsnprintf vsnprintf_s
 #endif
 #include "font.hpp"
 
@@ -15,16 +18,16 @@ static const size_t BAR_WIDTH = ITEMS_WIDTH / 2;
 
 static LoadTime::time_type get_time()
 {
-#ifdef HAVE_MACH_MACH_TIME_H
+#if defined(__APPLE__)
   return mach_absolute_time();
 #else
-  return SDL_GetTicks();
+  return SDL_GetPerformanceCounter();
 #endif
 }
 
-static LoadTime::time_type get_elapsed_time(LoadTime::time_type end, LoadTime::time_type start)
+LoadTime::time_type LoadTime::get_elapsed_time(LoadTime::time_type end, LoadTime::time_type start) const
 {
-#ifdef HAVE_MACH_MACH_TIME_H
+#if defined(__APPLE__)
   uint64_t elapsed = end - start;
   static mach_timebase_info_data_t info = {0, 0};
   if (info.denom == 0) {
@@ -32,7 +35,8 @@ static LoadTime::time_type get_elapsed_time(LoadTime::time_type end, LoadTime::t
   }
   return elapsed * info.numer / info.denom;
 #else
-  return end - start;
+	time_type elapsed = end - start;
+	return elapsed * TIME_BASE_SEC / freq_;
 #endif
 }
 
@@ -47,6 +51,9 @@ LoadTime::LoadTime()
     item->color[3] = 0xff;
     item->name = strdup("UNKNOWN");
   }
+#ifndef __APPLE__
+  freq_ = SDL_GetPerformanceFrequency();
+#endif
 }
 
 LoadTime::~LoadTime()

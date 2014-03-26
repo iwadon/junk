@@ -6,12 +6,13 @@
 #ifndef FPS_HPP_INCLUDED
 #define FPS_HPP_INCLUDED 1
 
-#if defined(HAVE_TR1_CSTDINT)
+#include <ciso646>
+#if defined(_LIBCPP_VERSION) || defined(_MSC_VER)
+// using libc++ or msvc
+#include <cstdint>
+#else
+// using libstdc++ or other
 #include <tr1/cstdint>
-#elif defined(HAVE_BOOST)
-#include <boost/cstdint.hpp>
-#elif defined(HAVE_STDINT_H)
-#include <stdint.h>
 #endif
 
 /// fpsを測る
@@ -22,7 +23,7 @@ struct FPS
   uint32_t latest_frames;	///< 直前のfps
 
   FPS();
-  void update();
+  void update(int32_t n = 1);
 };
 
 #endif // !defined(FPS_HPP_INCLUDED)

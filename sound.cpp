@@ -3,7 +3,6 @@
 #endif
 #include "sound.hpp"
 #include <SDL.h>
-#include <boost/foreach.hpp>
 #include "sample_voice.hpp"
 #include "sdl_logger.hpp"
 #include "snd_v0.hpp"
@@ -46,7 +45,7 @@ void Sound::Finalize()
 
 void Sound::Update()
 {
-  BOOST_FOREACH(VoiceBase *voice, voices_) {
+  for (auto voice: voices_) {
     voice->Update();
   }
 }
@@ -96,10 +95,10 @@ bool Sound::InitializeAudio()
 
 void Sound::FinalizeAudio()
 {
-  BOOST_FOREACH(VoiceBase *voice, voices_) {
+  for (auto voice: voices_) {
     delete voice;
   }
-  BOOST_FOREACH(void *buf, snd_files_) {
+  for (auto buf: snd_files_) {
     SDL_free(buf);
   }
   SDL_PauseAudio(1);
@@ -142,7 +141,7 @@ void Sound::AudioCallback(void *userdata, uint8_t *stream, int len)
 
 void Sound::MixAudio(void *buf, int len)
 {
-  BOOST_FOREACH(VoiceBase *voice, voices_) {
+  for (auto voice: voices_) {
     voice->MixAudio(buf, len);
   }
 }

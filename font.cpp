@@ -13,6 +13,9 @@
 #include "sdl_logger.hpp"
 #include "texture.hpp"
 #include "texture_pool.hpp"
+#ifdef _MSC_VER
+#define vsnprintf vsnprintf_s
+#endif
 
 #ifdef _MSC_VER
 #define vsnprintf vsnprintf_s

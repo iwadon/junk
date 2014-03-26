@@ -2,8 +2,8 @@
 #define SAMPLE_VOICE_HPP_INCLUDED 1
 
 #include "voice_base.hpp"
-#include <boost/cstdint.hpp>
 #include "wav.hpp"
+#include <cstdint>
 
 class SampleVoice : public VoiceBase
 {

@@ -1,10 +1,9 @@
 #ifndef OBSERVER_HPP_INCLUDED
 #define OBSERVER_HPP_INCLUDED 1
 
-#include <cassert>
 #include <algorithm>
+#include <cassert>
 #include <list>
-#include <boost/foreach.hpp>
 
 #define TEST_IMPL
 
@@ -60,11 +59,11 @@ public:
   void notify()
   {
     notifying_ = true;
-    BOOST_FOREACH(observer_type *o, observers_) {
+    for (auto o: observers_) {
       o->update(this);
     }
     notifying_ = false;
-    BOOST_FOREACH(observer_type *o, detached_observers_) {
+    for (auto o: detached_observers_) {
       detach_observer(o);
     }
     detached_observers_.clear();

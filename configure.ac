@@ -51,9 +51,6 @@ AC_CHECK_PROGS(PCAP_CONFIG, [pcap-config])
 # Checks for libraries.
 AM_PATH_SDL2(2.0.0)
 SDL_LIBS="$SDL_LIBS -lSDL2_image"
-AX_BOOST_BASE
-AX_BOOST_PROGRAM_OPTIONS
-AX_BOOST_SYSTEM
 #AC_CHECK_LIB([pcap], [pcap_lookupdev])
 if test x$PCAP_CONFIG != x; then
     PCAP_LIBS=`$PCAP_CONFIG --libs`

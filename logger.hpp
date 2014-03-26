@@ -1,11 +1,11 @@
 #ifndef LOGGER_HPP_INCLUDED
 #define LOGGER_HPP_INCLUDED
 
+#include "NonCopyable.hpp"
 #include <cstdarg>
 #include <ostream>
-#include <boost/noncopyable.hpp>
 
-class Logger : public boost::noncopyable
+class Logger : public NonCopyable
 {
 public:
   enum LEVEL {

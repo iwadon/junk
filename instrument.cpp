@@ -2,9 +2,6 @@
 #include "config.h"
 #endif
 #include "instrument.hpp"
-#ifdef HAVE_BOOST
-#include <boost/foreach.hpp>
-#endif
 #include <SDL.h>
 #include "channel.hpp"
 #include "sdl_logger.hpp"
@@ -29,7 +26,7 @@ Instrument::~Instrument()
 
 void Instrument::update()
 {
-  BOOST_FOREACH(Channel *c, channels_) {
+  for (auto c: channels_) {
     c->update();
   }
   SDL_LockAudio();
@@ -56,7 +53,7 @@ bool Instrument::mix_audio(uint8_t *buf, const size_t len)
   if (!mix_buf_.prepare(len)) {
     return false;
   }
-  BOOST_FOREACH(Voice *v, active_voices_) {
+  for (auto v: active_voices_) {
     v->mix_audio(mix_buf_.addr, mix_buf_.len);
     SDL_MixAudio(buf, mix_buf_.addr, len, SDL_MIX_MAXVOLUME);
   }
@@ -65,7 +62,7 @@ bool Instrument::mix_audio(uint8_t *buf, const size_t len)
 
 Voice *Instrument::new_voice(Channel *channel, int note, int velocity)
 {
-  Voice *voice = voice_pool_.construct(channel, note, velocity);
+  Voice *voice = voice_pool_.Construct(channel, note, velocity);
   if (voice != NULL) {
     active_voices_.push_back(voice);
   }
@@ -75,13 +72,13 @@ Voice *Instrument::new_voice(Channel *channel, int note, int velocity)
 void Instrument::destroy_voice(Voice *voice)
 {
   active_voices_.remove(voice);
-  voice_pool_.destroy(voice);
+  voice_pool_.Destroy(voice);
 }
 
 size_t Instrument::stop_voices(Channel *channel, int note)
 {
   size_t n = 0;
-  BOOST_FOREACH(Voice *v, active_voices_) {
+  for (Voice *v: active_voices_) {
     if (v->channel() == channel && v->note() == note) {
       v->stop();
       ++n;
@@ -102,7 +99,7 @@ bool Instrument::set_patch(const int no, Patch *patch)
 std::string Instrument::inspect() const
 {
   std::string s;
-  BOOST_FOREACH(Voice *v, active_voices_) {
+  for (Voice *v: active_voices_) {
     s += v->inspect();
     s += "\n";
   }

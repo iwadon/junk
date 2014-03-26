@@ -18,9 +18,9 @@ FPS::FPS()
 }
 
 /// 更新
-void FPS::update()
+void FPS::update(int32_t n)
 {
-  ++frames;
+  frames += n;
   uint32_t now = SDL_GetTicks();
   if (now > next_ticks) {
     latest_frames = frames;

@@ -1,26 +1,20 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#ifdef STDCXX_98_HEADERS
-#include <list>
-#endif
-#ifdef HAVE_BOOST
-#include <boost/foreach.hpp>
-#include <boost/pool/object_pool.hpp>
-#include <boost/shared_ptr.hpp>
-#endif
-#include <SDL.h>
-#ifdef ENABLE_OPENGL
-#include <SDL_opengl.h>
-#endif
 #include "logger.hpp"
 #include "point_2d.hpp"
 #include "sdl_app.hpp"
 #include "sprite.hpp"
 #include "texture.hpp"
 #include "vector_2d.hpp"
+#include <list>
+#include <memory>
+#include <SDL.h>
+#ifdef ENABLE_OPENGL
+#include <SDL_opengl.h>
+#endif
 
-//#define SHOW_WINDOW_AFTER_INITIALIZED
+#define SHOW_WINDOW_AFTER_INITIALIZED
 
 namespace game
 {
@@ -59,7 +53,7 @@ namespace game
     void move();
     void draw(SDLApp &app);
   private:
-    boost::shared_ptr<Sprite> sprite_;
+    std::shared_ptr<Sprite> sprite_;
   };
 
   class MyShip : public Object
@@ -189,8 +183,16 @@ namespace game
     glTranslatef(pos_.x, pos_.y, 0.0f);
     glRotatef(rot_, 0.0f, 0.0f, 1.0f);
     glScalef(scale_, scale_, 1.0f);
-    SDL_Rect rect_o = {-MYSHIP_W / 2, -MYSHIP_H / 2, MYSHIP_W, MYSHIP_H};
-    SDL_Rect rect_i = {-MYSHIP_W / 2 + 1, -MYSHIP_H / 2 + 1, MYSHIP_W - 2, MYSHIP_H - 2};
+    SDL_Rect rect_o;
+    rect_o.x = -MYSHIP_W / 2;
+    rect_o.y = -MYSHIP_H / 2;
+    rect_o.w = MYSHIP_W;
+    rect_o.h = MYSHIP_H;
+    SDL_Rect rect_i;
+    rect_i.x = -MYSHIP_W / 2 + 1;
+    rect_i.y = -MYSHIP_H / 2 + 1;
+    rect_i.w = MYSHIP_W - 2;
+    rect_i.h = MYSHIP_H - 2;
     SDL_SetRenderDrawColor(app.renderer(), 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderFillRect(app.renderer(), &rect_o);
     SDL_SetRenderDrawColor(app.renderer(), 255, 255, 255, SDL_ALPHA_OPAQUE);
@@ -221,28 +223,28 @@ namespace game
 
   void App::input()
   {
-    BOOST_FOREACH(Object *obj, active_objects) {
+    for(auto obj: active_objects) {
       obj->input(*this);
     }
   }
 
   void App::move()
   {
-    BOOST_FOREACH(Object *obj, active_objects) {
+    for (auto obj: active_objects) {
       obj->move();
     }
   }
 
   void App::update()
   {
-    BOOST_FOREACH(Object *obj, active_objects) {
+    for (auto obj: active_objects) {
       obj->update();
     }
   }
 
   void App::draw()
   {
-    BOOST_FOREACH(Object *obj, active_objects) {
+    for (auto obj: active_objects) {
       obj->draw(*this);
     }
   }

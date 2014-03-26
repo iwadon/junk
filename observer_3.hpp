@@ -1,10 +1,9 @@
 #ifndef OBSERVER_3_HPP_INCLUDED
 #define OBSERVER_3_HPP_INCLUDED 1
 
-#include <cassert>
 #include <algorithm>
+#include <cassert>
 #include <list>
-#include <boost/foreach.hpp>
 
 template <typename T> class Subject;
 
