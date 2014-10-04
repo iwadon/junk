@@ -2,8 +2,8 @@
 #include "socket.hpp"
 #include "gtest/gtest.h"
 #include <arpa/inet.h>
+#include <memory>
 #include <iostream>
-#include <shared_ptr.hpp>
 #include <sys/socket.h>
 
 TEST(AddrinfoTest, getaddrinfo) {
@@ -33,7 +33,7 @@ TEST(AddrinfoTest, getaddrinfo2) {
 }
 
 TEST(AddrinfoTest, tcp) {
-  boost::shared_ptr<Addrinfo> ai(Addrinfo::tcp("localhost", "http"));
+  std::shared_ptr<Addrinfo> ai(Addrinfo::tcp("localhost", "http"));
   ASSERT_TRUE(ai != NULL);
   EXPECT_EQ(0, ai->flags());
   EXPECT_EQ(PF_INET, ai->pfamily());
@@ -46,7 +46,7 @@ TEST(AddrinfoTest, tcp) {
 }
 
 TEST(AddrinfoTest, tcp_2) {
-  boost::shared_ptr<Addrinfo> ai(Addrinfo::tcp("localhost", 80));
+  std::shared_ptr<Addrinfo> ai(Addrinfo::tcp("localhost", 80));
   ASSERT_TRUE(ai != NULL);
   EXPECT_EQ(0, ai->flags());
   EXPECT_EQ(PF_INET, ai->pfamily());
@@ -59,7 +59,7 @@ TEST(AddrinfoTest, tcp_2) {
 }
 
 TEST(AddrinfoTest, udp) {
-  boost::shared_ptr<Addrinfo> ai(Addrinfo::udp("localhost", "http"));
+  std::shared_ptr<Addrinfo> ai(Addrinfo::udp("localhost", "http"));
   ASSERT_TRUE(ai != NULL);
   EXPECT_EQ(0, ai->flags());
   EXPECT_EQ(PF_INET, ai->pfamily());
@@ -72,7 +72,7 @@ TEST(AddrinfoTest, udp) {
 }
 
 TEST(AddrinfoTest, udp_2) {
-  boost::shared_ptr<Addrinfo> ai(Addrinfo::udp("localhost", 80));
+  std::shared_ptr<Addrinfo> ai(Addrinfo::udp("localhost", 80));
   ASSERT_TRUE(ai != NULL);
   EXPECT_EQ(0, ai->flags());
   EXPECT_EQ(PF_INET, ai->pfamily());
@@ -99,7 +99,7 @@ TEST(AddrinfoTest, ctor) {
 }
 
 TEST(AddrinfoTest, bind) {
-  boost::shared_ptr<Addrinfo> ai(Addrinfo::udp("localhost", 7777));
+  std::shared_ptr<Addrinfo> ai(Addrinfo::udp("localhost", 7777));
   ASSERT_TRUE(ai != NULL);
   Socket *sock = ai->bind();
   ASSERT_TRUE(sock != NULL);
@@ -112,10 +112,10 @@ TEST(AddrinfoTest, inspect) {
   Addrinfo ai1(&sin1);
   EXPECT_EQ("#<Addrinfo: 127.0.0.1:80>", ai1.inspect());
 
-  boost::shared_ptr<Addrinfo> ai2(Addrinfo::tcp("127.0.0.1", 80));
+  std::shared_ptr<Addrinfo> ai2(Addrinfo::tcp("127.0.0.1", 80));
   EXPECT_EQ("#<Addrinfo: 127.0.0.1:80 TCP>", ai2->inspect());
 
-  boost::shared_ptr<Addrinfo> ai3(Addrinfo::udp("127.0.0.1", 80));
+  std::shared_ptr<Addrinfo> ai3(Addrinfo::udp("127.0.0.1", 80));
   EXPECT_EQ("#<Addrinfo: 127.0.0.1:80 UDP>", ai3->inspect());
 
   sockaddr_in sin4;
